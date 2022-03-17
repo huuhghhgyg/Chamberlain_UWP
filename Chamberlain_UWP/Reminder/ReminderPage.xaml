@@ -1,0 +1,72 @@
+﻿<Page
+    x:Class="Chamberlain_UWP.Reminder.ReminderPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Chamberlain_UWP.Reminder"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    Background="{ThemeResource NavigationViewExpandedPaneBackground}">
+
+    <Grid Margin="48">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Name="PageTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}">提醒</TextBlock>
+
+        <!--面板-->
+        <Grid Grid.Row="1">
+            <ScrollViewer>
+                <StackPanel Margin="0,16,0,0">
+                    <RelativePanel HorizontalAlignment="Stretch" VerticalAlignment="Top" 
+                                   Padding="12" Style="{StaticResource CardRelativePanel}">
+                        <TextBlock Text="添加/重置任务" RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                        <Button Name="ManageRemindItemButton" Content="管理提醒" 
+                                RelativePanel.AlignRightWithPanel="True" 
+                                Style="{StaticResource AccentButtonStyle}"
+                                Click="ManageRemindItemButton_Click"/>
+                    </RelativePanel>
+
+                    <TextBlock Text="搜索标签" Margin="0,16,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <AutoSuggestBox PlaceholderText="搜索任务" QueryIcon="Find" 
+                                        Width="280"/>
+                        <TextBlock Text="排序依据："
+                                   VerticalAlignment="Center" Margin="12,0,0,0"/>
+                        <ComboBox SelectedIndex="0">
+                            <ComboBoxItem Content="按照标签"/>
+                            <ComboBoxItem Content="按照名称"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <TextBlock Text="待处理" Margin="0,16,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <ListView ItemsSource="{x:Bind ReminderListOnwork}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:ReminderItem">
+                                <StackPanel>
+                                    <TextBlock Text="{x:Bind Title}"/>
+                                    <TextBlock Text="{x:Bind Description}"/>
+                                    <TextBlock Text="{x:Bind Deadline}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <TextBlock Text="已完成" Margin="0,16,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <ListView ItemsSource="{x:Bind ReminderListFinished}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:ReminderItem">
+                                <StackPanel>
+                                    <TextBlock Text="{x:Bind Title}"/>
+                                    <TextBlock Text="{x:Bind Description}"/>
+                                    <TextBlock Text="{x:Bind Deadline}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Page>

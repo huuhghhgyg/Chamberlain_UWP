@@ -1,0 +1,36 @@
+﻿<Page
+    x:Class="Chamberlain_UWP.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Chamberlain_UWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
+    Background="{ThemeResource LayerFillColorDefaultBrush}">
+
+    <Grid>
+        <muxc:NavigationView Name="navControl" PaneTitle="Chamberlain" 
+                             ItemInvoked="navControl_ItemInvoked"
+                             IsBackEnabled="{x:Bind contentFrame.CanGoBack, Mode=OneWay}"
+                             BackRequested="navControl_BackRequested">
+            <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem Icon="Clock" Content="任务" Tag="task"/>
+                <muxc:NavigationViewItem Content="提醒" Tag="reminder">
+                    <muxc:NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE0A2;"/>
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
+            </muxc:NavigationView.MenuItems>
+            <Frame x:Name="contentFrame">
+                <!--从微软官网抄来的Transition属性-->
+                <Frame.ContentTransitions>
+                    <TransitionCollection>
+                        <NavigationThemeTransition/>
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
+            </Frame>
+        </muxc:NavigationView>
+    </Grid>
+</Page>

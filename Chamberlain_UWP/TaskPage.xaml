@@ -1,0 +1,42 @@
+﻿<Page
+    x:Class="Chamberlain_UWP.TaskPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Chamberlain_UWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    Background="{ThemeResource NavigationViewExpandedPaneBackground}">
+
+    <Grid Margin="48">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Name="PageTitleTextBlock" Style="{ThemeResource TitleTextBlockStyle}">任务面板</TextBlock>
+
+        <!--面板-->
+        <StackPanel Grid.Row="1">
+            <!--
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,8" Padding="16,12"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="{StaticResource ControlCornerRadius}">
+                <RelativePanel Margin="0,0,0,4" >
+                    <CheckBox Content="卡片标题"/>
+                    <TextBlock Text="30%" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                </RelativePanel>
+                <muxc:ProgressBar x:Name="progressBar" Value="30" Margin="0,4,0,8"/>
+                <RelativePanel Margin="0,4">
+                    <TextBlock Style="{StaticResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}">这是卡片内容啦啦啦</TextBlock>
+                    <TextBlock RelativePanel.AlignRightWithPanel="True">ddl: 2022/04/01</TextBlock>
+                </RelativePanel>
+            </StackPanel>
+            -->
+
+        </StackPanel>
+
+    </Grid>
+</Page>
