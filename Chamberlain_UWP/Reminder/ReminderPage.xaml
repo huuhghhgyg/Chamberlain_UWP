@@ -18,12 +18,12 @@
 
         <!--列表卡片的DataTemplate，存放所有项目-->
         <DataTemplate x:DataType="local:ReminderItem" x:Key="ReminderItemViewTemplate">
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,8" Padding="16,12"
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,4" Padding="12,8"
                         Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1"
                         CornerRadius="{StaticResource ControlCornerRadius}">
-                
+
                 <RelativePanel Margin="0,0,0,4" >
                     <CheckBox Name="ItemCheckBox"
                               Content="{x:Bind Title,Mode=OneWay}"
@@ -33,18 +33,25 @@
                                RelativePanel.AlignRightWithPanel="True" 
                                RelativePanel.AlignVerticalCenterWithPanel="True"/>
                 </RelativePanel>
-                <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Margin="0,4,0,8"/>
+                <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Margin="0,0,0,4"/>
                 <RelativePanel Margin="0,4">
-                    <TextBlock Text="{x:Bind Description,Mode=OneWay}" 
+                    <TextBlock Name="ItemDescriptionTextBlock"
+                               Text="{x:Bind Description,Mode=OneWay}" 
                                Style="{StaticResource CaptionTextBlockStyle}" 
                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                    <TextBlock Text="ddl: "
+                    <TextBlock Text="{x:Bind TagsString,Mode=OneWay}" 
+                               Margin="8,0,0,0"
+                               Style="{StaticResource CaptionTextBlockStyle}" 
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               RelativePanel.RightOf="ItemDescriptionTextBlock"/>
+                    <TextBlock Text="ddl:"
                                RelativePanel.LeftOf="DateTimeTextBlock"
-                               Style="{ThemeResource BodyTextBlockStyle}"/>
+                               Margin="0,0,4,0"
+                               Style="{StaticResource CaptionTextBlockStyle}"/>
                     <TextBlock x:Name="DateTimeTextBlock"
                                Text="{x:Bind DeadlineString,Mode=OneWay}"
                                RelativePanel.AlignRightWithPanel="True"
-                               Style="{ThemeResource BodyTextBlockStyle}"/>
+                               Style="{StaticResource CaptionTextBlockStyle}"/>
                 </RelativePanel>
             </StackPanel>
         </DataTemplate>
@@ -94,13 +101,13 @@
                                         TextChanged="OnworkItemSuggestBox_TextChanged"/>
                         <TextBlock Text="排序依据："
                             VerticalAlignment="Center" Margin="12,0,0,0"/>
-                        <ComboBox SelectedIndex="0">
+                        <ComboBox Name="ItemsSortComboBox" SelectedIndex="0" SelectionChanged="ItemsSortComboBox_SelectionChanged">
                             <ComboBoxItem Content="按照标签"/>
                             <ComboBoxItem Content="按照名称"/>
                         </ComboBox>
                     </StackPanel>
                     <TextBlock Text="待处理" Margin="0,16,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
-                    <ListView ItemsSource="{x:Bind ReminderListOnwork}" 
+                    <ListView ItemsSource="{x:Bind ReminderListOnwork,Mode=OneWay}" 
                         SelectionMode="None"
                         ItemContainerStyle="{StaticResource SectionView}"
                         ItemTemplate="{StaticResource ReminderItemViewTemplate}">

@@ -26,13 +26,14 @@ namespace Chamberlain_UWP
         private void initializeData()
         {
             List<string> tg = new List<string>(){ "tag1", "tag2", "tag3" };
+            List<string> tg2 = new List<string>(){ "tag3", "newtag" };
             ReminderItem item1 = new ReminderItem("item1", "desc1", tg, DateTime.Now.AddHours(1), 0);
             ReminderItem item2 = new ReminderItem("item2", "desc2", tg, DateTime.Now.AddHours(1), 0);
             ReminderItem item3 = new ReminderItem("item3", "desc3", tg, DateTime.Now.AddHours(1), 0);
-            ReminderItem item4 = new ReminderItem("item4", "desc4", tg, DateTime.Now.AddHours(1), 1);
+            ReminderItem item4 = new ReminderItem("item4", "desc4", tg2, DateTime.Now.AddHours(1), 1);
             ReminderItem item5 = new ReminderItem("item5", "desc5", tg, DateTime.Now.AddHours(1), 0);
             ReminderItem item6 = new ReminderItem("item6", "desc6", tg, DateTime.Now.AddHours(1), 1);
-            ReminderItem item7 = new ReminderItem("item7", "desc7", tg, DateTime.Now.AddHours(1), 0);
+            ReminderItem item7 = new ReminderItem("item7", "desc7", tg2, DateTime.Now.AddHours(1), 0);
             ReminderManager.AddReminder(item1);
             ReminderManager.AddReminder(item2);
             ReminderManager.AddReminder(item3);

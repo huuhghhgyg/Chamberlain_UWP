@@ -18,7 +18,7 @@
         
         <!--列表卡片的DataTemplate，存放所有项目-->
         <DataTemplate x:DataType="local:ReminderItem" x:Key="ReminderItemViewTemplate">
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,8" Padding="16,12">
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,4" Padding="12,8">
                 <RelativePanel Margin="0,0,0,4" >
                     <CheckBox Content="{x:Bind Title,Mode=OneWay}"
                               IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"/>
@@ -26,13 +26,20 @@
                                RelativePanel.AlignRightWithPanel="True" 
                                RelativePanel.AlignVerticalCenterWithPanel="True"/>
                 </RelativePanel>
-                <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Margin="0,4,0,8"/>
+                <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Margin="0,0,0,4"/>
                 <RelativePanel Margin="0,4">
                     <TextBlock Text="{x:Bind Description,Mode=OneWay}" 
+                               Name="ItemDescriptionTextBlock"
                                Style="{StaticResource CaptionTextBlockStyle}" 
                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock Text="{x:Bind TagsString,Mode=OneWay}" 
+                               Margin="8,0,0,0"
+                               Style="{StaticResource CaptionTextBlockStyle}" 
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               RelativePanel.RightOf="ItemDescriptionTextBlock"/>
                     <TextBlock Text="ddl: "
                                RelativePanel.LeftOf="DateTimeTextBlock"
+                               Margin="0,0,4,0"
                                Style="{ThemeResource BodyTextBlockStyle}"/>
                     <TextBlock x:Name="DateTimeTextBlock"
                                Text="{x:Bind DeadlineString,Mode=OneWay}"
@@ -112,7 +119,7 @@
                                 <ListBox Name="TagListBox"
                                          SelectionMode="Multiple" 
                                          MaxHeight="334" 
-                                         ItemsSource="{x:Bind TagList}"
+                                         ItemsSource="{x:Bind TagList,Mode=OneWay}"
                                          SelectionChanged="TagListBox_SelectionChanged"/>
                                 <Grid Margin="0,12,0,0">
                                     <Grid.ColumnDefinitions>

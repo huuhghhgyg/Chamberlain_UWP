@@ -29,8 +29,11 @@ namespace Chamberlain_UWP.Reminder
         public ReminderItemsManagePage()
         {
             this.InitializeComponent();
+
             ReminderManager.GetTags(TagList);
             ReminderManager.GetReminderList(ReminderList);
+
+            ReminderManager.SortCollectionByTaskState(ReminderList);
         }
 
         private void TagListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -44,6 +47,7 @@ namespace Chamberlain_UWP.Reminder
             if (!string.IsNullOrWhiteSpace(AddTagTextBox.Text)) TagList.Add(AddTagTextBox.Text);
             AddTagTextBox.Text = "";
             UpdateItemsProgress();
+            ReminderManager.SortCollectionByTaskState(ReminderList);
         }
 
         private void ItemSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)

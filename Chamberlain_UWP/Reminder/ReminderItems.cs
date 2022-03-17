@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Chamberlain_UWP.Reminder
 {
-    public class ReminderItem : INotifyPropertyChanged
+    public class ReminderItem : INotifyPropertyChanged, IComparer<ReminderItem>,IComparable
     {
         //属性区域
         private string title { get; set; }
@@ -79,10 +79,22 @@ namespace Chamberlain_UWP.Reminder
             }
             set
             {
-                if (value) TaskState = 1;
-                else TaskState = 0;
-                NotifyPropertyChanged("TaskState");
+                if (value && TaskState != 1)
+                {
+                    TaskState = 1;
+                    NotifyPropertyChanged("TaskState");
+                }
+                else if (!value && TaskState != 0)
+                {
+                    TaskState = 0;
+                    NotifyPropertyChanged("TaskState");
+                }
             }
+        }
+
+        public string TagsString
+        {
+            get { return "( " + string.Join(", ", tags) + " )"; }
         }
 
         public ReminderItem(string title, string desc, List<string> tags, DateTime ddl, int taskstate)
@@ -115,6 +127,17 @@ namespace Chamberlain_UWP.Reminder
         {
             NotifyPropertyChanged("ProgressValue");
         }
+
+        public int Compare(ReminderItem x, ReminderItem y)
+        {
+            return x.TaskState - y.TaskState;
+        }
+
+        public int CompareTo(object obj)
+        {
+            ReminderItem item = (ReminderItem)obj;
+            return item.TaskState - this.TaskState;
+        }
     }
 
     public class ReminderManager
@@ -141,8 +164,14 @@ namespace Chamberlain_UWP.Reminder
             return ReminderItemList.IndexOf(item);
         }
 
-
         public static void GetTags(ObservableCollection<string> tagList)
+        {
+            List<string> tags = new List<string>();
+            GetTags(tags); //调用重载方法
+            tags.ForEach(tag => tagList.Add(tag)); //List类型转换
+        }
+
+        public static void GetTags(List<string> tagList)
         {
             List<string> AllTags = new List<string>(); // 存放所有的tag
             List<string> TagsCache = new List<string>(); // 存放在一个实例中找到的tag
@@ -174,10 +203,40 @@ namespace Chamberlain_UWP.Reminder
 
         public static void UpdateReminderList(ObservableCollection<ReminderItem> collection) // 导入ObservableCollection的数据更新List
         {
-            ReminderItemList.Clear();
-            ReminderItemList.AddRange(collection);
-            // 排序:todo (未实现)
-            ReminderItemList.Sort((x,y)=>x.TaskState.CompareTo(y.TaskState));
+            //ReminderItemList.Clear();
+            //ReminderItemList.AddRange(collection);
+            ReminderItemList = new List<ReminderItem>(collection);
+        }
+
+        public static void SortReminderListbyTaskState()
+        {
+            ReminderItemList.Sort((x,y) => x.TaskState.CompareTo(y.TaskState));
+        }
+
+        public static void SortCollectionByTaskState(ObservableCollection<ReminderItem> collection)
+        {
+            int length = collection.Count;
+
+            // 排序测试（为了UI方面不奇怪，只能这么繁琐...）
+            int operate_num = 0; //已完成数
+            foreach (ReminderItem item in collection)
+            {
+                if(item.TaskState == 1) operate_num++;
+            }
+
+            int operated = 0;
+            operated = 0;
+            for (int i = 0; i < length - operated;)
+            {
+                if (collection[i].TaskState == 1)
+                {
+                    //已完成
+                    collection.Move(i, length - 1);
+                    operated++;
+                }
+                else if (i < length - 1 - operate_num) i++; // 不能确定是否需要排序
+                else break; // 确定不需要排序
+            }
         }
     }
 }

@@ -35,7 +35,14 @@ namespace Chamberlain_UWP
 
         private void ItemCheckBox_Click(object sender, RoutedEventArgs e)
         {
-
+            // 未完成减少了
+            List<ReminderItem> listOnwork = new List<ReminderItem>(ReminderListOnwork);
+            List<ReminderItem> newlistOnwork = new List<ReminderItem>(); //少
+            ReminderManager.GetReminderList(newlistOnwork,0);
+            listOnwork.ForEach(item =>
+            {
+                if(!newlistOnwork.Contains(item)) ReminderListOnwork.Remove(item);
+            });
         }
     }
 }

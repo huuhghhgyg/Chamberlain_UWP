@@ -92,9 +92,64 @@ namespace Chamberlain_UWP.Reminder
 
         private void OnworkItemSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            List<string> itemsName = new List<string>();
-            ReminderListOnwork.ToList().ForEach(item => itemsName.Add(item.Title));
-            sender.ItemsSource = itemsName.Where(item => item.Contains(sender.Text)).ToList();
+            GetListOnwork();
+
+            FilterReminderItems filter; //声明委托
+            List<string> suggestList = new List<string>(); //AutoSuggest项目列表
+
+            if (ItemsSortComboBox.SelectedIndex == 1)
+            {
+                ReminderListOnwork.ToList().ForEach(item => suggestList.Add(item.Title));
+                sender.ItemsSource = suggestList.Where(item => item.Contains(sender.Text)).ToList();
+
+                filter = new FilterReminderItems(FilterReminderItemsByName);
+                filter(sender);
+            }
+            else
+            {
+                ReminderManager.GetTags(suggestList);
+                sender.ItemsSource = suggestList.Where(item => item.Contains(sender.Text)).ToList();
+
+                filter = new FilterReminderItems(FilterReminderItemsByTag);
+                filter(sender);
+            }
+
+        }
+
+        delegate void FilterReminderItems(AutoSuggestBox sender);
+
+        private void FilterReminderItemsByName(AutoSuggestBox sender)
+        {
+            List<ReminderItem> reminderItems = new List<ReminderItem>(ReminderListOnwork);
+
+            reminderItems = reminderItems.Where(item => item.Title.Contains(sender.Text)).ToList();
+
+            //根据名称搜索
+            ReminderListOnwork.Clear();
+            reminderItems.ForEach(item => ReminderListOnwork.Add(item));
+        }
+
+        private void FilterReminderItemsByTag(AutoSuggestBox sender)
+        {
+            List<ReminderItem> reminderItems = new List<ReminderItem>(ReminderListOnwork);
+
+            //根据tag搜索
+            reminderItems = reminderItems.Where(item => item.TagsString.Contains(sender.Text)).ToList();
+
+            ReminderListOnwork.Clear();
+            reminderItems.ForEach(item => ReminderListOnwork.Add(item));
+        }
+
+        private void ItemsSortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            OnworkItemSuggestBox.Text = "";
+        }
+
+        private void GetListOnwork() // 用于筛选Onwork状态的item
+        {
+            ReminderListOnwork.Clear();
+            ReminderManager.GetReminderList(ReminderListOnwork, 0); // 获取未完成提醒，放入正在处理
+            ReminderManager.GetReminderList(ReminderListOnwork, 2); // 获取过期提醒，放入正在处理
         }
     }
 }
