@@ -44,8 +44,8 @@ namespace Chamberlain_UWP
         public MainPage()
         {
             this.InitializeComponent();
-            contentFrame.Navigate(typeof(TaskPage));
             initializeData();
+            contentFrame.Navigate(typeof(TaskPage));
         }
 
         private void navControl_ItemInvoked(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs args)

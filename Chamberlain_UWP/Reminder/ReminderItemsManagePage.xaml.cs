@@ -53,12 +53,18 @@ namespace Chamberlain_UWP.Reminder
             sender.ItemsSource = itemsName.Where(item => item.Contains(sender.Text)).ToList();
         }
 
-        private void RemindItemGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ItemSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
-            int index = RemindItemGridView.SelectedIndex; // 找到RemindItemGridView中选择的元素下标
+            int i = ReminderManager.FindReminderItemWithTitle(args.SelectedItem.ToString());
+            RemindItemListView.SelectedIndex = i; // 选中item
+        }
+
+        private void RemindItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = RemindItemListView.SelectedIndex; // 找到RemindItemListView中选择的元素下标
             if (index == -1)
             {
-                RemindItemGridView.SelectedItem = null;
+                RemindItemListView.SelectedItem = null;
                 ClearReviseControl();
                 return;
             }
@@ -75,10 +81,10 @@ namespace Chamberlain_UWP.Reminder
 
         private void ModifyItemButton_Click(object sender, RoutedEventArgs e)
         {
-            int index = RemindItemGridView.SelectedIndex; //找到RemindItemGridView中选择的元素下标
+            int index = RemindItemListView.SelectedIndex; //找到RemindItemListView中选择的元素下标
             if (index == -1)
             {
-                RemindItemGridView.SelectedItem = null;
+                RemindItemListView.SelectedItem = null;
                 ClearReviseControl();
                 return;
             }
@@ -93,7 +99,6 @@ namespace Chamberlain_UWP.Reminder
             ReminderList[index].SetDeadline(ddlDate); //按照类中的方法，更新Deadline字段
 
             ReminderManager.UpdateReminderList(ReminderList); //更新列表
-
         }
 
         private void ClearReviseControl()
@@ -112,5 +117,84 @@ namespace Chamberlain_UWP.Reminder
             }
         }
 
+        void callTeachingTip(string title, string desc, FrameworkElement target_control)
+        {
+            AddInstructTip.Title = title;
+            AddInstructTip.Subtitle = desc;
+            AddInstructTip.Target = target_control;
+            AddInstructTip.IsOpen = true;
+        }
+
+        private void AddItemButton_Click(object sender, RoutedEventArgs e) //添加提醒项按钮
+        {
+            string title, desc;
+
+            //标题
+            if (!string.IsNullOrEmpty(AddTitleTextBox.Text)) 
+                title = AddTitleTextBox.Text;
+            else
+            {
+                callTeachingTip("标题不能为空", "不然就找不到这个项目了😥", AddTitleTextBox);
+                return;
+            }
+
+            //描述
+            if (!string.IsNullOrEmpty(AddDescTextBox.Text))
+                desc = AddDescTextBox.Text;
+            else
+            {
+                callTeachingTip("描述不能为空", "可以详细描述子事件。如果没有可以直接截取标题的一部分作为描述😂", AddDescTextBox);
+                return;
+            }
+
+            //日期和时间
+            DateTime ddlDate;
+            if (AddItemDatePicker.Date==null)
+            {
+                callTeachingTip("日期不能为空", "ddl日期必须要有📅", AddItemDatePicker);
+                return;
+            }
+            else if (AddItemTimePicker.SelectedTime == null)
+            {
+                callTeachingTip("时间不能为空", "还是选一个ddl时间吧⏰", AddItemTimePicker);
+                return;
+            }
+            else
+            {
+                // 日期和时间都有
+                DateTimeOffset dto = (DateTimeOffset)AddItemDatePicker.Date; //转换为DateTimeOffset类型
+                ddlDate = dto.LocalDateTime.Date; //获得本地时间
+                ddlDate += AddItemTimePicker.Time; //计算预设的时间
+            }
+
+            List<string> tags = new List<string>();
+            if (TagListBox.SelectedItems.ToList().Count > 0)
+            {
+                // 符合
+                TagListBox.SelectedItems.ToList().ForEach(p => tags.Add(p.ToString()));
+            }
+            else
+            {
+                callTeachingTip("标签不能为空", "请在列表中选择一个或多个标签，也可以在下方新建标签🏷", TagListBox);
+                return;
+            }
+
+            ReminderItem item = new ReminderItem(title, desc, tags, ddlDate, 0); // 新建ReminderItem
+            ReminderList.Insert(0, item);
+
+            ReminderManager.UpdateReminderList(ReminderList); //更新存放在类中的列表
+
+            //清除表单数据
+            AddTitleTextBox.Text = "";
+            AddDescTextBox.Text = "";
+            AddItemTimePicker.SelectedTime = null;
+        }
+
+        private void DeleteItemButton_Click(object sender, RoutedEventArgs e)
+        {
+            int i = RemindItemListView.SelectedIndex;
+            ReminderList.RemoveAt(i);
+            ReminderManager.UpdateReminderList(ReminderList);
+        }
     }
 }

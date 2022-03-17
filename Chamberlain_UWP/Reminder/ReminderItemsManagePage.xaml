@@ -9,6 +9,41 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Background="{ThemeResource NavigationViewExpandedPaneBackground}">
 
+    <Page.Resources>
+        <!--ReminderItem列表的模板-->
+        <Style TargetType="ListViewItem" x:Key="SectionView">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        
+        <!--列表卡片的DataTemplate，存放所有项目-->
+        <DataTemplate x:DataType="local:ReminderItem" x:Key="ReminderItemViewTemplate">
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,8" Padding="16,12">
+                <RelativePanel Margin="0,0,0,4" >
+                    <CheckBox Content="{x:Bind Title,Mode=OneWay}"
+                              IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"/>
+                    <TextBlock Text="{x:Bind ProgressValue,Mode=OneWay}" 
+                               RelativePanel.AlignRightWithPanel="True" 
+                               RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                </RelativePanel>
+                <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Margin="0,4,0,8"/>
+                <RelativePanel Margin="0,4">
+                    <TextBlock Text="{x:Bind Description,Mode=OneWay}" 
+                               Style="{StaticResource CaptionTextBlockStyle}" 
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock Text="ddl: "
+                               RelativePanel.LeftOf="DateTimeTextBlock"
+                               Style="{ThemeResource BodyTextBlockStyle}"/>
+                    <TextBlock x:Name="DateTimeTextBlock"
+                               Text="{x:Bind DeadlineString,Mode=OneWay}"
+                               RelativePanel.AlignRightWithPanel="True"
+                               Style="{ThemeResource BodyTextBlockStyle}"/>
+                </RelativePanel>
+            </StackPanel>
+        </DataTemplate>
+
+    </Page.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -20,7 +55,7 @@
                    Margin="48,48,48,4"
                    Style="{ThemeResource TitleTextBlockStyle}"/>
         <Grid Grid.Row="1">
-            <ScrollViewer Padding="48,0">
+            <ScrollViewer Name="PageScrollViewer" Padding="48,0,48,48">
                 <StackPanel>
 
                     <TextBlock Text="添加" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}" />
@@ -38,24 +73,33 @@
                                            Margin="0,0,0,8" 
                                            Style="{ThemeResource BaseTextBlockStyle}" />
                                 <StackPanel Padding="0,12">
-                                    <TextBox Header="标题"/>
-                                    <TextBox Header="提醒描述" Margin="0,12,0,0"/>
+                                    <TextBox Header="标题" Name="AddTitleTextBox"/>
+                                    <TextBox Header="提醒描述" Name="AddDescTextBox" Margin="0,12,0,0"/>
                                     <CalendarDatePicker PlaceholderText="到期日期"
                                                         Header="选择日期"
+                                                        Name="AddItemDatePicker"
                                                         Margin="0,12,0,0"/>
                                     <TimePicker Header="到期时间"
+                                                Name="AddItemTimePicker"
                                                 Margin="0,12,0,0"/>
                                     <!--标签-->
                                     <StackPanel>
                                         <TextBlock Text="选择标签" Margin="0,12,0,4"/>
-                                        <TextBlock Name="SelectedTagsTextBlock" Grid.Column="1" Text="tag1, tag2"/>
+                                        <TextBlock Name="SelectedTagsTextBlock" Grid.Column="1" Text="（未选择）"/>
                                     </StackPanel>
                                     <!--按钮-->
                                     <RelativePanel Margin="0,16,0,0">
                                         <Button Name="AddItemButton" Content="添加项"
                                                 RelativePanel.AlignRightWithPanel="True"
-                                                Style="{StaticResource AccentButtonStyle}"/>
+                                                Style="{StaticResource AccentButtonStyle}"
+                                                Click="AddItemButton_Click"/>
                                     </RelativePanel>
+
+                                    <muxc:TeachingTip x:Name="AddInstructTip">
+                                        <muxc:TeachingTip.IconSource>
+                                            <muxc:SymbolIconSource Symbol="Important" />
+                                        </muxc:TeachingTip.IconSource>
+                                    </muxc:TeachingTip>
                                 </StackPanel>
                             </StackPanel>
 
@@ -81,7 +125,6 @@
                                                 Margin="4,0,0,0" 
                                                 Style="{StaticResource AccentButtonStyle}"
                                                 Click="AddTagButton_Click"/>
-                                        <Button Content="删除" Margin="4,0,0,0"/>
                                     </StackPanel>
                                 </Grid>
 
@@ -101,35 +144,15 @@
                                 <StackPanel>
                                     <AutoSuggestBox Name="ItemSuggestBox" 
                                                     PlaceholderText="搜索“提醒”"
-                                                    QueryIcon="Find" TextChanged="ItemSuggestBox_TextChanged"/>
-                                    <GridView Name="RemindItemGridView" Margin="0,8,0,0" ItemsSource="{x:Bind ReminderList,Mode=OneWay}"
-                                              SelectionChanged="RemindItemGridView_SelectionChanged">
-                                        <!--存放所有项目-->
-                                        <GridView.ItemTemplate >
-                                            <DataTemplate x:DataType="local:ReminderItem">
-                                                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,8" Padding="16,12"
-                                                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                                            BorderThickness="1"
-                                                            CornerRadius="{StaticResource ControlCornerRadius}">
-                                                    <RelativePanel Margin="0,0,0,4" >
-                                                        <CheckBox Content="{x:Bind Title,Mode=OneWay}"/>
-                                                        <TextBlock Text="{x:Bind ProgressValue,Mode=OneWay}" 
-                                                                   RelativePanel.AlignRightWithPanel="True" 
-                                                                   RelativePanel.AlignVerticalCenterWithPanel="True"/>
-                                                    </RelativePanel>
-                                                    <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Margin="0,4,0,8" Width="400"/>
-                                                    <RelativePanel Margin="0,4">
-                                                        <TextBlock Text="{x:Bind Description,Mode=OneWay}" 
-                                                                   Style="{StaticResource CaptionTextBlockStyle}" 
-                                                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                                        <TextBlock Text="ddl: " RelativePanel.LeftOf="DateTimeTextBlock"/>
-                                                        <TextBlock x:Name="DateTimeTextBlock" Text="{x:Bind DeadlineString,Mode=OneWay}" RelativePanel.AlignRightWithPanel="True"/>
-                                                    </RelativePanel>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </GridView.ItemTemplate>
-                                    </GridView>
+                                                    QueryIcon="Find"
+                                                    TextChanged="ItemSuggestBox_TextChanged"
+                                                    SuggestionChosen="ItemSuggestBox_SuggestionChosen"/>
+                                    <ListView Name="RemindItemListView" Margin="0,8,0,0" ItemsSource="{x:Bind ReminderList,Mode=OneWay}"
+                                              SelectionChanged="RemindItemListView_SelectionChanged"
+                                              BorderThickness="1"
+                                              ItemContainerStyle="{StaticResource SectionView}"
+                                              ItemTemplate="{StaticResource ReminderItemViewTemplate}">
+                                    </ListView>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" Margin="12,0,0,0">
                                     <TextBox Name="ItemReviseTitleText" 
@@ -149,7 +172,8 @@
                                                 Click="ModifyItemButton_Click"/>
                                         <Button Name="DeleteItemButton" Content="删除" 
                                                 Margin="0,0,8,0" 
-                                                RelativePanel.LeftOf="ModifyItemButton"/>
+                                                RelativePanel.LeftOf="ModifyItemButton"
+                                                Click="DeleteItemButton_Click"/>
                                     </RelativePanel>
                                 </StackPanel>
                             </Grid>

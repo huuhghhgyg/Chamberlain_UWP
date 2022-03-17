@@ -6,37 +6,70 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" xmlns:local1="using:Chamberlain_UWP.Reminder"
     Background="{ThemeResource NavigationViewExpandedPaneBackground}">
 
-    <Grid Margin="48">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <TextBlock Name="PageTitleTextBlock" Style="{ThemeResource TitleTextBlockStyle}">任务面板</TextBlock>
+    <Page.Resources>
+        <!--ReminderItem列表的模板-->
+        <Style TargetType="ListViewItem" x:Key="SectionView">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
 
-        <!--面板-->
-        <StackPanel Grid.Row="1">
-            <!--
+        <!--列表卡片的DataTemplate，存放所有项目-->
+        <DataTemplate x:DataType="local1:ReminderItem" x:Key="ReminderItemViewTemplate">
             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,8" Padding="16,12"
                         Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1"
                         CornerRadius="{StaticResource ControlCornerRadius}">
+
                 <RelativePanel Margin="0,0,0,4" >
-                    <CheckBox Content="卡片标题"/>
-                    <TextBlock Text="30%" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                    <CheckBox Name="ItemCheckBox"
+                              Content="{x:Bind Title,Mode=OneWay}"
+                              IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"
+                              Click="ItemCheckBox_Click"/>
+                    <TextBlock Text="{x:Bind ProgressValue,Mode=OneWay}" 
+                               RelativePanel.AlignRightWithPanel="True" 
+                               RelativePanel.AlignVerticalCenterWithPanel="True"/>
                 </RelativePanel>
-                <muxc:ProgressBar x:Name="progressBar" Value="30" Margin="0,4,0,8"/>
+                <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Margin="0,4,0,8"/>
                 <RelativePanel Margin="0,4">
-                    <TextBlock Style="{StaticResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}">这是卡片内容啦啦啦</TextBlock>
-                    <TextBlock RelativePanel.AlignRightWithPanel="True">ddl: 2022/04/01</TextBlock>
+                    <TextBlock Text="{x:Bind Description,Mode=OneWay}" 
+                               Style="{StaticResource CaptionTextBlockStyle}" 
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock Text="ddl: "
+                               RelativePanel.LeftOf="DateTimeTextBlock"
+                               Style="{ThemeResource BodyTextBlockStyle}"/>
+                    <TextBlock x:Name="DateTimeTextBlock"
+                               Text="{x:Bind DeadlineString,Mode=OneWay}"
+                               RelativePanel.AlignRightWithPanel="True"
+                               Style="{ThemeResource BodyTextBlockStyle}"/>
                 </RelativePanel>
             </StackPanel>
-            -->
+        </DataTemplate>
 
-        </StackPanel>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Name="PageTitleTextBlock" Text="任务面板"
+                   Margin="48,48,48,4"
+                   Style="{ThemeResource TitleTextBlockStyle}"/>
+
+        <ScrollViewer Grid.Row="1" Padding="48,0">
+            <!--面板-->
+            <StackPanel>
+                <ListView ItemsSource="{x:Bind ReminderListOnwork}" 
+                        SelectionMode="None"
+                        ItemContainerStyle="{StaticResource SectionView}"
+                        ItemTemplate="{StaticResource ReminderItemViewTemplate}">
+                </ListView>
+            </StackPanel>
+        </ScrollViewer>
 
     </Grid>
 </Page>

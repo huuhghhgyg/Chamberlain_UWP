@@ -13,12 +13,12 @@ namespace Chamberlain_UWP.Reminder
     public class ReminderItem : INotifyPropertyChanged
     {
         //属性区域
-        public string title { get; set; }
+        private string title { get; set; }
         public string description { get; set; }
         public List<string> tags { get; set; }
         public DateTime deadline { get; set; }
         public DateTime CreatedTime { get; }
-        public int TaskState { get; set; } // 0 - 未完成；1 - 已完成； 2 - 过期
+        public int TaskState { get; set; } // 0 - 未完成；1 - 已完成； -1 - 过期
 
         //访问器区域
         public string Title
@@ -62,13 +62,26 @@ namespace Chamberlain_UWP.Reminder
                 TimeSpan RemainSpan = Deadline - DateTime.Now; // 任务剩余时间
                 if (RemainSpan < TimeSpan.Zero) // 剩余时间为负数
                 {
-                    if (TaskState == 0) TaskState = 2; // 没完成的任务自动过期
+                    if (TaskState == 0) TaskState = -1; // 没完成的任务自动过期
                     return 1.ToString("#0.0%"); // ToString()中的%自动将小数转化为百分数形式
                 }
                 else
                 {
                     return ((1 - RemainSpan.TotalSeconds / TaskSpan.TotalSeconds)).ToString("#0.0%"); // 返回剩余时间比例
                 }
+            }
+        }
+        public bool IsReminderDone
+        {
+            get
+            {
+                return (TaskState == 1) ? true : false; //返回是否已完成
+            }
+            set
+            {
+                if (value) TaskState = 1;
+                else TaskState = 0;
+                NotifyPropertyChanged("TaskState");
             }
         }
 
@@ -122,6 +135,12 @@ namespace Chamberlain_UWP.Reminder
                 });
             return filterd;
         }
+        public static int FindReminderItemWithTitle(string name) // 返回在List中的下标
+        {
+            ReminderItem item = ReminderItemList.Find(p => p.Title == name);
+            return ReminderItemList.IndexOf(item);
+        }
+
 
         public static void GetTags(ObservableCollection<string> tagList)
         {
@@ -146,11 +165,19 @@ namespace Chamberlain_UWP.Reminder
             reminder_item_list.ForEach(item => collection.Add(item)); // 添加元素
         }
 
+        // 代码清理时，如果没有引用，可以删除这个重载
+        public static void GetReminderList(List<ReminderItem> collection, int taskstate) // 用于按条件复制到List
+        {
+            var reminder_item_list = ReminderItemList.Where(item => item.TaskState == taskstate).ToList(); // 筛选符合taskstate的元素
+            reminder_item_list.ForEach(item => collection.Add(item)); // 添加元素
+        }
 
         public static void UpdateReminderList(ObservableCollection<ReminderItem> collection) // 导入ObservableCollection的数据更新List
         {
             ReminderItemList.Clear();
             ReminderItemList.AddRange(collection);
+            // 排序:todo (未实现)
+            ReminderItemList.Sort((x,y)=>x.TaskState.CompareTo(y.TaskState));
         }
     }
 }

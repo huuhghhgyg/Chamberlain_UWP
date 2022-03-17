@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Chamberlain_UWP.Reminder;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,9 +24,18 @@ namespace Chamberlain_UWP
     /// </summary>
     public sealed partial class TaskPage : Page
     {
+        ObservableCollection<ReminderItem> ReminderListOnwork = new ObservableCollection<ReminderItem>(); // 正在处理
+
         public TaskPage()
         {
             this.InitializeComponent();
+            ReminderManager.GetReminderList(ReminderListOnwork, 0); // 获取未完成提醒，放入正在处理
+            ReminderManager.GetReminderList(ReminderListOnwork, 2); // 获取过期提醒，放入正在处理
+        }
+
+        private void ItemCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
