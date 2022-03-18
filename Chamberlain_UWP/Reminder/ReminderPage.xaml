@@ -91,7 +91,7 @@
                             Click="ManageRemindItemButton_Click"/>
                     </RelativePanel>
 
-                    <TextBlock Text="搜索标签" Margin="0,16,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <TextBlock Text="搜索" Margin="0,16,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
 
                     <StackPanel Orientation="Horizontal">
                         <AutoSuggestBox PlaceholderText="搜索未完成的任务"
@@ -99,7 +99,7 @@
                                         Name="OnworkItemSuggestBox"
                                         Width="280"
                                         TextChanged="OnworkItemSuggestBox_TextChanged"/>
-                        <TextBlock Text="排序依据："
+                        <TextBlock Text="搜索排序："
                             VerticalAlignment="Center" Margin="12,0,0,0"/>
                         <ComboBox Name="ItemsSortComboBox" SelectedIndex="0" SelectionChanged="ItemsSortComboBox_SelectionChanged">
                             <ComboBoxItem Content="按照标签"/>
