@@ -28,21 +28,24 @@ namespace Chamberlain_UWP.Reminder
         public ReminderPage()
         {
             this.InitializeComponent();
+
             ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
             ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
             ReminderManager.GetList(ReminderListFinished, TaskState.Finished); // 获取已完成提醒，放入已完成
+
+            ReminderManager.SortCollectionByTaskState(ReminderListOnwork); // 对列表中的过期项进行排序
         }
 
         private void RefreshReminderList(bool state)
         {
             /* 点击之后状态的collection+1。执行前的ObservableList没同步，存在差异。
              * true: 已完成 +1
-             * false：未完成 +1
+             * false：未完成/已过期 +1
              */
             ReminderItem itemMoved = null;
             if (state)
             {
-                //已完成+1
+                // 已完成+1
                 List<ReminderItem> finished = new List<ReminderItem>();
                 ReminderManager.GetList(finished, TaskState.Finished);
                 finished.ForEach(item =>
@@ -60,9 +63,10 @@ namespace Chamberlain_UWP.Reminder
             }
             else
             {
-                //未完成+1
+                // 未完成/已过期+1
                 List<ReminderItem> onwork = new List<ReminderItem>();
-                ReminderManager.GetList(onwork,0);
+                ReminderManager.GetList(onwork,TaskState.Onwork);
+                ReminderManager.GetList(onwork,TaskState.OutOfDate);
                 onwork.ForEach(item =>
                 {
                     if (!ReminderListOnwork.Contains(item)) // 找旧列表中不包含的项
@@ -75,6 +79,9 @@ namespace Chamberlain_UWP.Reminder
                     ReminderListOnwork.Add(itemMoved);
                     ReminderListFinished.Remove(itemMoved);
                 }
+
+                // 可能添加了已过期的选项，进行排序
+                ReminderManager.SortCollectionByTaskState(ReminderListOnwork);
             }
         }
 

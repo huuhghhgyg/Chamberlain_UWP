@@ -80,26 +80,46 @@ namespace Chamberlain_UWP.Reminder
         {
             int length = collection.Count;
 
-            // 排序测试（为了UI方面不奇怪，只能这么繁琐...）
-            int operate_num = 0; //已完成数
+            //排序测试（为了UI方面不奇怪，只能这么繁琐...）
+            int finished_num = 0; //操作计数
+            int operate_num = 0;
             foreach (ReminderItem item in collection)
             {
-                if (item.TaskState == TaskState.Finished) operate_num++;
+                if (item.TaskState == TaskState.Finished) finished_num++;
+                if (item.TaskState != TaskState.Onwork) operate_num++;
             }
 
-            int operated = 0;
-            operated = 0;
-            for (int i = 0; i < length - operated;)
+            if(operate_num > 0) // 有必要进行排序
             {
-                if (collection[i].TaskState == TaskState.Finished)
+                int finished = 0;
+                int operated = 0;
+                for (int i = 0; i < length - finished;)
                 {
-                    //已完成
-                    collection.Move(i, length - 1);
-                    operated++;
+                    if (operated < operate_num)
+                    {
+                        if (collection[i].TaskState == TaskState.Finished)//已完成
+                        {
+                            if(finished < finished_num)
+                            {
+                                collection.Move(i, length - 1); // 移到末尾
+                                finished++;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                        else if (collection[i].TaskState == TaskState.OutOfDate)//过期
+                        {
+                            collection.Move(i, 0); // 移到开头
+                            i++;
+                        }
+                        else i++; // 正在进行
+                    }
+                    else break; // 排序已完成
                 }
-                else if (i < length - 1 - operate_num) i++; // 不能确定是否需要排序
-                else break; // 确定不需要排序
             }
         }
+
     }
 }

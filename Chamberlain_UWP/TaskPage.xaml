@@ -29,11 +29,11 @@
                               Content="{x:Bind Title,Mode=OneWay}"
                               IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"
                               Click="ItemCheckBox_Click"/>
-                    <TextBlock Text="{x:Bind ProgressValue,Mode=OneWay}" 
+                    <TextBlock Text="{x:Bind ProgressString,Mode=OneWay}" 
                                RelativePanel.AlignRightWithPanel="True" 
                                RelativePanel.AlignVerticalCenterWithPanel="True"/>
                 </RelativePanel>
-                <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Margin="0,0,0,4"/>
+                <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Maximum="1" Margin="0,0,0,4"/>
                 <RelativePanel Margin="0,4">
                     <TextBlock Name="ItemDescriptionTextBlock"
                                Text="{x:Bind Description,Mode=OneWay}" 

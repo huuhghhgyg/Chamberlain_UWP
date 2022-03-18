@@ -61,23 +61,38 @@ namespace Chamberlain_UWP.Reminder
                 return Deadline.ToString("MM/dd HH:mm");
             }
         }
-        public string ProgressValue
+        public double ProgressValue
         {
             get
             {
                 TimeSpan TaskSpan = Deadline - CreatedTime; // 任务时间长度
                 TimeSpan RemainSpan = Deadline - DateTime.Now; // 任务剩余时间
-                if (RemainSpan < TimeSpan.Zero || TaskState == TaskState.Finished) // 剩余时间为负数或已完成
+
+                if(RemainSpan < TimeSpan.Zero) // 判断剩余时间是否是负数
                 {
-                    if (TaskState == 0) TaskState = TaskState.OutOfDate; // 没完成的任务自动过期
-                    return 1.ToString("#0.0%"); // ToString()中的%自动将小数转化为百分数形式
+                    // 是负数：未完成但过期、过期、已完成
+                    if (TaskState == TaskState.Onwork) TaskState = TaskState.OutOfDate; // 没完成的任务自动过期
+                    return 1;
+                }
+                else return (1 - RemainSpan.TotalSeconds / TaskSpan.TotalSeconds); // 剩余时间不是负数，返回剩余时间比例
+            }
+        }
+
+        public string ProgressString
+        {
+            get
+            {
+                if(TaskState > 0) // 判断任务是否过期
+                {
+                    return ProgressValue.ToString("#0.0%"); // 没过期
                 }
                 else
                 {
-                    return ((1 - RemainSpan.TotalSeconds / TaskSpan.TotalSeconds)).ToString("#0.0%"); // 返回剩余时间比例
+                    return "已过期";
                 }
             }
         }
+
         public bool IsReminderDone
         {
             get
@@ -86,20 +101,22 @@ namespace Chamberlain_UWP.Reminder
             }
             set
             {
-                //if (value && TaskState != 1)
-                //{
-                //    TaskState = 1;
-                //    NotifyPropertyChanged("TaskState");
-                //}
-                //else if (!value && TaskState != 0)
-                //{
-                //    TaskState = 0;
-                //    NotifyPropertyChanged("TaskState");
-                //}
-                if (value) TaskState = TaskState.Finished;
-                else TaskState = TaskState.Onwork;
+                if (value)
+                {
+                    TaskState = TaskState.Finished;
+                }
+                else if (ProgressValue < 100)
+                {
+                    TaskState = TaskState.Onwork;
+                }
+                else
+                {
+                    TaskState = TaskState.OutOfDate;
+                }
+
                 NotifyPropertyChanged("TaskState");
                 NotifyPropertyChanged("ProgressValue");
+                NotifyPropertyChanged("ProgressString");
             }
         }
 

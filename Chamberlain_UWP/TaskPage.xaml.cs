@@ -29,8 +29,11 @@ namespace Chamberlain_UWP
         public TaskPage()
         {
             this.InitializeComponent();
+
             ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
             ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
+
+            ReminderManager.SortCollectionByTaskState(ReminderListOnwork); // 对列表中的过期项进行排序
         }
 
         private void ItemCheckBox_Click(object sender, RoutedEventArgs e)

@@ -34,6 +34,7 @@ namespace Chamberlain_UWP
             ReminderItem item5 = new ReminderItem("item5", "desc5", tg, DateTime.Now.AddHours(1), TaskState.Onwork);
             ReminderItem item6 = new ReminderItem("item6", "desc6", tg, DateTime.Now.AddHours(1), TaskState.Finished);
             ReminderItem item7 = new ReminderItem("item7", "desc7", tg2, DateTime.Now.AddHours(1), TaskState.Onwork);
+            ReminderItem outdated = new ReminderItem("Outdated", "Outdated Item", tg2, DateTime.Now.AddSeconds(5), TaskState.Onwork);
             ReminderManager.Add(item1);
             ReminderManager.Add(item2);
             ReminderManager.Add(item3);
@@ -41,6 +42,7 @@ namespace Chamberlain_UWP
             ReminderManager.Add(item5);
             ReminderManager.Add(item6);
             ReminderManager.Add(item7);
+            ReminderManager.Add(outdated);
         }
         public MainPage()
         {

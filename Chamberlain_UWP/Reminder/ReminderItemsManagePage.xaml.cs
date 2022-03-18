@@ -34,6 +34,7 @@ namespace Chamberlain_UWP.Reminder
             ReminderManager.GetList(ReminderList);
 
             ReminderManager.SortCollectionByTaskState(ReminderList);
+            ReminderManager.UpdateList(ReminderList);
         }
 
         private void TagListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
