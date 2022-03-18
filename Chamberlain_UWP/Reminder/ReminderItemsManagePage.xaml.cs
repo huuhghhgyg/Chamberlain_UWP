@@ -88,20 +88,40 @@ namespace Chamberlain_UWP.Reminder
         private void ModifyItemButton_Click(object sender, RoutedEventArgs e)
         {
             int index = RemindItemListView.SelectedIndex; //找到RemindItemListView中选择的元素下标
-            if (index == -1)
+            if (index == -1) //无选中元素
             {
                 RemindItemListView.SelectedItem = null;
                 ClearReviseControl();
+                callTeachingTip("没有选中项", "请在这个列表中选择一项进行修改🛠",RemindItemListView);
                 return;
             }
 
-            ReminderList[index].Title = ItemReviseTitleText.Text; //更新Title字段
-            ReminderList[index].Description = ItemReviseDescText.Text; //更新Description字段
+            // 检测表单内容合法性
+            if(string.IsNullOrEmpty(ItemReviseTitleText.Text))
+            {
+                callTeachingTip("标题不能为空", "否则你想怎么称呼？🤔", ItemReviseTitleText);
+                return;
+            }
+
+            if(string.IsNullOrEmpty(ItemReviseDescText.Text))
+            {
+                callTeachingTip("描述不能为空", "创建的时候不能为空，修改的时候也不能为空捏🤗",ItemReviseDescText);
+                return;
+            }
 
             DateTimeOffset dto = (DateTimeOffset)ItemReviseDatePicker.Date; //转换为DateTimeOffset类型
             DateTime ddlDate = dto.LocalDateTime.Date; //获得本地时间
             ddlDate += ItemReviseTimePicker.Time; //计算预设的时间
 
+            if(ddlDate - DateTime.Now <= TimeSpan.Zero)
+            {
+                callTeachingTip("目标时间已经过了", "穿越不了捏😵", ItemReviseTimePicker);
+                return;
+            }
+
+            // 内容装填
+            ReminderList[index].Title = ItemReviseTitleText.Text; //更新Title字段
+            ReminderList[index].Description = ItemReviseDescText.Text; //更新Description字段
             ReminderList[index].SetDeadline(ddlDate); //按照类中的方法，更新Deadline字段
 
             ReminderManager.UpdateList(ReminderList); //更新列表
@@ -173,6 +193,12 @@ namespace Chamberlain_UWP.Reminder
                 ddlDate += AddItemTimePicker.Time; //计算预设的时间
             }
 
+            if (ddlDate - DateTime.Now <= TimeSpan.Zero)
+            {
+                callTeachingTip("目标时间已经过了", "穿越不了捏😵", AddItemTimePicker);
+                return;
+            }
+
             List<string> tags = new List<string>();
             if (TagListBox.SelectedItems.ToList().Count > 0)
             {
@@ -202,5 +228,6 @@ namespace Chamberlain_UWP.Reminder
             ReminderList.RemoveAt(i);
             ReminderManager.UpdateList(ReminderList);
         }
+
     }
 }
