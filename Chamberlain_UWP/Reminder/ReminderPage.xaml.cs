@@ -33,6 +33,7 @@ namespace Chamberlain_UWP.Reminder
             ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
             ReminderManager.GetList(ReminderListFinished, TaskState.Finished); // 获取已完成提醒，放入已完成
 
+            ReminderManager.SortCollectionByDeadline(ReminderListOnwork); // 对所有项先按日期排序
             ReminderManager.SortCollectionByTaskState(ReminderListOnwork); // 对列表中的过期项进行排序
         }
 

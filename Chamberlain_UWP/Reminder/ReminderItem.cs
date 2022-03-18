@@ -154,7 +154,7 @@ namespace Chamberlain_UWP.Reminder
         public void SetDeadline(DateTime dt)
         {
             Deadline = dt;
-            TaskState = 0; // 重置任务状态
+            TaskState = TaskState.Onwork; // 重置任务状态
         }
 
         // 如果需要重新设置创建时间，则需要重新创建一个ReminderItem

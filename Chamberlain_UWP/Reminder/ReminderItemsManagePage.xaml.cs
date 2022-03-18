@@ -122,7 +122,6 @@ namespace Chamberlain_UWP.Reminder
             // 内容装填
             ReminderList[index].Title = ItemReviseTitleText.Text; //更新Title字段
             ReminderList[index].Description = ItemReviseDescText.Text; //更新Description字段
-            ReminderList[index].TaskState = TaskState.Onwork; // 更新任务状态
             ReminderList[index].SetDeadline(ddlDate); //按照类中的方法，更新Deadline字段
 
             ReminderManager.UpdateList(ReminderList); //更新列表
@@ -212,7 +211,7 @@ namespace Chamberlain_UWP.Reminder
                 return;
             }
 
-            ReminderItem item = new ReminderItem(title, desc, tags, ddlDate, 0); // 新建ReminderItem
+            ReminderItem item = new ReminderItem(title, desc, tags, ddlDate, TaskState.Onwork); // 新建ReminderItem
             ReminderList.Insert(0, item);
 
             ReminderManager.UpdateList(ReminderList); //更新存放在类中的列表

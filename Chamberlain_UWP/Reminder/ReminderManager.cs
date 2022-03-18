@@ -76,6 +76,10 @@ namespace Chamberlain_UWP.Reminder
             ReminderItemList.Sort((x, y) => x.TaskState.CompareTo(y.TaskState));
         }
 
+        /* 问题：如果已经按照日期排了序，这里就没有必要考虑TaskState=OutOfDate的情况，
+         *      TaskState是根据日期计算出来的。
+         *      所以还有必要考虑OutOfDate吗
+         * */
         public static void SortCollectionByTaskState(ObservableCollection<ReminderItem> collection)
         {
             int length = collection.Count;
@@ -89,7 +93,7 @@ namespace Chamberlain_UWP.Reminder
                 if (item.TaskState != TaskState.Onwork) operate_num++;
             }
 
-            if(operate_num > 0) // 有必要进行排序
+            if (operate_num > 0) // 有必要进行排序
             {
                 int finished = 0;
                 int operated = 0;
@@ -99,7 +103,7 @@ namespace Chamberlain_UWP.Reminder
                     {
                         if (collection[i].TaskState == TaskState.Finished)//已完成
                         {
-                            if(finished < finished_num)
+                            if (finished < finished_num)
                             {
                                 collection.Move(i, length - 1); // 移到末尾
                                 finished++;
@@ -119,6 +123,15 @@ namespace Chamberlain_UWP.Reminder
                     else break; // 排序已完成
                 }
             }
+
+        }
+
+        public static void SortCollectionByDeadline(ObservableCollection<ReminderItem> collection) // 先做。否则影响动画
+        {
+            List<ReminderItem> list = new List<ReminderItem>(collection);
+            list.Sort((x, y) => x.Deadline.CompareTo(y.Deadline));
+            collection.Clear();
+            list.ForEach(item => collection.Add(item));
         }
 
     }
