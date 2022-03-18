@@ -25,7 +25,9 @@ namespace Chamberlain_UWP.Reminder
         public List<string> tags { get; set; }
         public DateTime deadline { get; set; }
         public DateTime CreatedTime { get; } // 一经创建，不可更改
-        public TaskState TaskState { get; set; } // 0 - 未完成；1 - 已完成； -1 - 过期
+        public TaskState TaskState { get; set; } 
+        //旧： 0 - 未完成；1 - 已完成； -1 - 过期
+        //新： 0 - 已过期；1 - 未完成；2 - 已完成
 
         //访问器区域
         public string Title
@@ -50,6 +52,7 @@ namespace Chamberlain_UWP.Reminder
                 deadline = value; 
                 NotifyPropertyChanged("DeadlineString"); //注意控件里面绑定的是DeadlineString，所以Notify要填DeadlineString
                 NotifyPropertyChanged("ProgressValue");
+                NotifyPropertyChanged("ProgressString");
             }
         }
 
@@ -68,13 +71,16 @@ namespace Chamberlain_UWP.Reminder
                 TimeSpan TaskSpan = Deadline - CreatedTime; // 任务时间长度
                 TimeSpan RemainSpan = Deadline - DateTime.Now; // 任务剩余时间
 
-                if(RemainSpan < TimeSpan.Zero) // 判断剩余时间是否是负数
+                if (RemainSpan < TimeSpan.Zero) // 判断剩余时间是否是负数
                 {
                     // 是负数：未完成但过期、过期、已完成
                     if (TaskState == TaskState.Onwork) TaskState = TaskState.OutOfDate; // 没完成的任务自动过期
                     return 1;
                 }
-                else return (1 - RemainSpan.TotalSeconds / TaskSpan.TotalSeconds); // 剩余时间不是负数，返回剩余时间比例
+                else if (TaskState == TaskState.Finished) // 提前完成
+                    return 1;
+                else
+                    return (1 - RemainSpan.TotalSeconds / TaskSpan.TotalSeconds); // 剩余时间不是负数，返回剩余时间比例
             }
         }
 
@@ -84,7 +90,9 @@ namespace Chamberlain_UWP.Reminder
             {
                 if(TaskState > 0) // 判断任务是否过期
                 {
-                    return ProgressValue.ToString("#0.0%"); // 没过期
+                    // 没过期
+                    if (TaskState == TaskState.Onwork) return ProgressValue.ToString("#0.0%"); // 正在进行
+                    else return "已完成"; // 已完成
                 }
                 else
                 {

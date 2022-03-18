@@ -122,6 +122,7 @@ namespace Chamberlain_UWP.Reminder
             // 内容装填
             ReminderList[index].Title = ItemReviseTitleText.Text; //更新Title字段
             ReminderList[index].Description = ItemReviseDescText.Text; //更新Description字段
+            ReminderList[index].TaskState = TaskState.Onwork; // 更新任务状态
             ReminderList[index].SetDeadline(ddlDate); //按照类中的方法，更新Deadline字段
 
             ReminderManager.UpdateList(ReminderList); //更新列表
@@ -227,6 +228,7 @@ namespace Chamberlain_UWP.Reminder
             int i = RemindItemListView.SelectedIndex;
             ReminderList.RemoveAt(i);
             ReminderManager.UpdateList(ReminderList);
+            if (RemindItemListView.Items.Count >= i + 1) RemindItemListView.SelectedIndex = i;
         }
 
     }
