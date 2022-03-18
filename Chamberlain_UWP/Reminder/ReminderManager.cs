@@ -13,7 +13,7 @@ namespace Chamberlain_UWP.Reminder
 
         public static int ItemCountOnwork
         {
-            get { return ReminderItemList.Where(item => item.TaskState != 1).ToList().Count; }
+            get { return ReminderItemList.Where(item => item.TaskState != TaskState.Finished).ToList().Count; }
         }
 
         public static void Add(ReminderItem item)
@@ -54,13 +54,13 @@ namespace Chamberlain_UWP.Reminder
             ReminderItemList.ForEach(item => collection.Add(item));
         }
 
-        public static void GetList(ObservableCollection<ReminderItem> collection, int taskstate) // 用于初始化ObservableCollection（有条件）
+        public static void GetList(ObservableCollection<ReminderItem> collection, TaskState taskstate) // 用于初始化ObservableCollection（有条件）
         {
             var reminder_item_list = ReminderItemList.Where(item => item.TaskState == taskstate).ToList(); // 筛选符合taskstate的元素
             reminder_item_list.ForEach(item => collection.Add(item)); // 添加元素
         }
 
-        public static void GetList(List<ReminderItem> collection, int taskstate) // 用于按条件复制到List
+        public static void GetList(List<ReminderItem> collection, TaskState taskstate) // 用于按条件复制到List
         {
             var reminder_item_list = ReminderItemList.Where(item => item.TaskState == taskstate).ToList(); // 筛选符合taskstate的元素
             reminder_item_list.ForEach(item => collection.Add(item)); // 添加元素
@@ -84,14 +84,14 @@ namespace Chamberlain_UWP.Reminder
             int operate_num = 0; //已完成数
             foreach (ReminderItem item in collection)
             {
-                if (item.TaskState == 1) operate_num++;
+                if (item.TaskState == TaskState.Finished) operate_num++;
             }
 
             int operated = 0;
             operated = 0;
             for (int i = 0; i < length - operated;)
             {
-                if (collection[i].TaskState == 1)
+                if (collection[i].TaskState == TaskState.Finished)
                 {
                     //已完成
                     collection.Move(i, length - 1);

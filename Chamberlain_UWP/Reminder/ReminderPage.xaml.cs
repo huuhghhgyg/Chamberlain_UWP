@@ -28,9 +28,9 @@ namespace Chamberlain_UWP.Reminder
         public ReminderPage()
         {
             this.InitializeComponent();
-            ReminderManager.GetList(ReminderListOnwork, 0); // 获取未完成提醒，放入正在处理
-            ReminderManager.GetList(ReminderListOnwork, 2); // 获取过期提醒，放入正在处理
-            ReminderManager.GetList(ReminderListFinished, 1); // 获取已完成提醒，放入已完成
+            ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
+            ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
+            ReminderManager.GetList(ReminderListFinished, TaskState.Finished); // 获取已完成提醒，放入已完成
         }
 
         private void RefreshReminderList(bool state)
@@ -44,7 +44,7 @@ namespace Chamberlain_UWP.Reminder
             {
                 //已完成+1
                 List<ReminderItem> finished = new List<ReminderItem>();
-                ReminderManager.GetList(finished, 1);
+                ReminderManager.GetList(finished, TaskState.Finished);
                 finished.ForEach(item =>
                 {
                     if (!ReminderListFinished.Contains(item)) // 找旧列表中不包含的项
@@ -90,6 +90,8 @@ namespace Chamberlain_UWP.Reminder
             RefreshReminderList(sender_state);
         }
 
+        delegate void FilterReminderItems(AutoSuggestBox sender);
+
         private void OnworkItemSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             GetListOnwork();
@@ -103,7 +105,6 @@ namespace Chamberlain_UWP.Reminder
                 sender.ItemsSource = suggestList.Where(item => item.Contains(sender.Text)).ToList();
 
                 filter = new FilterReminderItems(FilterReminderItemsByName);
-                filter(sender);
             }
             else
             {
@@ -111,12 +112,9 @@ namespace Chamberlain_UWP.Reminder
                 sender.ItemsSource = suggestList.Where(item => item.Contains(sender.Text)).ToList();
 
                 filter = new FilterReminderItems(FilterReminderItemsByTag);
-                filter(sender);
             }
-
+            filter(sender); // 使用委托
         }
-
-        delegate void FilterReminderItems(AutoSuggestBox sender);
 
         private void FilterReminderItemsByName(AutoSuggestBox sender)
         {
@@ -148,8 +146,8 @@ namespace Chamberlain_UWP.Reminder
         private void GetListOnwork() // 用于筛选Onwork状态的item
         {
             ReminderListOnwork.Clear();
-            ReminderManager.GetList(ReminderListOnwork, 0); // 获取未完成提醒，放入正在处理
-            ReminderManager.GetList(ReminderListOnwork, 2); // 获取过期提醒，放入正在处理
+            ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
+            ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
         }
     }
 }

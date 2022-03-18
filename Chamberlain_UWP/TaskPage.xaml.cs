@@ -29,8 +29,8 @@ namespace Chamberlain_UWP
         public TaskPage()
         {
             this.InitializeComponent();
-            ReminderManager.GetList(ReminderListOnwork, 0); // 获取未完成提醒，放入正在处理
-            ReminderManager.GetList(ReminderListOnwork, 2); // 获取过期提醒，放入正在处理
+            ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
+            ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
         }
 
         private void ItemCheckBox_Click(object sender, RoutedEventArgs e)
@@ -38,10 +38,10 @@ namespace Chamberlain_UWP
             // 未完成减少了
             List<ReminderItem> listOnwork = new List<ReminderItem>(ReminderListOnwork);
             List<ReminderItem> newlistOnwork = new List<ReminderItem>(); //少
-            ReminderManager.GetList(newlistOnwork,0);
+            ReminderManager.GetList(newlistOnwork,TaskState.Finished);
             listOnwork.ForEach(item =>
             {
-                if(!newlistOnwork.Contains(item)) ReminderListOnwork.Remove(item);
+                if(newlistOnwork.Contains(item)) ReminderListOnwork.Remove(item); //删除不存在的项
             });
         }
     }

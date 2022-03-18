@@ -10,6 +10,13 @@ using System.Threading.Tasks;
 
 namespace Chamberlain_UWP.Reminder
 {
+    public enum TaskState
+    {
+        OutOfDate,
+        Onwork,
+        Finished
+    }
+
     public class ReminderItem : INotifyPropertyChanged
     {
         //属性区域
@@ -18,7 +25,7 @@ namespace Chamberlain_UWP.Reminder
         public List<string> tags { get; set; }
         public DateTime deadline { get; set; }
         public DateTime CreatedTime { get; } // 一经创建，不可更改
-        public int TaskState { get; set; } // 0 - 未完成；1 - 已完成； -1 - 过期
+        public TaskState TaskState { get; set; } // 0 - 未完成；1 - 已完成； -1 - 过期
 
         //访问器区域
         public string Title
@@ -60,9 +67,9 @@ namespace Chamberlain_UWP.Reminder
             {
                 TimeSpan TaskSpan = Deadline - CreatedTime; // 任务时间长度
                 TimeSpan RemainSpan = Deadline - DateTime.Now; // 任务剩余时间
-                if (RemainSpan < TimeSpan.Zero || TaskState == 1) // 剩余时间为负数或已完成
+                if (RemainSpan < TimeSpan.Zero || TaskState == TaskState.Finished) // 剩余时间为负数或已完成
                 {
-                    if (TaskState == 0) TaskState = -1; // 没完成的任务自动过期
+                    if (TaskState == 0) TaskState = TaskState.OutOfDate; // 没完成的任务自动过期
                     return 1.ToString("#0.0%"); // ToString()中的%自动将小数转化为百分数形式
                 }
                 else
@@ -75,7 +82,7 @@ namespace Chamberlain_UWP.Reminder
         {
             get
             {
-                return (TaskState == 1) ? true : false; //返回是否已完成
+                return (TaskState == TaskState.Finished) ? true : false; //返回是否已完成
             }
             set
             {
@@ -89,8 +96,8 @@ namespace Chamberlain_UWP.Reminder
                 //    TaskState = 0;
                 //    NotifyPropertyChanged("TaskState");
                 //}
-                if (value) TaskState = 1;
-                else TaskState = 0;
+                if (value) TaskState = TaskState.Finished;
+                else TaskState = TaskState.Onwork;
                 NotifyPropertyChanged("TaskState");
                 NotifyPropertyChanged("ProgressValue");
             }
@@ -101,7 +108,7 @@ namespace Chamberlain_UWP.Reminder
             get { return "( " + string.Join(", ", tags) + " )"; }
         }
 
-        public ReminderItem(string title, string desc, List<string> tags, DateTime ddl, int taskstate)
+        public ReminderItem(string title, string desc, List<string> tags, DateTime ddl, TaskState taskstate)
         {
             Title = title;
             Description = desc;
