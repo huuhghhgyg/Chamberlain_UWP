@@ -30,8 +30,8 @@ namespace Chamberlain_UWP.Reminder
         {
             this.InitializeComponent();
 
-            ReminderManager.GetTags(TagList);
-            ReminderManager.GetReminderList(ReminderList);
+            ReminderManager.GetTagCollection(TagList);
+            ReminderManager.GetList(ReminderList);
 
             ReminderManager.SortCollectionByTaskState(ReminderList);
         }
@@ -59,7 +59,7 @@ namespace Chamberlain_UWP.Reminder
 
         private void ItemSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
-            int i = ReminderManager.FindReminderItemWithTitle(args.SelectedItem.ToString());
+            int i = ReminderManager.FindItemWithTitle(args.SelectedItem.ToString());
             RemindItemListView.SelectedIndex = i; // 选中item
         }
 
@@ -73,6 +73,7 @@ namespace Chamberlain_UWP.Reminder
                 return;
             }
 
+            // 更新元素属性
             ItemReviseTitleText.Text = ReminderList[index].Title;
             ItemReviseDescText.Text = ReminderList[index].Description;
             ItemReviseDatePicker.Date = ReminderList[index].Deadline;
@@ -102,7 +103,7 @@ namespace Chamberlain_UWP.Reminder
 
             ReminderList[index].SetDeadline(ddlDate); //按照类中的方法，更新Deadline字段
 
-            ReminderManager.UpdateReminderList(ReminderList); //更新列表
+            ReminderManager.UpdateList(ReminderList); //更新列表
         }
 
         private void ClearReviseControl()
@@ -186,7 +187,7 @@ namespace Chamberlain_UWP.Reminder
             ReminderItem item = new ReminderItem(title, desc, tags, ddlDate, 0); // 新建ReminderItem
             ReminderList.Insert(0, item);
 
-            ReminderManager.UpdateReminderList(ReminderList); //更新存放在类中的列表
+            ReminderManager.UpdateList(ReminderList); //更新存放在类中的列表
 
             //清除表单数据
             AddTitleTextBox.Text = "";
@@ -198,7 +199,7 @@ namespace Chamberlain_UWP.Reminder
         {
             int i = RemindItemListView.SelectedIndex;
             ReminderList.RemoveAt(i);
-            ReminderManager.UpdateReminderList(ReminderList);
+            ReminderManager.UpdateList(ReminderList);
         }
     }
 }

@@ -123,10 +123,11 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reminder\ReminderItems.cs" />
+    <Compile Include="Reminder\ReminderItem.cs" />
     <Compile Include="Reminder\ReminderItemsManagePage.xaml.cs">
       <DependentUpon>ReminderItemsManagePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Reminder\ReminderManager.cs" />
     <Compile Include="Reminder\ReminderPage.xaml.cs">
       <DependentUpon>ReminderPage.xaml</DependentUpon>
     </Compile>

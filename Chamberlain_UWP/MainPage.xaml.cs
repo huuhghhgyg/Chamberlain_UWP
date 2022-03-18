@@ -34,13 +34,13 @@ namespace Chamberlain_UWP
             ReminderItem item5 = new ReminderItem("item5", "desc5", tg, DateTime.Now.AddHours(1), 0);
             ReminderItem item6 = new ReminderItem("item6", "desc6", tg, DateTime.Now.AddHours(1), 1);
             ReminderItem item7 = new ReminderItem("item7", "desc7", tg2, DateTime.Now.AddHours(1), 0);
-            ReminderManager.AddReminder(item1);
-            ReminderManager.AddReminder(item2);
-            ReminderManager.AddReminder(item3);
-            ReminderManager.AddReminder(item4);
-            ReminderManager.AddReminder(item5);
-            ReminderManager.AddReminder(item6);
-            ReminderManager.AddReminder(item7);
+            ReminderManager.Add(item1);
+            ReminderManager.Add(item2);
+            ReminderManager.Add(item3);
+            ReminderManager.Add(item4);
+            ReminderManager.Add(item5);
+            ReminderManager.Add(item6);
+            ReminderManager.Add(item7);
         }
         public MainPage()
         {

@@ -28,9 +28,9 @@ namespace Chamberlain_UWP.Reminder
         public ReminderPage()
         {
             this.InitializeComponent();
-            ReminderManager.GetReminderList(ReminderListOnwork, 0); // 获取未完成提醒，放入正在处理
-            ReminderManager.GetReminderList(ReminderListOnwork, 2); // 获取过期提醒，放入正在处理
-            ReminderManager.GetReminderList(ReminderListFinished, 1); // 获取已完成提醒，放入已完成
+            ReminderManager.GetList(ReminderListOnwork, 0); // 获取未完成提醒，放入正在处理
+            ReminderManager.GetList(ReminderListOnwork, 2); // 获取过期提醒，放入正在处理
+            ReminderManager.GetList(ReminderListFinished, 1); // 获取已完成提醒，放入已完成
         }
 
         private void RefreshReminderList(bool state)
@@ -44,7 +44,7 @@ namespace Chamberlain_UWP.Reminder
             {
                 //已完成+1
                 List<ReminderItem> finished = new List<ReminderItem>();
-                ReminderManager.GetReminderList(finished, 1);
+                ReminderManager.GetList(finished, 1);
                 finished.ForEach(item =>
                 {
                     if (!ReminderListFinished.Contains(item)) // 找旧列表中不包含的项
@@ -62,7 +62,7 @@ namespace Chamberlain_UWP.Reminder
             {
                 //未完成+1
                 List<ReminderItem> onwork = new List<ReminderItem>();
-                ReminderManager.GetReminderList(onwork,0);
+                ReminderManager.GetList(onwork,0);
                 onwork.ForEach(item =>
                 {
                     if (!ReminderListOnwork.Contains(item)) // 找旧列表中不包含的项
@@ -107,7 +107,7 @@ namespace Chamberlain_UWP.Reminder
             }
             else
             {
-                ReminderManager.GetTags(suggestList);
+                ReminderManager.GetTagList(suggestList);
                 sender.ItemsSource = suggestList.Where(item => item.Contains(sender.Text)).ToList();
 
                 filter = new FilterReminderItems(FilterReminderItemsByTag);
@@ -148,8 +148,8 @@ namespace Chamberlain_UWP.Reminder
         private void GetListOnwork() // 用于筛选Onwork状态的item
         {
             ReminderListOnwork.Clear();
-            ReminderManager.GetReminderList(ReminderListOnwork, 0); // 获取未完成提醒，放入正在处理
-            ReminderManager.GetReminderList(ReminderListOnwork, 2); // 获取过期提醒，放入正在处理
+            ReminderManager.GetList(ReminderListOnwork, 0); // 获取未完成提醒，放入正在处理
+            ReminderManager.GetList(ReminderListOnwork, 2); // 获取过期提醒，放入正在处理
         }
     }
 }
