@@ -10,16 +10,18 @@
     Background="{ThemeResource NavigationViewExpandedPaneBackground}">
 
     <Grid>
-        <Grid Margin="48">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock Name="PageTitleTextBlock" Style="{ThemeResource TitleTextBlockStyle}">设置</TextBlock>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Name="PageTitleTextBlock"
+                   Text="设置"
+                   Margin="48,48,48,12"
+                   Style="{ThemeResource TitleTextBlockStyle}"/>
+        <ScrollViewer>
             <!--设置面板-->
-            <StackPanel Grid.Row="1">
+            <StackPanel Margin="48,0,48,48" Grid.Row="1">
             </StackPanel>
-        </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -18,7 +18,7 @@
 
         <!--列表卡片的DataTemplate，存放所有项目-->
         <DataTemplate x:DataType="local1:ReminderItem" x:Key="ReminderItemViewTemplate">
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,4" Padding="12,8"
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,8" Padding="12,8"
                         Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1"
@@ -64,12 +64,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Name="PageTitleTextBlock" Text="任务面板"
-                   Margin="48,48,48,4"
+                   Margin="48,48,48,12"
                    Style="{ThemeResource TitleTextBlockStyle}"/>
 
-        <ScrollViewer Grid.Row="1" Padding="48,0">
+        <ScrollViewer Grid.Row="1">
             <!--面板-->
-            <StackPanel>
+            <StackPanel Margin="48,0,48,48">
                 <ListView ItemsSource="{x:Bind ReminderListOnwork}" 
                         SelectionMode="None"
                         ItemContainerStyle="{StaticResource SectionView}"

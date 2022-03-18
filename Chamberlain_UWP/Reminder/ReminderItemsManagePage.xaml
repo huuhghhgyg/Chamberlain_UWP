@@ -15,10 +15,10 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="Padding" Value="0"/>
         </Style>
-        
+
         <!--列表卡片的DataTemplate，存放所有项目-->
         <DataTemplate x:DataType="local:ReminderItem" x:Key="ReminderItemViewTemplate">
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,4" Padding="12,8">
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,8" Padding="12,8">
                 <RelativePanel Margin="0,0,0,4" >
                     <CheckBox Name="ItemCheckBox"
                               Content="{x:Bind Title,Mode=OneWay}"
@@ -51,7 +51,7 @@
         </DataTemplate>
 
     </Page.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -60,13 +60,12 @@
 
         <TextBlock Name="PageTitleTextBlock"
                    Text="管理提醒项"
-                   Margin="48,48,48,4"
+                   Margin="48,48,48,12"
                    Style="{ThemeResource TitleTextBlockStyle}"/>
         <Grid Grid.Row="1">
-            <ScrollViewer Name="PageScrollViewer" Padding="48,0,48,48">
-                <StackPanel>
-
-                    <TextBlock Text="添加" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}" />
+            <ScrollViewer Name="PageScrollViewer">
+                <StackPanel Margin="48,0,48,48">
+                    <TextBlock Text="添加" Margin="0,0,0,8" Style="{ThemeResource BaseTextBlockStyle}" />
                     <!--添加项目-->
                     <StackPanel Name="AddItemPanel" Style="{StaticResource CardStackPanel}" Padding="12">
                         <Grid ColumnSpacing="12">
@@ -140,7 +139,7 @@
                         </Grid>
                     </StackPanel>
 
-                    <TextBlock Text="修改提醒" Margin="0,16,0,8" Style="{ThemeResource BaseTextBlockStyle}" />
+                    <TextBlock Text="修改提醒" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}" />
                     <!--处理项目面板-->
                     <StackPanel Name="PendingItemsPanel">
                         <StackPanel Style="{StaticResource CardStackPanel}" Padding="12">
@@ -187,7 +186,6 @@
                             </Grid>
                         </StackPanel>
                     </StackPanel>
-
                 </StackPanel>
             </ScrollViewer>
         </Grid>

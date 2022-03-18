@@ -18,7 +18,7 @@
 
         <!--列表卡片的DataTemplate，存放所有项目-->
         <DataTemplate x:DataType="local:ReminderItem" x:Key="ReminderItemViewTemplate">
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,4" Padding="12,8"
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,8" Padding="12,8"
                         Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1"
@@ -57,69 +57,67 @@
         </DataTemplate>
 
     </Page.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock Name="PageTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="48,48,48,4">提醒</TextBlock>
+        <TextBlock Name="PageTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="48,48,48,12">提醒</TextBlock>
 
         <!--面板-->
         <ScrollViewer Grid.Row="1">
-            <Grid Margin="48,0,48,48">
-                <StackPanel Margin="0,16,0,0">
-                    <RelativePanel HorizontalAlignment="Stretch" VerticalAlignment="Top" 
+            <StackPanel Margin="48,0,48,48">
+                <RelativePanel HorizontalAlignment="Stretch" VerticalAlignment="Top" 
                         Padding="16" Style="{StaticResource CardRelativePanel}">
-                        <FontIcon x:Name="ItemFontIcon" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                    <FontIcon x:Name="ItemFontIcon" FontFamily="{ThemeResource SymbolThemeFontFamily}"
                                   Glyph="&#xE133;" FontSize="26"
                                   RelativePanel.AlignVerticalCenterWithPanel="True"/>
-                        <StackPanel Margin="16,0,0,0"
+                    <StackPanel Margin="16,0,0,0"
                                     RelativePanel.RightOf="ItemFontIcon"
                                     RelativePanel.AlignVerticalCenterWithPanel="True">
-                            <TextBlock Text="管理提醒" 
+                        <TextBlock Text="管理提醒" 
                                        Style="{ThemeResource BodyTextBlockStyle}"/>
-                            <TextBlock Text="添加 / 删除提醒项" 
+                        <TextBlock Text="添加 / 删除提醒项" 
                                        Style="{StaticResource CaptionTextBlockStyle}"
                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
 
-                        </StackPanel>
-                        
-                        <Button Name="ManageRemindItemButton" Content="转到管理页面" 
+                    </StackPanel>
+
+                    <Button Name="ManageRemindItemButton" Content="转到管理页面" 
                             RelativePanel.AlignRightWithPanel="True" 
                             Style="{StaticResource AccentButtonStyle}"
                             Click="ManageRemindItemButton_Click"/>
-                    </RelativePanel>
+                </RelativePanel>
 
-                    <TextBlock Text="搜索" Margin="0,16,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <TextBlock Text="搜索" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
 
-                    <StackPanel Orientation="Horizontal">
-                        <AutoSuggestBox PlaceholderText="搜索未完成的任务"
+                <StackPanel Orientation="Horizontal">
+                    <AutoSuggestBox PlaceholderText="搜索未完成的任务"
                                         QueryIcon="Find"
                                         Name="OnworkItemSuggestBox"
                                         Width="280"
                                         TextChanged="OnworkItemSuggestBox_TextChanged"/>
-                        <TextBlock Text="搜索排序："
+                    <TextBlock Text="搜索排序："
                             VerticalAlignment="Center" Margin="12,0,0,0"/>
-                        <ComboBox Name="ItemsSortComboBox" SelectedIndex="0" SelectionChanged="ItemsSortComboBox_SelectionChanged">
-                            <ComboBoxItem Content="按照标签"/>
-                            <ComboBoxItem Content="按照名称"/>
-                        </ComboBox>
-                    </StackPanel>
-                    <TextBlock Text="待处理" Margin="0,16,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
-                    <ListView ItemsSource="{x:Bind ReminderListOnwork,Mode=OneWay}" 
-                        SelectionMode="None"
-                        ItemContainerStyle="{StaticResource SectionView}"
-                        ItemTemplate="{StaticResource ReminderItemViewTemplate}">
-                    </ListView>
-                    <TextBlock Text="已完成" Margin="0,16,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
-                    <ListView ItemsSource="{x:Bind ReminderListFinished}"
-                        SelectionMode="None"
-                        ItemContainerStyle="{StaticResource SectionView}"
-                        ItemTemplate="{StaticResource ReminderItemViewTemplate}">
-                    </ListView>
+                    <ComboBox Name="ItemsSortComboBox" SelectedIndex="0" SelectionChanged="ItemsSortComboBox_SelectionChanged">
+                        <ComboBoxItem Content="按照标签"/>
+                        <ComboBoxItem Content="按照名称"/>
+                    </ComboBox>
                 </StackPanel>
-            </Grid>
+                <TextBlock Text="待处理" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <ListView ItemsSource="{x:Bind ReminderListOnwork,Mode=OneWay}" 
+                        SelectionMode="None"
+                        ItemContainerStyle="{StaticResource SectionView}"
+                        ItemTemplate="{StaticResource ReminderItemViewTemplate}">
+                </ListView>
+                <TextBlock Text="已完成" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <ListView ItemsSource="{x:Bind ReminderListFinished}"
+                        SelectionMode="None"
+                        ItemContainerStyle="{StaticResource SectionView}"
+                        ItemTemplate="{StaticResource ReminderItemViewTemplate}">
+                </ListView>
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 </Page>
