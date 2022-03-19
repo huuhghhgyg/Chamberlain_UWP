@@ -18,9 +18,56 @@
                    Text="设置"
                    Margin="48,48,48,12"
                    Style="{ThemeResource TitleTextBlockStyle}"/>
-        <ScrollViewer>
+        <ScrollViewer Grid.Row="1">
             <!--设置面板-->
             <StackPanel Margin="48,0,48,48" Grid.Row="1">
+                <muxc:Expander Name="ReminderExpander"
+                               IsExpanded="False" ExpandDirection="Down"
+                               VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                               HorizontalContentAlignment="Stretch">
+                    <muxc:Expander.Header>
+                        <RelativePanel>
+                            <FontIcon Name="ReminderIcon" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                      Glyph="&#xE73A;" FontSize="16"
+                                      RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                            <TextBlock Text="提醒" Margin="12,0,0,0"
+                                       RelativePanel.RightOf="ReminderIcon"
+                                       RelativePanel.AlignHorizontalCenterWithPanel="True"/>
+                        </RelativePanel>
+                    </muxc:Expander.Header>
+                    <StackPanel>
+                        <TextBlock Text="导入Reminder(JSON)"
+                                   Margin="0,0,0,8"
+                                   Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <muxc:InfoBar Name="ImportReminderInfoBar" Title="" IsOpen="True"
+                                Severity="Success" Visibility="Collapsed"/>
+                        <TextBox Name="ImportReminderTextBox"
+                                 PlaceholderText="(JSON)"
+                                 MaxHeight="200"
+                                 TextWrapping="Wrap"/>
+                        <Button Name="ImportReminderButton" Content="导入"
+                                Margin="0,8,0,0"
+                                HorizontalAlignment="Right"
+                                Click="ImportReminderButton_Click"/>
+                    </StackPanel>
+                </muxc:Expander>
+                
+                <muxc:Expander Name="DebugOptionExpander" Header="调试选项"
+                               IsExpanded="False" ExpandDirection="Down"
+                               Margin="0,12,0,0"
+                               VerticalAlignment="Top" 
+                               HorizontalAlignment="Stretch"
+                               HorizontalContentAlignment="Stretch"
+                               Expanding="DebugOptionExpander_Expanding">
+                    <StackPanel>
+                        <TextBlock Text="JSON（仅输出）"
+                                   Margin="0,0,0,8"
+                                   Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <TextBox Name="ReminderJsonTextBox"
+                                 MaxHeight="200"
+                                 TextWrapping="Wrap"/>
+                    </StackPanel>
+                </muxc:Expander>
             </StackPanel>
         </ScrollViewer>
     </Grid>

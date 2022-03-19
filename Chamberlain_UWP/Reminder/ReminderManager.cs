@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Chamberlain_UWP.Reminder
 {
@@ -87,18 +88,18 @@ namespace Chamberlain_UWP.Reminder
                 .ToList();
         }
 
-        /* 问题：如果已经按照日期排了序，这里就没有必要考虑TaskState=OutOfDate的情况，
+        public static string ImportByJson(string json_str)
         {
-            int length = collection.Count;
-
+            string message = "";
+            try
             {
-                if (item.TaskState == TaskState.Finished) finished_num++;
+                ReminderItemList = JsonSerializer.Deserialize<List<ReminderItem>>(json_str);
             }
-
+            catch (Exception ex)
             {
-                int finished = 0;
-        }
-
+                message = ex.Message;
+            }
+            return message;
         }
 
     }

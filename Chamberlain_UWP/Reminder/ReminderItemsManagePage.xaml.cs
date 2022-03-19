@@ -83,6 +83,7 @@ namespace Chamberlain_UWP.Reminder
             ItemReviseTimePicker.SelectedTime = new TimeSpan(h, m, s);
 
             ItemRevisePriorityComboBox.SelectedIndex = (int)ReminderList[index].Priority;
+            CreatedTimeTextBlock.Text = ReminderList[index].CreatedTime.ToString("f");
         }
 
         private void ModifyItemButton_Click(object sender, RoutedEventArgs e)

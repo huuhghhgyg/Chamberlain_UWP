@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Chamberlain_UWP.Reminder
@@ -26,62 +27,76 @@ namespace Chamberlain_UWP.Reminder
 
     public class ReminderItem : INotifyPropertyChanged
     {
+        /// <summary>
+        /// 属性区域：大部分都是私有的局部属性，一些没有必要用访问器的直接做成public
+        /// 访问器区域：修改私有属性，顺便做其它操作。
+        /// 辅助prop区域：基本上是get类型的访问器，用于辅助xaml的x:bind
+        /// </summary>
+        
         //属性区域
-        private string title { get; set; }
-        private string description { get; set; }
-        private List<string> tags { get; set; }
-        private DateTime deadline { get; set; }
-        private DateTime CreatedTime { get; } // 一经创建，不可更改
-        public TaskState TaskState { get; set; }
+        private string _title;
+        private string _description;
+        private List<string> _tags;
+        private DateTime _deadline;
+        [JsonInclude]
+        public readonly DateTime CreatedTime; // 创建后不更改，只读的public属性
+        [JsonInclude]
+        public TaskState TaskState { get; set; } // 更改不需要触发事件，public
         //旧： 0 - 未完成；1 - 已完成； -1 - 过期
         //新： 0 - 已过期；1 - 未完成；2 - 已完成
-        public Priority priority { get; set; }
+        [JsonIgnore]
+        public Priority _priority;
 
         //访问器区域
+        [JsonInclude]
         public string Title
         {
-            get { return title; }
-            set { title = value; NotifyPropertyChanged("Title"); }
+            get { return _title; }
+            set { _title = value; NotifyPropertyChanged("Title"); }
         }
 
+        [JsonInclude]
         public string Description
         {
-            get { return description; }
-            set { description = value; NotifyPropertyChanged("Description"); }
+            get { return _description; }
+            set { _description = value; NotifyPropertyChanged("Description"); }
         }
 
+        [JsonInclude]
         public List<string> Tags
         {
-            get { return tags; }
-            set { tags = value; NotifyPropertyChanged("Tags"); }
+            get { return _tags; }
+            set { _tags = value; NotifyPropertyChanged("Tags"); }
         }
 
+        [JsonInclude]
         public DateTime Deadline
         {
-            get { return deadline; }
+            get { return _deadline; }
             set { 
-                deadline = value; 
+                _deadline = value; 
                 NotifyPropertyChanged("DeadlineString"); //注意控件里面绑定的是DeadlineString，所以Notify要填DeadlineString
                 NotifyPropertyChanged("ProgressValue");
                 NotifyPropertyChanged("ProgressString");
             }
         }
 
+        [JsonInclude]
         public Priority Priority
         {
             get
             {
-                return priority;
+                return _priority;
             }
             set
             {
-                priority = value;
+                _priority = value;
                 NotifyPropertyChanged("PriorityString");
             }
         }
 
-        //辅助prop
         [JsonIgnore]
+        //辅助prop
         public string DeadlineString
         {
             get
@@ -111,6 +126,7 @@ namespace Chamberlain_UWP.Reminder
             }
         }
 
+        [JsonIgnore]
         public string ProgressString
         {
             get
@@ -128,6 +144,7 @@ namespace Chamberlain_UWP.Reminder
             }
         }
 
+        [JsonIgnore]
         public bool IsReminderDone
         {
             get
@@ -155,11 +172,13 @@ namespace Chamberlain_UWP.Reminder
             }
         }
 
+        [JsonIgnore]
         public string TagsString
         {
-            get { return "( " + string.Join(", ", tags) + " )"; }
+            get { return "( " + string.Join(", ", _tags) + " )"; }
         }
 
+        [JsonIgnore]
         public string PriorityString
         {
             get
@@ -184,6 +203,7 @@ namespace Chamberlain_UWP.Reminder
             TaskState = taskstate;
             Priority = Priority.Default; // 0
         }
+
         public ReminderItem(string title, string desc, List<string> tags, DateTime ddl, TaskState taskstate, Priority pri)
         {
             Title = title;
@@ -195,6 +215,22 @@ namespace Chamberlain_UWP.Reminder
             TaskState = taskstate;
             Priority = pri;
         }
+
+        // 存在引用，仅用于JsonSerializer创建实例
+        [JsonConstructor]
+        public ReminderItem(string title, string description, List<string> tags, DateTime deadline, TaskState taskstate, Priority priority, DateTime createdTime)
+        {
+            //仅用于JsonSerializer创建实例
+            Title = title;
+            Description = description;
+            Tags = new List<string>();
+            Tags.AddRange(tags);
+            Deadline = deadline;
+            TaskState = taskstate;
+            Priority = priority;
+            CreatedTime = createdTime;
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
