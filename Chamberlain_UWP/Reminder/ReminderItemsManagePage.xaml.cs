@@ -30,11 +30,10 @@ namespace Chamberlain_UWP.Reminder
         {
             this.InitializeComponent();
 
+            ReminderManager.SortListByDefault(); // 对List先进行排序
+
             ReminderManager.GetTagCollection(TagList);
             ReminderManager.GetList(ReminderList);
-
-            ReminderManager.SortCollectionByTaskState(ReminderList);
-            ReminderManager.UpdateList(ReminderList);
         }
 
         private void TagListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -48,7 +47,6 @@ namespace Chamberlain_UWP.Reminder
             if (!string.IsNullOrWhiteSpace(AddTagTextBox.Text)) TagList.Add(AddTagTextBox.Text);
             AddTagTextBox.Text = "";
             UpdateItemsProgress();
-            ReminderManager.SortCollectionByTaskState(ReminderList);
         }
 
         private void ItemSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
@@ -83,6 +81,8 @@ namespace Chamberlain_UWP.Reminder
             int m = ReminderList[index].Deadline.Minute;
             int s = ReminderList[index].Deadline.Second;
             ItemReviseTimePicker.SelectedTime = new TimeSpan(h, m, s);
+
+            ItemRevisePriorityComboBox.SelectedIndex = (int)ReminderList[index].Priority;
         }
 
         private void ModifyItemButton_Click(object sender, RoutedEventArgs e)
@@ -123,6 +123,7 @@ namespace Chamberlain_UWP.Reminder
             ReminderList[index].Title = ItemReviseTitleText.Text; //更新Title字段
             ReminderList[index].Description = ItemReviseDescText.Text; //更新Description字段
             ReminderList[index].SetDeadline(ddlDate); //按照类中的方法，更新Deadline字段
+            ReminderList[index].Priority = (Priority)ItemRevisePriorityComboBox.SelectedIndex; //这项似乎没法不选，不做检测
 
             ReminderManager.UpdateList(ReminderList); //更新列表
         }
@@ -211,7 +212,10 @@ namespace Chamberlain_UWP.Reminder
                 return;
             }
 
-            ReminderItem item = new ReminderItem(title, desc, tags, ddlDate, TaskState.Onwork); // 新建ReminderItem
+            Priority priority = new Priority();
+            priority = (Priority)AddItemPriorityComboBox.SelectedIndex; // 因为无法为空，所以不检查
+
+            ReminderItem item = new ReminderItem(title, desc, tags, ddlDate, TaskState.Onwork,priority); // 新建ReminderItem
             ReminderList.Insert(0, item);
 
             ReminderManager.UpdateList(ReminderList); //更新存放在类中的列表
@@ -230,5 +234,11 @@ namespace Chamberlain_UWP.Reminder
             if (RemindItemListView.Items.Count >= i + 1) RemindItemListView.SelectedIndex = i;
         }
 
+        private void SortListButton_Click(object sender, RoutedEventArgs e) // 暴力刷新
+        {
+            ReminderManager.SortListByDefault();
+            ReminderList.Clear();
+            ReminderManager.GetList(ReminderList);
+        }
     }
 }

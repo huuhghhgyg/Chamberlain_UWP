@@ -30,8 +30,14 @@
                               IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"
                               Click="ItemCheckBox_Click"/>
                     <TextBlock Text="{x:Bind ProgressString,Mode=OneWay}" 
+                               Name="ProgressTextBlock"
                                RelativePanel.AlignRightWithPanel="True" 
                                RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                    <TextBlock Text="{x:Bind PriorityString}"
+                               RelativePanel.LeftOf="ProgressTextBlock"
+                               Style="{ThemeResource BodyTextBlockStyle}"
+                               RelativePanel.AlignVerticalCenterWithPanel="True"
+                               Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
                 </RelativePanel>
                 <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Maximum="1" Margin="0,0,0,4"/>
                 <RelativePanel Margin="0,4">

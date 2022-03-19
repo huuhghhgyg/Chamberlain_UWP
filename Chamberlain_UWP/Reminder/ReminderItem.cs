@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -17,17 +17,25 @@ namespace Chamberlain_UWP.Reminder
         Finished
     }
 
+    public enum Priority
+    {
+        Default,
+        Middle,
+        High
+    }
+
     public class ReminderItem : INotifyPropertyChanged
     {
         //属性区域
         private string title { get; set; }
-        public string description { get; set; }
-        public List<string> tags { get; set; }
-        public DateTime deadline { get; set; }
-        public DateTime CreatedTime { get; } // 一经创建，不可更改
-        public TaskState TaskState { get; set; } 
+        private string description { get; set; }
+        private List<string> tags { get; set; }
+        private DateTime deadline { get; set; }
+        private DateTime CreatedTime { get; } // 一经创建，不可更改
+        public TaskState TaskState { get; set; }
         //旧： 0 - 未完成；1 - 已完成； -1 - 过期
         //新： 0 - 已过期；1 - 未完成；2 - 已完成
+        public Priority priority { get; set; }
 
         //访问器区域
         public string Title
@@ -35,16 +43,19 @@ namespace Chamberlain_UWP.Reminder
             get { return title; }
             set { title = value; NotifyPropertyChanged("Title"); }
         }
+
         public string Description
         {
             get { return description; }
             set { description = value; NotifyPropertyChanged("Description"); }
         }
+
         public List<string> Tags
         {
             get { return tags; }
             set { tags = value; NotifyPropertyChanged("Tags"); }
         }
+
         public DateTime Deadline
         {
             get { return deadline; }
@@ -56,7 +67,21 @@ namespace Chamberlain_UWP.Reminder
             }
         }
 
+        public Priority Priority
+        {
+            get
+            {
+                return priority;
+            }
+            set
+            {
+                priority = value;
+                NotifyPropertyChanged("PriorityString");
+            }
+        }
+
         //辅助prop
+        [JsonIgnore]
         public string DeadlineString
         {
             get
@@ -64,6 +89,8 @@ namespace Chamberlain_UWP.Reminder
                 return Deadline.ToString("MM/dd HH:mm");
             }
         }
+
+        [JsonIgnore]
         public double ProgressValue
         {
             get
@@ -133,6 +160,19 @@ namespace Chamberlain_UWP.Reminder
             get { return "( " + string.Join(", ", tags) + " )"; }
         }
 
+        public string PriorityString
+        {
+            get
+            {
+                switch (Priority)
+                {
+                    case Priority.Middle: return "（中优先级）";
+                    case Priority.High: return "（高优先级）";
+                    default: return "";
+                }
+            }
+        }
+
         public ReminderItem(string title, string desc, List<string> tags, DateTime ddl, TaskState taskstate)
         {
             Title = title;
@@ -142,6 +182,18 @@ namespace Chamberlain_UWP.Reminder
             CreatedTime = DateTime.Now;
             Deadline = ddl;
             TaskState = taskstate;
+            Priority = Priority.Default; // 0
+        }
+        public ReminderItem(string title, string desc, List<string> tags, DateTime ddl, TaskState taskstate, Priority pri)
+        {
+            Title = title;
+            Description = desc;
+            Tags = new List<string>();
+            Tags.AddRange(tags);
+            CreatedTime = DateTime.Now;
+            Deadline = ddl;
+            TaskState = taskstate;
+            Priority = pri;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -29,12 +29,11 @@ namespace Chamberlain_UWP.Reminder
         {
             this.InitializeComponent();
 
-            ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
-            ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
-            ReminderManager.GetList(ReminderListFinished, TaskState.Finished); // 获取已完成提醒，放入已完成
+            ReminderManager.SortListByDefault(); // 对List先进行排序
 
-            ReminderManager.SortCollectionByDeadline(ReminderListOnwork); // 对所有项先按日期排序
-            ReminderManager.SortCollectionByTaskState(ReminderListOnwork); // 对列表中的过期项进行排序
+            ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 1. 获取过期提醒，放入正在处理（减少排序工作量，代码按照这个顺序）
+            ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 2. 获取未完成提醒，放入正在处理
+            ReminderManager.GetList(ReminderListFinished, TaskState.Finished); // 获取已完成提醒，放入已完成
         }
 
         private void RefreshReminderList(bool state)
@@ -46,7 +45,7 @@ namespace Chamberlain_UWP.Reminder
             ReminderItem itemMoved = null;
             if (state)
             {
-                // 已完成+1
+                // 未完成/已过期+1
                 List<ReminderItem> finished = new List<ReminderItem>();
                 ReminderManager.GetList(finished, TaskState.Finished);
                 finished.ForEach(item =>
@@ -58,13 +57,13 @@ namespace Chamberlain_UWP.Reminder
                 });
                 if (itemMoved != null)
                 {
-                    ReminderListFinished.Add(itemMoved);
+                    ReminderListFinished.Insert(0,itemMoved);
                     ReminderListOnwork.Remove(itemMoved);
                 }
             }
             else
             {
-                // 未完成/已过期+1
+                // 已完成+1
                 List<ReminderItem> onwork = new List<ReminderItem>();
                 ReminderManager.GetList(onwork,TaskState.Onwork);
                 ReminderManager.GetList(onwork,TaskState.OutOfDate);
@@ -77,12 +76,44 @@ namespace Chamberlain_UWP.Reminder
                 });
                 if (itemMoved != null)
                 {
-                    ReminderListOnwork.Add(itemMoved);
-                    ReminderListFinished.Remove(itemMoved);
-                }
+                    // 选择插入。顺序：过期事项、高优先级、中优先级、普通
+                    if (itemMoved.TaskState == TaskState.OutOfDate) // 是否过期项
+                    {
+                        ReminderListOnwork.Insert(0, itemMoved);
+                    }
+                    else if (itemMoved.Priority > Priority.Default) // 是否特别优先级项
+                    {
+                        if(itemMoved.Priority == Priority.High) // 是否高优先级项
+                        {
+                            int items_outofdate = ReminderListOnwork
+                                .Where(item => item.TaskState == TaskState.OutOfDate)
+                                .ToList()
+                                .Count();
+                            ReminderListOnwork.Insert(items_outofdate, itemMoved);
+                        }
+                        else
+                        {
+                            // 中优先级项
+                            int items_before = ReminderListOnwork
+                                .Where(item => item.Priority == Priority.High || item.TaskState == TaskState.OutOfDate)
+                                .ToList()
+                                .Count();
+                            ReminderListOnwork.Insert(items_before, itemMoved);
+                        }
+                    }
+                    else
+                    {
+                        int items_before = ReminderListOnwork
+                            .Where(item => item.TaskState == TaskState.OutOfDate || item.Priority > Priority.Default)
+                            .ToList()
+                            .Count();
+                        ReminderListOnwork.Insert(items_before,itemMoved);
+                    }
 
-                // 可能添加了已过期的选项，进行排序
-                ReminderManager.SortCollectionByTaskState(ReminderListOnwork);
+                    ReminderListFinished.Remove(itemMoved);
+                    
+                    // 由于IsCheck为双向绑定，因此不需要在这里更新ReminderManager里面的列表
+                }
             }
         }
 

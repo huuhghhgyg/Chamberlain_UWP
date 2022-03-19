@@ -30,8 +30,8 @@ namespace Chamberlain_UWP
             ReminderItem item1 = new ReminderItem("item1", "desc1", tg, DateTime.Now.AddHours(1), TaskState.Onwork);
             ReminderItem item2 = new ReminderItem("item2", "desc2", tg, DateTime.Now.AddHours(1), TaskState.Onwork);
             ReminderItem item3 = new ReminderItem("item3", "desc3", tg, DateTime.Now.AddHours(1), TaskState.Onwork);
-            ReminderItem item4 = new ReminderItem("item4", "desc4", tg2, DateTime.Now.AddHours(1), TaskState.Finished);
-            ReminderItem item5 = new ReminderItem("item5", "desc5", tg, DateTime.Now.AddHours(1), TaskState.Onwork);
+            ReminderItem item4 = new ReminderItem("item4", "desc4", tg2, DateTime.Now.AddHours(1), TaskState.Finished ,Priority.High);
+            ReminderItem item5 = new ReminderItem("item5", "desc5", tg, DateTime.Now.AddHours(1), TaskState.Onwork ,Priority.Middle);
             ReminderItem item6 = new ReminderItem("item6", "desc6", tg, DateTime.Now.AddHours(1), TaskState.Finished);
             ReminderItem item7 = new ReminderItem("item7", "desc7", tg2, DateTime.Now.AddHours(1), TaskState.Onwork);
             ReminderItem outdated = new ReminderItem("Outdated", "Outdated Item", tg2, DateTime.Now.AddSeconds(5), TaskState.Onwork);

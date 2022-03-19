@@ -18,14 +18,20 @@
 
         <!--列表卡片的DataTemplate，存放所有项目-->
         <DataTemplate x:DataType="local:ReminderItem" x:Key="ReminderItemViewTemplate">
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,8" Padding="12,8">
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,8" Padding="0,8">
                 <RelativePanel Margin="0,0,0,4" >
                     <CheckBox Name="ItemCheckBox"
                               Content="{x:Bind Title,Mode=OneWay}"
                               IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"/>
                     <TextBlock Text="{x:Bind ProgressString,Mode=OneWay}" 
+                               Name="ProgressTextBlock"
                                RelativePanel.AlignRightWithPanel="True" 
                                RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                    <TextBlock Text="{x:Bind PriorityString,Mode=OneWay}"
+                               RelativePanel.LeftOf="ProgressTextBlock"
+                               Style="{ThemeResource BodyTextBlockStyle}"
+                               RelativePanel.AlignVerticalCenterWithPanel="True"
+                               Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
                 </RelativePanel>
                 <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Maximum="1" Margin="0,0,0,4"/>
                 <RelativePanel Margin="0,4">
@@ -38,14 +44,15 @@
                                Style="{StaticResource CaptionTextBlockStyle}" 
                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                RelativePanel.RightOf="ItemDescriptionTextBlock"/>
-                    <TextBlock Text="ddl: "
-                               RelativePanel.LeftOf="DateTimeTextBlock"
-                               Margin="0,0,4,0"
-                               Style="{ThemeResource BodyTextBlockStyle}"/>
                     <TextBlock x:Name="DateTimeTextBlock"
                                Text="{x:Bind DeadlineString,Mode=OneWay}"
                                RelativePanel.AlignRightWithPanel="True"
                                Style="{ThemeResource BodyTextBlockStyle}"/>
+                    <TextBlock Text="ddl: "
+                               RelativePanel.LeftOf="DateTimeTextBlock"
+                               Margin="0,0,4,0"
+                               Style="{ThemeResource BodyTextBlockStyle}"/>
+
                 </RelativePanel>
             </StackPanel>
         </DataTemplate>
@@ -94,6 +101,13 @@
                                         <TextBlock Text="选择标签" Margin="0,12,0,4"/>
                                         <TextBlock Name="SelectedTagsTextBlock" Grid.Column="1" Text="（未选择）"/>
                                     </StackPanel>
+
+                                    <ComboBox Header="优先级" Name="AddItemPriorityComboBox" Margin="0,12,0,0" SelectedIndex="0">
+                                        <x:String>默认</x:String>
+                                        <x:String>中</x:String>
+                                        <x:String>高</x:String>
+                                    </ComboBox>
+
                                     <!--按钮-->
                                     <RelativePanel Margin="0,16,0,0">
                                         <Button Name="AddItemButton" Content="添加项"
@@ -149,19 +163,29 @@
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel>
-                                    <AutoSuggestBox Name="ItemSuggestBox" 
-                                                    PlaceholderText="搜索“提醒”"
-                                                    QueryIcon="Find"
-                                                    TextChanged="ItemSuggestBox_TextChanged"
-                                                    SuggestionChosen="ItemSuggestBox_SuggestionChosen"/>
+                                    <RelativePanel>
+                                        <AutoSuggestBox Name="ItemSuggestBox" 
+                                                        PlaceholderText="搜索“提醒”"
+                                                        QueryIcon="Find"
+                                                        Width="280"
+                                                        TextChanged="ItemSuggestBox_TextChanged"
+                                                        SuggestionChosen="ItemSuggestBox_SuggestionChosen"/>
+                                        <Button Name="SortListButton" RelativePanel.AlignRightWithPanel="True" Click="SortListButton_Click">
+                                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE72C;" />
+                                        </Button>
+                                    </RelativePanel>
                                     <ListView Name="RemindItemListView" Margin="0,8,0,0" ItemsSource="{x:Bind ReminderList,Mode=OneWay}"
                                               SelectionChanged="RemindItemListView_SelectionChanged"
-                                              BorderThickness="1"
-                                              ItemContainerStyle="{StaticResource SectionView}"
                                               ItemTemplate="{StaticResource ReminderItemViewTemplate}">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
                                     </ListView>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                    <!--修改面板-->
                                     <TextBox Name="ItemReviseTitleText" 
                                              Header="标题"/>
                                     <TextBox Name="ItemReviseDescText" 
@@ -172,6 +196,11 @@
                                                         Header="选择日期" 
                                                         Margin="0,12,0,0"/>
                                     <TimePicker Name="ItemReviseTimePicker" Header="Deadline时间" Margin="0,12,0,0"/>
+                                    <ComboBox Header="优先级" Name="ItemRevisePriorityComboBox" Margin="0,12,0,0">
+                                        <x:String>默认</x:String>
+                                        <x:String>中</x:String>
+                                        <x:String>高</x:String>
+                                    </ComboBox>
                                     <RelativePanel Margin="0,16,0,0">
                                         <Button Name="ModifyItemButton" Content="修改提醒项" 
                                                 RelativePanel.AlignRightWithPanel="True" 
