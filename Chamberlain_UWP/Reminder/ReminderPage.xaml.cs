@@ -109,8 +109,12 @@ namespace Chamberlain_UWP.Reminder
 
             if (ItemsSortComboBox.SelectedIndex == 1)
             {
-                ReminderListOnwork.ToList().ForEach(item => suggestList.Add(item.Title));
-                sender.ItemsSource = suggestList.Where(item => item.Contains(sender.Text)).ToList();
+                //ReminderListOnwork.ToList().ForEach(item => suggestList.Add(item.Title));
+                //sender.ItemsSource = suggestList.Where(item => item.Contains(sender.Text)).ToList();
+                sender.ItemsSource = ReminderListOnwork
+                                        .Where(item => item.Title.Contains(sender.Text))
+                                        .Select(item => item.Title)
+                                        .ToList();
 
                 filter = new FilterReminderItems(FilterReminderItemsByName);
             }

@@ -21,14 +21,14 @@ namespace Chamberlain_UWP.Reminder
             ReminderItemList.Add(item);
         }
 
-        // Find开头返回index
+        // 名称以Find开头，返回index
         public static int FindItemWithTitle(string name) // 返回在List中的下标
         {
             ReminderItem item = ReminderItemList.Find(p => p.Title == name);
             return ReminderItemList.IndexOf(item);
         }
 
-        // Get开头返回List或Collection
+        // 名称以Get开头，返回List或Collection
         public static void GetTagCollection(ObservableCollection<string> tagList)
         {
             List<string> tags = new List<string>();
@@ -39,14 +39,16 @@ namespace Chamberlain_UWP.Reminder
         public static void GetTagList(List<string> tagList)
         {
             List<string> AllTags = new List<string>(); // 存放所有的tag
-            List<string> TagsCache = new List<string>(); // 存放在一个实例中找到的tag
-            foreach (ReminderItem reminder_item in ReminderItemList)
-            {
-                TagsCache = reminder_item.Tags.Where(t => !AllTags.Contains(t)).ToList(); // AllTag列表里面没有的才储存
-                AllTags.AddRange(TagsCache); // 导入AllTags
-                TagsCache.Clear();
-            }
-            AllTags.ForEach(t => tagList.Add(t)); // 添加标签
+            //foreach (ReminderItem reminder_item in ReminderItemList)
+            //{
+            //    AllTags.AddRange(reminder_item.Tags
+            //                        .Where(t => !AllTags.Contains(t)) // AllTag列表里面没有的才储存
+            //                        .ToList()); // 导入AllTags
+            //}
+            ReminderItemList.ForEach(reminder_item => 
+                AllTags.AddRange(reminder_item.Tags
+                        .Where(t => !AllTags.Contains(t)) // AllTag列表里面没有的才储存
+                        .ToList())); // 导入AllTags
         }
 
         public static void GetList(ObservableCollection<ReminderItem> collection) // 用于初始化ObservableCollection
