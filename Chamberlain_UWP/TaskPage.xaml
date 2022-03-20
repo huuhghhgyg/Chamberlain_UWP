@@ -76,7 +76,7 @@
         <ScrollViewer Grid.Row="1">
             <!--面板-->
             <StackPanel Margin="48,0,48,48">
-                <ListView ItemsSource="{x:Bind ReminderListOnwork}" 
+                <ListView ItemsSource="{x:Bind ReminderListOnwork, Mode=OneWay}" 
                         SelectionMode="None"
                         ItemContainerStyle="{StaticResource SectionView}"
                         ItemTemplate="{StaticResource ReminderItemViewTemplate}">

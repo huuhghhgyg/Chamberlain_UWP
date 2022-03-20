@@ -1,4 +1,4 @@
-﻿<Page
+<Page
     x:Class="Chamberlain_UWP.Reminder.ReminderItemsManagePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -22,7 +22,8 @@
                 <RelativePanel Margin="0,0,0,4" >
                     <CheckBox Name="ItemCheckBox"
                               Content="{x:Bind Title,Mode=OneWay}"
-                              IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"/>
+                              IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"
+                              Click="ItemCheckBox_Click"/>
                     <TextBlock Text="{x:Bind ProgressString,Mode=OneWay}" 
                                Name="ProgressTextBlock"
                                RelativePanel.AlignRightWithPanel="True" 

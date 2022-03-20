@@ -36,7 +36,7 @@ namespace Chamberlain_UWP
             ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
         }
 
-        private void ItemCheckBox_Click(object sender, RoutedEventArgs e)
+        private async void ItemCheckBox_Click(object sender, RoutedEventArgs e)
         {
             // 未完成减少了
             List<ReminderItem> listOnwork = new List<ReminderItem>(ReminderListOnwork);
@@ -46,6 +46,7 @@ namespace Chamberlain_UWP
             {
                 if(newlistOnwork.Contains(item)) ReminderListOnwork.Remove(item); //删除不存在的项
             });
+            await ReminderManager.Data.Save(); // 保存数据
         }
     }
 }

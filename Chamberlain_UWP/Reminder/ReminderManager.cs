@@ -5,12 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
+using Windows.Storage;
 
 namespace Chamberlain_UWP.Reminder
 {
     public static class ReminderManager
     {
         private static List<ReminderItem> ReminderItemList = new List<ReminderItem>(); // 只能通过以下的访问器访问
+
+        private static string DataFilename = "ReminderData.json";
 
         public static int ItemCountOnwork
         {
@@ -46,10 +49,11 @@ namespace Chamberlain_UWP.Reminder
             //                        .Where(t => !AllTags.Contains(t)) // AllTag列表里面没有的才储存
             //                        .ToList()); // 导入AllTags
             //}
-            ReminderItemList.ForEach(reminder_item => 
+            ReminderItemList.ForEach(reminder_item =>
                 AllTags.AddRange(reminder_item.Tags
                         .Where(t => !AllTags.Contains(t)) // AllTag列表里面没有的才储存
                         .ToList())); // 导入AllTags
+            tagList.AddRange(AllTags); // 导出
         }
 
         public static void GetList(ObservableCollection<ReminderItem> collection) // 用于初始化ObservableCollection
@@ -74,9 +78,10 @@ namespace Chamberlain_UWP.Reminder
             reminder_item_list.ForEach(item => collection.Add(item)); // 添加元素
         }
 
-        public static void UpdateList(ObservableCollection<ReminderItem> collection) // 导入ObservableCollection的数据更新List
+        public static async void UpdateList(ObservableCollection<ReminderItem> collection) // 导入ObservableCollection的数据更新List
         {
             ReminderItemList = new List<ReminderItem>(collection);
+            await Data.Save();
         }
 
         public static void SortListByDefault()
@@ -88,7 +93,7 @@ namespace Chamberlain_UWP.Reminder
                 .ToList();
         }
 
-        public static string ImportByJson(string json_str)
+        public static string ImportByJsonAsync(string json_str)
         {
             string message = "";
             try
@@ -102,5 +107,116 @@ namespace Chamberlain_UWP.Reminder
             return message;
         }
 
+        public static string GenerateJson()
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = false,
+                IncludeFields = true,
+            };
+            return JsonSerializer.Serialize(ReminderItemList, options);
+        }
+
+        /// <summary>
+        /// 数据操作类：负责进行各种文件数据操作
+        /// </summary>
+        public static class Data
+        {
+            // 导出为文件
+            public static async Task<string> ExportToFile(StorageFolder folder, string file_name,CreationCollisionOption file_option,bool return_path)
+            {
+                string msg = "";
+                try
+                {
+                    StorageFile file = await folder.CreateFileAsync(file_name,file_option); // 替换现有项
+                    await FileIO.WriteTextAsync(file, GenerateJson());
+                    if (return_path) msg = file.Path;
+                }
+                catch(Exception ex)
+                {
+                    msg = ex.Message;
+                }
+                return msg;
+            }
+
+            // 读取文件
+            public static async Task<string> LoadFile(StorageFile file)
+            {
+                string msg;
+                try
+                {
+                    string jsonContent = await FileIO.ReadTextAsync(file); // 通过传入的文件对象进行访问
+                    msg = ImportByJsonAsync(jsonContent);
+                }
+                catch(Exception ex)
+                {
+                    msg = ex.Message;
+                }
+                return msg;
+            }
+
+            public static async Task<string> Save()
+            {
+                StorageFolder folder = ApplicationData.Current.LocalFolder;
+                return await ExportToFile(folder, DataFilename, CreationCollisionOption.ReplaceExisting, true);
+            }
+
+            public static async Task<string> Load()
+            {
+                string msg = "";
+                StorageFolder folder = ApplicationData.Current.LocalFolder; // 创建本地目录文件夹对象
+                try
+                {
+                    StorageFile file = await folder.GetFileAsync(DataFilename); // 创建文件对象
+                    msg = await LoadFile(file);
+                }
+                catch (Exception ex)
+                {
+                    msg += ex.Message;
+                }
+                return msg;
+            }
+
+            public static bool IsDataEmpty
+            {
+                get
+                {
+                    return ReminderItemList.Count > 0 ? false : true;
+                }
+            }
+
+            //public static async Task<bool> IsDataNullOrEmpty() // 无法作为字段，只能作为方法
+            //{
+            //    StorageFolder folder = ApplicationData.Current.LocalFolder;
+
+            //    if (System.IO.File.Exists(folder.Path + DataFilename))
+            //    {
+            //        try
+            //        {
+            //            StorageFile file = await folder.GetFileAsync(DataFilename);
+            //            string content = await FileIO.ReadTextAsync(file); // 通过传入的文件对象进行访问
+            //            if (string.IsNullOrEmpty(content)) return true; // 文件为空
+            //            else return false; // 文件不为空
+            //        }
+            //        catch
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //    else return true;
+            //}
+
+            public static async void Clear() // 清除保存在本地目录的数据文件
+            {
+                StorageFolder folder = ApplicationData.Current.LocalFolder;
+                string path = folder.Path + '\\' + DataFilename;
+                if (System.IO.File.Exists(path))
+                {
+                    StorageFile file = await folder.GetFileAsync(DataFilename);
+                    await file.DeleteAsync();
+                    ReminderItemList.Clear(); // 清除内存中的list
+                }
+            }
+        }
     }
 }

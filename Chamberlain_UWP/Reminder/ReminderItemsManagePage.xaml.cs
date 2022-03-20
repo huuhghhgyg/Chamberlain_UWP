@@ -93,20 +93,20 @@ namespace Chamberlain_UWP.Reminder
             {
                 RemindItemListView.SelectedItem = null;
                 ClearReviseControl();
-                callTeachingTip("没有选中项", "请在这个列表中选择一项进行修改🛠",RemindItemListView);
+                CallTeachingTip("没有选中项", "请在这个列表中选择一项进行修改🛠",RemindItemListView);
                 return;
             }
 
             // 检测表单内容合法性
             if(string.IsNullOrEmpty(ItemReviseTitleText.Text))
             {
-                callTeachingTip("标题不能为空", "否则你想怎么称呼？🤔", ItemReviseTitleText);
+                CallTeachingTip("标题不能为空", "否则你想怎么称呼？🤔", ItemReviseTitleText);
                 return;
             }
 
             if(string.IsNullOrEmpty(ItemReviseDescText.Text))
             {
-                callTeachingTip("描述不能为空", "创建的时候不能为空，修改的时候也不能为空捏🤗",ItemReviseDescText);
+                CallTeachingTip("描述不能为空", "创建的时候不能为空，修改的时候也不能为空捏🤗",ItemReviseDescText);
                 return;
             }
 
@@ -116,7 +116,7 @@ namespace Chamberlain_UWP.Reminder
 
             if(ddlDate - DateTime.Now <= TimeSpan.Zero)
             {
-                callTeachingTip("目标时间已经过了", "穿越不了捏😵", ItemReviseTimePicker);
+                CallTeachingTip("目标时间已经过了", "穿越不了捏😵", ItemReviseTimePicker);
                 return;
             }
 
@@ -145,7 +145,7 @@ namespace Chamberlain_UWP.Reminder
             }
         }
 
-        void callTeachingTip(string title, string desc, FrameworkElement target_control)
+        void CallTeachingTip(string title, string desc, FrameworkElement target_control)
         {
             AddInstructTip.Title = title;
             AddInstructTip.Subtitle = desc;
@@ -162,7 +162,7 @@ namespace Chamberlain_UWP.Reminder
                 title = AddTitleTextBox.Text;
             else
             {
-                callTeachingTip("标题不能为空", "不然就找不到这个项目了😥", AddTitleTextBox);
+                CallTeachingTip("标题不能为空", "不然就找不到这个项目了😥", AddTitleTextBox);
                 return;
             }
 
@@ -171,7 +171,7 @@ namespace Chamberlain_UWP.Reminder
                 desc = AddDescTextBox.Text;
             else
             {
-                callTeachingTip("描述不能为空", "可以详细描述子事件。如果没有可以直接截取标题的一部分作为描述😂", AddDescTextBox);
+                CallTeachingTip("描述不能为空", "可以详细描述子事件。如果没有可以直接截取标题的一部分作为描述😂", AddDescTextBox);
                 return;
             }
 
@@ -179,12 +179,12 @@ namespace Chamberlain_UWP.Reminder
             DateTime ddlDate;
             if (AddItemDatePicker.Date==null)
             {
-                callTeachingTip("日期不能为空", "ddl日期必须要有📅", AddItemDatePicker);
+                CallTeachingTip("日期不能为空", "ddl日期必须要有📅", AddItemDatePicker);
                 return;
             }
             else if (AddItemTimePicker.SelectedTime == null)
             {
-                callTeachingTip("时间不能为空", "还是选一个ddl时间吧⏰", AddItemTimePicker);
+                CallTeachingTip("时间不能为空", "还是选一个ddl时间吧⏰", AddItemTimePicker);
                 return;
             }
             else
@@ -197,7 +197,7 @@ namespace Chamberlain_UWP.Reminder
 
             if (ddlDate - DateTime.Now <= TimeSpan.Zero)
             {
-                callTeachingTip("目标时间已经过了", "穿越不了捏😵", AddItemTimePicker);
+                CallTeachingTip("目标时间已经过了", "穿越不了捏😵", AddItemTimePicker);
                 return;
             }
 
@@ -209,7 +209,7 @@ namespace Chamberlain_UWP.Reminder
             }
             else
             {
-                callTeachingTip("标签不能为空", "请在列表中选择一个或多个标签，也可以在下方新建标签🏷", TagListBox);
+                CallTeachingTip("标签不能为空", "请在列表中选择一个或多个标签，也可以在下方新建标签🏷", TagListBox);
                 return;
             }
 
@@ -240,6 +240,11 @@ namespace Chamberlain_UWP.Reminder
             ReminderManager.SortListByDefault();
             ReminderList.Clear();
             ReminderManager.GetList(ReminderList);
+        }
+
+        private async void ItemCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            await ReminderManager.Data.Save(); // 保存数据
         }
     }
 }

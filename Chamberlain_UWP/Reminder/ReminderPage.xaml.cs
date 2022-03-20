@@ -122,11 +122,12 @@ namespace Chamberlain_UWP.Reminder
             this.Frame.Navigate(typeof(ReminderItemsManagePage));
         }
 
-        private void ItemCheckBox_Click(object sender, RoutedEventArgs e)
+        private async void ItemCheckBox_Click(object sender, RoutedEventArgs e)
         {
             var control = (CheckBox)sender;
             bool sender_state = (bool)control.IsChecked; // 点击之后的状态
             RefreshReminderList(sender_state);
+            await ReminderManager.Data.Save(); // 保存数据
         }
 
         delegate void FilterReminderItems(AutoSuggestBox sender);

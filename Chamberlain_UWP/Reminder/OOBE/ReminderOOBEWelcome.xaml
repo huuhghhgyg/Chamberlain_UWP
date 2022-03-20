@@ -1,0 +1,41 @@
+﻿<Page
+    x:Class="Chamberlain_UWP.Reminder.OOBE.ReminderOOBEWelcome"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Chamberlain_UWP.Reminder.OOBE"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    Background="{ThemeResource NavigationViewExpandedPaneBackground}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="欢迎使用 Reminder 提醒👋"
+                   FontSize="36"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Bottom"/>
+        <TextBlock
+                   FontSize="20"
+                   Grid.Row="1" Margin="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center">现在来创建一些提醒项吧</TextBlock>
+        <RelativePanel Grid.Row="2" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="导入备份" Name="GoImportPageButton"
+                        Grid.Row="2"
+                        HorizontalAlignment="Center"
+                        Click="GoImportPageButton_Click"/>
+                <Button Content="前往" Name="GoManagePageButton"
+                    Grid.Row="2" Margin="12,0,0,0"
+                    Style="{StaticResource AccentButtonStyle}"
+                    HorizontalAlignment="Center"
+                    Click="GoManagePageButton_Click"/>
+            </StackPanel>
+        </RelativePanel>
+    </Grid>
+</Page>

@@ -23,32 +23,26 @@ namespace Chamberlain_UWP
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private void initializeData()
+
+        private async void InitializeData(Action callback)
         {
-            List<string> tg = new List<string>(){ "tag1", "tag2", "tag3" };
-            List<string> tg2 = new List<string>(){ "tag3", "newtag" };
-            ReminderItem item1 = new ReminderItem("item1", "desc1", tg, DateTime.Now.AddHours(1), TaskState.Onwork);
-            ReminderItem item2 = new ReminderItem("item2", "desc2", tg, DateTime.Now.AddHours(1), TaskState.Onwork);
-            ReminderItem item3 = new ReminderItem("item3", "desc3", tg, DateTime.Now.AddHours(1), TaskState.Onwork);
-            ReminderItem item4 = new ReminderItem("item4", "desc4", tg2, DateTime.Now.AddHours(1), TaskState.Finished ,Priority.High);
-            ReminderItem item5 = new ReminderItem("item5", "desc5", tg, DateTime.Now.AddHours(1), TaskState.Onwork ,Priority.Middle);
-            ReminderItem item6 = new ReminderItem("item6", "desc6", tg, DateTime.Now.AddHours(1), TaskState.Finished);
-            ReminderItem item7 = new ReminderItem("item7", "desc7", tg2, DateTime.Now.AddHours(1), TaskState.Onwork);
-            ReminderItem outdated = new ReminderItem("Outdated", "Outdated Item", tg2, DateTime.Now.AddSeconds(5), TaskState.Onwork);
-            ReminderManager.Add(item1);
-            ReminderManager.Add(item2);
-            ReminderManager.Add(item3);
-            ReminderManager.Add(item4);
-            ReminderManager.Add(item5);
-            ReminderManager.Add(item6);
-            ReminderManager.Add(item7);
-            ReminderManager.Add(outdated);
+            await ReminderManager.Data.Load();
+
+            if (callback != null)
+                callback();
         }
+
+        private void initializeNavigate()
+        {
+            contentFrame.Navigate(typeof(TaskPage));
+            navControl.SelectedItem = navControl.MenuItems[0];
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
-            initializeData();
-            contentFrame.Navigate(typeof(TaskPage));
+
+            InitializeData(initializeNavigate); // 使用回调（Action），先data后navigate
         }
 
         private void navControl_ItemInvoked(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs args)
@@ -66,7 +60,7 @@ namespace Chamberlain_UWP
                         contentFrame.Navigate(typeof(TaskPage));
                         break;
                     case "提醒":
-                        contentFrame.Navigate(typeof(Reminder.ReminderPage));
+                        Navigate2Reminder();
                         break;
                 }
             }
@@ -76,6 +70,20 @@ namespace Chamberlain_UWP
         {
             // navControl的IsBackEnabled与contentFrame.CanGoBack绑定，无需判断。
             contentFrame.GoBack();
+        }
+
+        private async void Navigate2Reminder()
+        {
+            if (ReminderManager.Data.IsDataEmpty) // 判断数据是否为空
+            {
+                // 为空，跳转到OOBE
+                contentFrame.Navigate(typeof(Reminder.OOBE.ReminderOOBEWelcome));
+            }
+            else
+            {
+                await ReminderManager.Data.Load();
+                contentFrame.Navigate(typeof(ReminderPage));
+            }
         }
     }
 }

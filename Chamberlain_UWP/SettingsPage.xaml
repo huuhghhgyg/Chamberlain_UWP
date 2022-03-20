@@ -42,13 +42,43 @@
                         <muxc:InfoBar Name="ImportReminderInfoBar" Title="" IsOpen="True"
                                 Severity="Success" Visibility="Collapsed"/>
                         <TextBox Name="ImportReminderTextBox"
-                                 PlaceholderText="(JSON)"
+                                 PlaceholderText="JSON格式文本（支持文件拖拽）"
                                  MaxHeight="200"
-                                 TextWrapping="Wrap"/>
+                                 TextWrapping="Wrap"
+                                 DragOver="ImportReminderTextBox_DragOver"
+                                 Drop="ImportReminderTextBox_Drop"/>
                         <Button Name="ImportReminderButton" Content="导入"
                                 Margin="0,8,0,0"
                                 HorizontalAlignment="Right"
                                 Click="ImportReminderButton_Click"/>
+
+                        <TextBlock Text="从JSON文件中读取数据"
+                                   Margin="0,0,0,8"
+                                   Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <RelativePanel>
+                            <Button Content="打开文件" Name="OpenFileButton" Click="OpenFileButton_Click"/>
+                            <TextBlock Name="OpenFileTextBlock"
+                                       Margin="8,0,0,0"
+                                       IsTextSelectionEnabled="True"
+                                       RelativePanel.RightOf="OpenFileButton"
+                                       RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                        </RelativePanel>
+                        <TextBlock Text="清除Reminder数据"
+                                   Margin="0,12,0,8"
+                                   Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <Button Content="删除" Name="DeleteFlyoutButton" Click="DeleteFlyoutButton_Click">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <StackPanel>
+                                        <TextBlock Text="⚠将会删除数据文件。是否继续？" 
+                                                   Margin="0,0,0,12" 
+                                                   Style="{ThemeResource BaseTextBlockStyle}" />
+                                        <Button Content="确认删除" Name="DeleteReminderDataButton"
+                                                Click="DeleteReminderDataButton_Click"/>
+                                    </StackPanel>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
                     </StackPanel>
                 </muxc:Expander>
                 
@@ -60,12 +90,21 @@
                                HorizontalContentAlignment="Stretch"
                                Expanding="DebugOptionExpander_Expanding">
                     <StackPanel>
+                        <TextBlock Text="Reminder" Style="{ThemeResource BaseTextBlockStyle}"/>
                         <TextBlock Text="JSON（仅输出）"
-                                   Margin="0,0,0,8"
-                                   Style="{ThemeResource BaseTextBlockStyle}"/>
+                                   Margin="0,8,0,8"
+                                   Style="{ThemeResource BodyTextBlockStyle}"/>
                         <TextBox Name="ReminderJsonTextBox"
                                  MaxHeight="200"
                                  TextWrapping="Wrap"/>
+                        
+                        <TextBlock Text="保存数据"
+                                   Margin="0,12,0,0"
+                                   Style="{ThemeResource BodyTextBlockStyle}"/>
+                        <StackPanel Margin="0,8,0,0">
+                            <Button Name="ReminderSave" Content="保存Reminder" Click="ReminderSave_Click"/>
+                            <TextBox Name="ReminderSaveTextBox" Margin="0,8,0,0" PlaceholderText="文件保存路径（仅输出）"/>
+                        </StackPanel>
                     </StackPanel>
                 </muxc:Expander>
             </StackPanel>
