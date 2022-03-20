@@ -1,4 +1,4 @@
-<Page
+﻿<Page
     x:Class="Chamberlain_UWP.Reminder.ReminderItemsManagePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -75,19 +75,19 @@
                 <StackPanel Margin="48,0,48,48">
                     <TextBlock Text="添加" Margin="0,0,0,8" Style="{ThemeResource BaseTextBlockStyle}" />
                     <!--添加项目-->
-                    <StackPanel Name="AddItemPanel" Style="{StaticResource CardStackPanel}" Padding="12">
+                    <StackPanel Name="AddItemPanel">
                         <Grid ColumnSpacing="12">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel>
+                            <StackPanel Style="{StaticResource CardStackPanel}" Padding="12">
                                 <!--提醒项信息-->
-                                <TextBlock Text="添加提醒" 
+                                <TextBlock Text="提醒" 
                                            Margin="0,0,0,8" 
                                            Style="{ThemeResource BaseTextBlockStyle}" />
-                                <StackPanel Padding="0,12">
+                                <StackPanel Padding="0,8">
                                     <TextBox Header="标题" Name="AddTitleTextBox"/>
                                     <TextBox Header="提醒描述" Name="AddDescTextBox" Margin="0,12,0,0"/>
                                     <CalendarDatePicker PlaceholderText="到期日期"
@@ -125,18 +125,12 @@
                                 </StackPanel>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1">
+                            <StackPanel Grid.Column="1" Style="{StaticResource CardStackPanel}" Padding="12">
                                 <!--标签信息-->
                                 <TextBlock Text="标签" 
-                                           Margin="0,0,0,8" 
+                                           Margin="0,0,0,12" 
                                            Style="{ThemeResource BaseTextBlockStyle}" />
-                                <!--存放所有标签-->
-                                <ListBox Name="TagListBox"
-                                         SelectionMode="Multiple" 
-                                         MaxHeight="334" 
-                                         ItemsSource="{x:Bind TagList,Mode=OneWay}"
-                                         SelectionChanged="TagListBox_SelectionChanged"/>
-                                <Grid Margin="0,12,0,0">
+                                <Grid Margin="0,0,0,12">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="auto"/>
@@ -149,7 +143,12 @@
                                                 Click="AddTagButton_Click"/>
                                     </StackPanel>
                                 </Grid>
-
+                                <!--存放所有标签-->
+                                <ListBox Name="TagListBox"
+                                         SelectionMode="Multiple" 
+                                         MaxHeight="400"
+                                         ItemsSource="{x:Bind TagList,Mode=OneWay}"
+                                         SelectionChanged="TagListBox_SelectionChanged"/>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -157,13 +156,13 @@
                     <TextBlock Text="修改提醒" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}" />
                     <!--处理项目面板-->
                     <StackPanel Name="PendingItemsPanel">
-                        <StackPanel Style="{StaticResource CardStackPanel}" Padding="12">
+                        <StackPanel>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <StackPanel>
+                                <StackPanel Style="{StaticResource CardStackPanel}" Padding="12">
                                     <RelativePanel>
                                         <AutoSuggestBox Name="ItemSuggestBox" 
                                                         PlaceholderText="搜索“提醒”"
@@ -185,7 +184,7 @@
                                         </ListView.ItemContainerStyle>
                                     </ListView>
                                 </StackPanel>
-                                <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                <StackPanel Grid.Column="1" Margin="12,0,0,0" Padding="12" Height="500" VerticalAlignment="Top" Style="{StaticResource CardStackPanel}">
                                     <!--修改面板-->
                                     <TextBlock Text="基本信息" Margin="0,0,0,12" Style="{ThemeResource BaseTextBlockStyle}"/>
                                     <TextBox Name="ItemReviseTitleText" 
