@@ -29,10 +29,11 @@
                                RelativePanel.AlignRightWithPanel="True" 
                                RelativePanel.AlignVerticalCenterWithPanel="True"/>
                     <TextBlock Text="{x:Bind PriorityString,Mode=OneWay}"
+                               Margin="0,0,4,0"
                                RelativePanel.LeftOf="ProgressTextBlock"
                                Style="{ThemeResource BodyTextBlockStyle}"
                                RelativePanel.AlignVerticalCenterWithPanel="True"
-                               Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                               Foreground="{ThemeResource SystemAccentColor}"/>
                 </RelativePanel>
                 <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Maximum="1" Margin="0,0,0,4"/>
                 <RelativePanel Margin="0,4">

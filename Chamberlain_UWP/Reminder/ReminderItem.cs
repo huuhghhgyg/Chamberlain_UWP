@@ -185,8 +185,10 @@ namespace Chamberlain_UWP.Reminder
             {
                 switch (Priority)
                 {
-                    case Priority.Middle: return "（中优先级）";
-                    case Priority.High: return "（高优先级）";
+                    //case Priority.Middle: return "（中优先级）";
+                    //case Priority.High: return "（高优先级）";
+                    case Priority.Middle: return "🟡(优先)";
+                    case Priority.High: return "🔴(紧急)";
                     default: return "";
                 }
             }
