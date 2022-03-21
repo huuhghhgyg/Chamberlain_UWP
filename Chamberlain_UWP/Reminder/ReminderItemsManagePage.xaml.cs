@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -230,9 +230,12 @@ namespace Chamberlain_UWP.Reminder
         private void DeleteItemButton_Click(object sender, RoutedEventArgs e)
         {
             int i = RemindItemListView.SelectedIndex;
-            ReminderList.RemoveAt(i);
-            ReminderManager.UpdateList(ReminderList);
-            if (RemindItemListView.Items.Count >= i + 1) RemindItemListView.SelectedIndex = i;
+            if(i != -1)
+            {
+                ReminderList.RemoveAt(i);
+                ReminderManager.UpdateList(ReminderList);
+                if (RemindItemListView.Items.Count >= i + 1) RemindItemListView.SelectedIndex = i;
+            }
         }
 
         private void SortListButton_Click(object sender, RoutedEventArgs e) // 暴力刷新
