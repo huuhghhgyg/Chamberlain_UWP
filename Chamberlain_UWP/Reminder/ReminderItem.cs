@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -243,15 +243,17 @@ namespace Chamberlain_UWP.Reminder
 
         public void SetDeadline(DateTime dt)
         {
-            Deadline = dt;
             TaskState = TaskState.Onwork; // 重置任务状态
+            Deadline = dt; // 先更新TaskState，deadline状态需要用到taskstate
         }
 
         // 如果需要重新设置创建时间，则需要重新创建一个ReminderItem
 
         public void RefreshProgress()
         {
+            NotifyPropertyChanged("TaskState");
             NotifyPropertyChanged("ProgressValue");
+            NotifyPropertyChanged("ProgressString");
         }
     }
 }
