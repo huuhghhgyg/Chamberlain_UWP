@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,6 +26,9 @@ namespace Chamberlain_UWP.Reminder
     {
         ObservableCollection<ReminderItem> ReminderListOnwork = new ObservableCollection<ReminderItem>(); // 正在处理
         ObservableCollection<ReminderItem> ReminderListFinished = new ObservableCollection<ReminderItem>(); // 已完成
+
+        bool IsPageAlive = true; // 确认页面是否被Unload
+
         public ReminderPage()
         {
             this.InitializeComponent();
@@ -34,6 +38,27 @@ namespace Chamberlain_UWP.Reminder
             ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 1. 获取过期提醒，放入正在处理（减少排序工作量，代码按照这个顺序）
             ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 2. 获取未完成提醒，放入正在处理
             ReminderManager.GetList(ReminderListFinished, TaskState.Finished); // 获取已完成提醒，放入已完成
+
+            new Thread(RefreshData).Start();
+        }
+
+        private async void RefreshData()
+        {
+            while (IsPageAlive)
+            {
+                if (ReminderManager.ItemCountOnwork > 0)
+                {
+                    Thread.Sleep(ReminderManager.UpdateTimeSpan()); // 根据列表中项的最小时间间隔来计算
+                    await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        ReminderManager.UpdateListProgress();
+                    });
+                }
+                else
+                {
+                    break; //没有onwork项直接结束线程
+                }
+            }
         }
 
         private void RefreshReminderList(bool state)
@@ -192,6 +217,11 @@ namespace Chamberlain_UWP.Reminder
             ReminderListOnwork.Clear();
             ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
             ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            IsPageAlive = false; //结束线程
         }
     }
 }

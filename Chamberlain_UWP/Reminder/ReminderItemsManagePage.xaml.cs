@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -26,6 +27,8 @@ namespace Chamberlain_UWP.Reminder
         ObservableCollection<string> TagList = new ObservableCollection<string>(); // 标签列表
         ObservableCollection<ReminderItem> ReminderList = new ObservableCollection<ReminderItem>(); // 所有reminder的列表
 
+        bool IsPageAlive = true; // 确认页面是否被Unload
+
         public ReminderItemsManagePage()
         {
             this.InitializeComponent();
@@ -34,6 +37,30 @@ namespace Chamberlain_UWP.Reminder
 
             ReminderManager.GetTagCollection(TagList);
             ReminderManager.GetList(ReminderList);
+
+            // UI方面
+            AddItemDatePicker.Date = DateTime.Today; // 方便添加
+
+            new Thread(RefreshData).Start();
+        }
+
+        private async void RefreshData()
+        {
+            while (IsPageAlive)
+            {
+                if (ReminderManager.ItemCountOnwork > 0)
+                {
+                    Thread.Sleep(ReminderManager.UpdateTimeSpan()); // 根据列表中项的最小时间间隔来计算
+                    await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        ReminderManager.UpdateListProgress();
+                    });
+                }
+                else
+                {
+                    break; //没有onwork项直接结束线程
+                }
+            }
         }
 
         private void TagListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -248,6 +275,11 @@ namespace Chamberlain_UWP.Reminder
         private async void ItemCheckBox_Click(object sender, RoutedEventArgs e)
         {
             await ReminderManager.Data.Save(); // 保存数据
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            IsPageAlive = false; //结束线程
         }
     }
 }

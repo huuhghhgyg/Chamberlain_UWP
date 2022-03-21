@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -26,6 +27,8 @@ namespace Chamberlain_UWP
     {
         ObservableCollection<ReminderItem> ReminderListOnwork = new ObservableCollection<ReminderItem>(); // 正在处理
 
+        bool IsPageAlive = true; // 确认页面是否被Unload
+
         public TaskPage()
         {
             this.InitializeComponent();
@@ -34,6 +37,27 @@ namespace Chamberlain_UWP
 
             ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
             ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
+
+            new Thread(RefreshData).Start();
+        }
+
+        private async void RefreshData()
+        {
+            while (IsPageAlive)
+            {
+                if (ReminderManager.ItemCountOnwork > 0)
+                {
+                    Thread.Sleep(ReminderManager.UpdateTimeSpan()); // 根据列表中项的最小时间间隔来计算
+                    await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        ReminderManager.UpdateListProgress();
+                    });
+                }
+                else
+                {
+                    break; //没有onwork项直接结束线程
+                }
+            }
         }
 
         private async void ItemCheckBox_Click(object sender, RoutedEventArgs e)
@@ -47,6 +71,11 @@ namespace Chamberlain_UWP
                 if(newlistOnwork.Contains(item)) ReminderListOnwork.Remove(item); //删除不存在的项
             });
             await ReminderManager.Data.Save(); // 保存数据
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            IsPageAlive = false;
         }
     }
 }

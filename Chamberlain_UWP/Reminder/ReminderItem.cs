@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -78,6 +78,7 @@ namespace Chamberlain_UWP.Reminder
                 NotifyPropertyChanged("DeadlineString"); //注意控件里面绑定的是DeadlineString，所以Notify要填DeadlineString
                 NotifyPropertyChanged("ProgressValue");
                 NotifyPropertyChanged("ProgressString");
+                TaskSpan = _deadline - CreatedTime; //更改deadline时会影响到taskspan的长度
             }
         }
 
@@ -106,11 +107,13 @@ namespace Chamberlain_UWP.Reminder
         }
 
         [JsonIgnore]
+        public TimeSpan TaskSpan; // 任务时间长度
+
+        [JsonIgnore]
         public double ProgressValue
         {
             get
             {
-                TimeSpan TaskSpan = Deadline - CreatedTime; // 任务时间长度
                 TimeSpan RemainSpan = Deadline - DateTime.Now; // 任务剩余时间
 
                 if (RemainSpan < TimeSpan.Zero) // 判断剩余时间是否是负数
@@ -194,17 +197,18 @@ namespace Chamberlain_UWP.Reminder
             }
         }
 
-        public ReminderItem(string title, string desc, List<string> tags, DateTime ddl, TaskState taskstate)
-        {
-            Title = title;
-            Description = desc;
-            Tags = new List<string>();
-            Tags.AddRange(tags);
-            CreatedTime = DateTime.Now;
-            Deadline = ddl;
-            TaskState = taskstate;
-            Priority = Priority.Default; // 0
-        }
+        //public ReminderItem(string title, string desc, List<string> tags, DateTime ddl, TaskState taskstate)
+        //{
+        //    Title = title;
+        //    Description = desc;
+        //    Tags = new List<string>();
+        //    Tags.AddRange(tags);
+        //    CreatedTime = DateTime.Now;
+        //    Deadline = ddl;
+        //    TaskState = taskstate;
+        //    Priority = Priority.Default; // 0
+        //    TaskSpan = Deadline - CreatedTime; // 计算得到任务时长
+        //}
 
         public ReminderItem(string title, string desc, List<string> tags, DateTime ddl, TaskState taskstate, Priority pri)
         {
@@ -216,6 +220,7 @@ namespace Chamberlain_UWP.Reminder
             Deadline = ddl;
             TaskState = taskstate;
             Priority = pri;
+            TaskSpan = Deadline - CreatedTime; // 计算得到任务时长
         }
 
         // 存在引用，仅用于JsonSerializer创建实例
@@ -231,6 +236,7 @@ namespace Chamberlain_UWP.Reminder
             TaskState = taskstate;
             Priority = priority;
             CreatedTime = createdTime;
+            TaskSpan = Deadline - CreatedTime; // 计算得到任务时长
         }
 
 

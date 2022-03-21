@@ -84,6 +84,26 @@ namespace Chamberlain_UWP.Reminder
             await Data.Save();
         }
 
+        static int onwork_count_cache = 0;
+        static int update_timespan_cache = 1000;
+        public static int UpdateTimeSpan()
+        {
+            if (onwork_count_cache != ItemCountOnwork)
+            {
+                onwork_count_cache = ItemCountOnwork;
+                TimeSpan task_span = ReminderItemList[0].TaskSpan;
+                ReminderItemList.Where(item => item.TaskState == TaskState.Onwork) // 筛选正在进行的项（需要更新进度）
+                    .ToList()
+                    .ForEach(item =>
+                    {
+                        if (task_span > item.TaskSpan)
+                            task_span = item.TaskSpan;
+                    });// 找到时间间隔最小的项
+                update_timespan_cache = (int)task_span.TotalMilliseconds / 1000; // 计算时间间隔
+            }
+            return update_timespan_cache;
+        }
+
         public static void SortListByDefault()
         {
             ReminderItemList = ReminderItemList
@@ -115,6 +135,13 @@ namespace Chamberlain_UWP.Reminder
                 IncludeFields = true,
             };
             return JsonSerializer.Serialize(ReminderItemList, options);
+        }
+
+        public static void UpdateListProgress()
+        {
+            ReminderItemList.Where(item => item.TaskState == TaskState.Onwork)
+                .ToList()
+                .ForEach(item => item.RefreshProgress());
         }
 
         /// <summary>
