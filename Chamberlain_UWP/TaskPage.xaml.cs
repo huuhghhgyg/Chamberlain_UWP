@@ -38,6 +38,9 @@ namespace Chamberlain_UWP
             ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
             ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
 
+            if(ReminderListOnwork.Count > 0)
+                NoTaskTextBlock.Visibility = Visibility.Collapsed; //有任务，隐藏无任务的提示
+
             new Thread(RefreshData).Start();
         }
 
@@ -70,6 +73,10 @@ namespace Chamberlain_UWP
             {
                 if(newlistOnwork.Contains(item)) ReminderListOnwork.Remove(item); //删除不存在的项
             });
+
+            if (ReminderListOnwork.Count == 0)
+                NoTaskTextBlock.Visibility = Visibility.Visible; // 无任务时提示任务已完成
+
             await ReminderManager.Data.Save(); // 保存数据
         }
 

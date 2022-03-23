@@ -78,6 +78,7 @@
         <ScrollViewer Grid.Row="1">
             <!--面板-->
             <StackPanel Margin="48,0,48,48">
+                <TextBlock Name="NoTaskTextBlock" Text="所有任务已完成☕"/>
                 <ListView ItemsSource="{x:Bind ReminderListOnwork, Mode=OneWay}" 
                         SelectionMode="None"
                         ItemContainerStyle="{StaticResource SectionView}"
