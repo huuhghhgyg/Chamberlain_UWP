@@ -28,13 +28,14 @@
                     <TextBlock Text="{x:Bind ProgressString,Mode=OneWay}" 
                                Name="ProgressTextBlock"
                                RelativePanel.AlignRightWithPanel="True" 
-                               RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                               RelativePanel.AlignVerticalCenterWithPanel="True"
+                               Foreground="{ThemeResource TextFillColorPrimary}"/>
                     <TextBlock Text="{x:Bind PriorityString,Mode=OneWay}"
                                Margin="0,0,4,0"
                                RelativePanel.LeftOf="ProgressTextBlock"
                                Style="{ThemeResource BodyTextBlockStyle}"
                                RelativePanel.AlignVerticalCenterWithPanel="True"
-                               Foreground="{ThemeResource SystemAccentColor}"/>
+                               Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
                 </RelativePanel>
                 <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Maximum="1" Margin="0,0,0,4"/>
                 <RelativePanel Margin="0,4">
@@ -50,11 +51,11 @@
                     <TextBlock x:Name="DateTimeTextBlock"
                                Text="{x:Bind DeadlineString,Mode=OneWay}"
                                RelativePanel.AlignRightWithPanel="True"
-                               Style="{ThemeResource BodyTextBlockStyle}"/>
+                               Foreground="{ThemeResource TextFillColorPrimary}"/>
                     <TextBlock Text="ddl: "
                                RelativePanel.LeftOf="DateTimeTextBlock"
                                Margin="0,0,4,0"
-                               Style="{ThemeResource BodyTextBlockStyle}"/>
+                               Foreground="{ThemeResource TextFillColorPrimary}"/>
 
                 </RelativePanel>
             </StackPanel>
@@ -179,6 +180,10 @@
                                     <ListView Name="RemindItemListView" Margin="0,8,0,0" ItemsSource="{x:Bind ReminderList,Mode=OneWay}"
                                               SelectionChanged="RemindItemListView_SelectionChanged"
                                               ItemTemplate="{StaticResource ReminderItemViewTemplate}">
+                                        <ListView.Resources>
+                                            <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="{ThemeResource SystemListAccentLowColor}" />
+                                            <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="{ThemeResource SystemListAccentLowColor}" />
+                                        </ListView.Resources>
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem">
                                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
