@@ -128,6 +128,7 @@ namespace Chamberlain_UWP.Reminder
             ReminderItemList = ReminderItemList
                 .OrderBy(item => item.TaskState)
                 .ThenByDescending(item => item.Priority)
+                .ThenBy(item => item.Deadline)
                 .ThenByDescending(item => item.ProgressValue)
                 .ToList();
         }
