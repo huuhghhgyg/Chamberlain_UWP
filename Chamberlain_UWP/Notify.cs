@@ -8,7 +8,7 @@ using Windows.UI.Notifications;
 
 namespace Chamberlain_UWP
 {
-    static class Notify
+    class Notify
     {
         internal class Notification4Tile //针对Tile创建的消息对象模板
         {

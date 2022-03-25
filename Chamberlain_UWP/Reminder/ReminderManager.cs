@@ -82,11 +82,10 @@ namespace Chamberlain_UWP.Reminder
         public static async void UpdateList(ObservableCollection<ReminderItem> collection) // 导入ObservableCollection的数据更新List
         {
             ReminderItemList = new List<ReminderItem>(collection);
-            UpdateTile();
             await Data.Save();
         }
 
-        public static void UpdateTile()
+        public static void UpdateTile() //更新磁贴内容
         {
             List<Notification4Tile> tileNotiList = new List<Notification4Tile>();
             ReminderItemList
@@ -98,7 +97,7 @@ namespace Chamberlain_UWP.Reminder
                     Notification4Tile tile = new Notification4Tile();
                     tile.title = item.Title;
                     tile.description = item.Description;
-                    tile.displayName = item.Deadline.ToString("MM/dd HH:mm");
+                    tile.displayName = item.DeadlineString;
                     tileNotiList.Add(tile);
                 });
             NotificationManager.UpdateTileNotification(tileNotiList);
@@ -204,6 +203,7 @@ namespace Chamberlain_UWP.Reminder
 
             public static async Task<string> Save()
             {
+                UpdateTile(); //更新磁贴
                 StorageFolder folder = ApplicationData.Current.LocalFolder;
                 return await ExportToFile(folder, DataFilename, CreationCollisionOption.ReplaceExisting, true);
             }

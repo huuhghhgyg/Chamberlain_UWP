@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -102,6 +102,10 @@ namespace Chamberlain_UWP.Reminder
         {
             get
             {
+                if (Deadline.ToString("d") == DateTime.Today.ToString("d")) return "今天 " + Deadline.ToString("HH:mm");
+                else if (Deadline.ToString("d") == DateTime.Today.AddDays(1).ToString("d")) return "明天 " + Deadline.ToString("HH:mm");
+                else if (Deadline.ToString("d") == DateTime.Today.AddDays(2).ToString("d")) return "后天 " + Deadline.ToString("HH:mm");
+                else if (Deadline - DateTime.Today > TimeSpan.Zero && Deadline - DateTime.Today < new TimeSpan(7, 0, 0, 0)) return Deadline.ToString("dddd HH:mm");
                 return Deadline.ToString("MM/dd HH:mm");
             }
         }
