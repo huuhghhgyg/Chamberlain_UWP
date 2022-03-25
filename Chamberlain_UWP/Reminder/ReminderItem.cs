@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -75,10 +75,10 @@ namespace Chamberlain_UWP.Reminder
             get { return _deadline; }
             set { 
                 _deadline = value; 
+                TaskSpan = _deadline - CreatedTime; //更改deadline时会影响到taskspan的长度
                 NotifyPropertyChanged("DeadlineString"); //注意控件里面绑定的是DeadlineString，所以Notify要填DeadlineString
                 NotifyPropertyChanged("ProgressValue");
                 NotifyPropertyChanged("ProgressString");
-                TaskSpan = _deadline - CreatedTime; //更改deadline时会影响到taskspan的长度
             }
         }
 

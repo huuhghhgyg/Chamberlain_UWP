@@ -41,7 +41,7 @@ namespace Chamberlain_UWP.Reminder
             // UI方面
             AddItemDatePicker.Date = DateTime.Today; // 方便添加
 
-            new Thread(RefreshData).Start();
+            new Thread(RefreshData).Start(); // 更新进度
         }
 
         private async void RefreshData()

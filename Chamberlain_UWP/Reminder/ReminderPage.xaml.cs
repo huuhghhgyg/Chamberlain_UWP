@@ -39,7 +39,7 @@ namespace Chamberlain_UWP.Reminder
             ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 2. 获取未完成提醒，放入正在处理
             ReminderManager.GetList(ReminderListFinished, TaskState.Finished); // 获取已完成提醒，放入已完成
 
-            new Thread(RefreshData).Start();
+            new Thread(RefreshData).Start(); // 更新进度
         }
 
         private async void RefreshData()
