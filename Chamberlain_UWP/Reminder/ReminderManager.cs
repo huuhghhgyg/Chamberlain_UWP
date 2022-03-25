@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using Windows.Storage;
+using static Chamberlain_UWP.Notify;
 
 namespace Chamberlain_UWP.Reminder
 {
@@ -81,7 +82,26 @@ namespace Chamberlain_UWP.Reminder
         public static async void UpdateList(ObservableCollection<ReminderItem> collection) // 导入ObservableCollection的数据更新List
         {
             ReminderItemList = new List<ReminderItem>(collection);
+            UpdateTile();
             await Data.Save();
+        }
+
+        public static void UpdateTile()
+        {
+            List<Notification4Tile> tileNotiList = new List<Notification4Tile>();
+            ReminderItemList
+                .Where(item => item.TaskState != TaskState.Finished)
+                .OrderBy(item => item.Deadline)
+                .ToList()
+                .ForEach(item =>
+                {
+                    Notification4Tile tile = new Notification4Tile();
+                    tile.title = item.Title;
+                    tile.description = item.Description;
+                    tile.displayName = item.Deadline.ToString("MM/dd HH:mm");
+                    tileNotiList.Add(tile);
+                });
+            NotificationManager.UpdateTileNotification(tileNotiList);
         }
 
         static int onwork_count_cache = 0;
@@ -150,16 +170,16 @@ namespace Chamberlain_UWP.Reminder
         public static class Data
         {
             // 导出为文件
-            public static async Task<string> ExportToFile(StorageFolder folder, string file_name,CreationCollisionOption file_option,bool return_path)
+            public static async Task<string> ExportToFile(StorageFolder folder, string file_name, CreationCollisionOption file_option, bool return_path)
             {
                 string msg = "";
                 try
                 {
-                    StorageFile file = await folder.CreateFileAsync(file_name,file_option); // 替换现有项
+                    StorageFile file = await folder.CreateFileAsync(file_name, file_option); // 替换现有项
                     await FileIO.WriteTextAsync(file, GenerateJson());
                     if (return_path) msg = file.Path;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     msg = ex.Message;
                 }
@@ -175,7 +195,7 @@ namespace Chamberlain_UWP.Reminder
                     string jsonContent = await FileIO.ReadTextAsync(file); // 通过传入的文件对象进行访问
                     msg = ImportByJsonAsync(jsonContent);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     msg = ex.Message;
                 }
@@ -245,5 +265,6 @@ namespace Chamberlain_UWP.Reminder
                 }
             }
         }
+
     }
 }
