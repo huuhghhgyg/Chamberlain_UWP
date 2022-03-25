@@ -88,6 +88,7 @@ namespace Chamberlain_UWP.Reminder.OOBE
         {
             // 导入成功
             this.Frame.Navigate(typeof(ReminderPage));
+            Frame.BackStack.Clear(); // 禁止返回
             await ReminderManager.Data.Save();
         }
 
