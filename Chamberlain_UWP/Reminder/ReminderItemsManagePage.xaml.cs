@@ -50,7 +50,7 @@ namespace Chamberlain_UWP.Reminder
             {
                 if (ReminderManager.ItemCountOnwork > 0)
                 {
-                    Thread.Sleep(ReminderManager.UpdateTimeSpan()); // 根据列表中项的最小时间间隔来计算
+                    Thread.Sleep(ReminderManager.UpdateTimeSpan); // 根据列表中项的最小时间间隔来计算
                     await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                     {
                         ReminderManager.UpdateListProgress();

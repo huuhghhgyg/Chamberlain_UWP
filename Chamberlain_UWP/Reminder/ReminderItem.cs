@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -96,8 +96,8 @@ namespace Chamberlain_UWP.Reminder
             }
         }
 
-        [JsonIgnore]
         //辅助prop
+        [JsonIgnore]
         public string DeadlineString
         {
             get

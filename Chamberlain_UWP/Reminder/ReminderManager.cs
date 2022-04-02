@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -105,25 +105,28 @@ namespace Chamberlain_UWP.Reminder
 
         static int onwork_count_cache = 0;
         static int update_timespan_cache = 1000;
-        public static int UpdateTimeSpan()
+        public static int UpdateTimeSpan //计算进度条更新的时间间隔
         {
-            if (onwork_count_cache != ItemCountOnwork)
+            get
             {
-                onwork_count_cache = ItemCountOnwork;
-                TimeSpan task_span = ReminderItemList[0].TaskSpan;
-                ReminderItemList.Where(item => item.TaskState == TaskState.Onwork) // 筛选正在进行的项（需要更新进度）
-                    .ToList()
-                    .ForEach(item =>
-                    {
-                        if (task_span > item.TaskSpan)
-                            task_span = item.TaskSpan;
-                    });// 找到时间间隔最小的项
-                update_timespan_cache = (int)task_span.TotalMilliseconds / 1000; // 计算时间间隔
+                if (onwork_count_cache != ItemCountOnwork)
+                {
+                    onwork_count_cache = ItemCountOnwork;
+                    TimeSpan task_span = ReminderItemList[0].TaskSpan;
+                    ReminderItemList.Where(item => item.TaskState == TaskState.Onwork) // 筛选正在进行的项（需要更新进度）
+                        .ToList()
+                        .ForEach(item =>
+                        {
+                            if (task_span > item.TaskSpan)
+                                task_span = item.TaskSpan;
+                        });// 找到时间间隔最小的项
+                    update_timespan_cache = (int)task_span.TotalMilliseconds / 1000; // 计算时间间隔
+                }
+                return update_timespan_cache;
             }
-            return update_timespan_cache;
         }
 
-        public static void SortListByDefault()
+        public static void SortListByDefault() // 按照默认顺序进行排序
         {
             ReminderItemList = ReminderItemList
                 .OrderBy(item => item.TaskState)
@@ -206,7 +209,7 @@ namespace Chamberlain_UWP.Reminder
             {
                 UpdateTile(); //更新磁贴
                 StorageFolder folder = ApplicationData.Current.LocalFolder;
-                return await ExportToFile(folder, DataFilename, CreationCollisionOption.ReplaceExisting, true);
+                return await ExportToFile(folder, DataFilename, CreationCollisionOption.ReplaceExisting, true); // 将数据导出到文件（本地路径）
             }
 
             public static async Task<string> Load()
