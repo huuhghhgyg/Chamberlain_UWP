@@ -148,7 +148,6 @@ namespace BackgroundUpdater
             NotificationManager.UpdateTileNotification(tileNotiList);
         }
 
-
         public static string ImportByJsonAsync(string json_str)
         {
             string message = "";

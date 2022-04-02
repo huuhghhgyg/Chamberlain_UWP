@@ -25,7 +25,7 @@ namespace BackgroundUpdater
             {
                 int count = list.Count; //规定时间内到期的项数
 
-                string title = string.Format($"{count}项将在{remian_hour}个小时内过期");
+                string title = string.Format($"{count}项deadline不足{remian_hour}小时");
                 string desc = "";
 
                 // 发送通知
@@ -39,7 +39,7 @@ namespace BackgroundUpdater
                         desc += string.Format($"\"{item.Title}\"、"); //添加临期项
                     });
                     desc = desc.TrimEnd('、'); //去掉末尾的顿号
-                    desc += string.Format($"将在{remian_hour}个小时内过期。");
+                    desc += string.Format($"将在{remian_hour}个小时内到期。");
                 }
                 else
                 {
@@ -47,7 +47,7 @@ namespace BackgroundUpdater
                     for (int i = 0; i < 3; i++)
                         desc += string.Format($"\"{list[i].Title}\"、"); //添加临期项
                     desc = desc.TrimEnd('、'); //去掉末尾的顿号
-                    desc += string.Format($"等，共{count}项将在{remian_hour}个小时内过期。");
+                    desc += string.Format($"等，共{count}项将在{remian_hour}个小时内到期。");
                 }
 
                 // 已过期项提示
