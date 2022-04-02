@@ -265,6 +265,12 @@
   <ItemGroup>
     <None Include="Chamberlain_UWP_TemporaryKey.pfx" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BackgroundUpdater\BackgroundUpdater.csproj">
+      <Project>{df70a8a0-df9c-45d7-b780-83e29b85c0e3}</Project>
+      <Name>BackgroundUpdater</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
