@@ -57,10 +57,10 @@ namespace BackgroundUpdater
 
                 // 发送通知
                 SendNotification(title, desc);
-
-                //更新磁贴
-                ReminderManager.UpdateTile();
             }
+
+            //更新磁贴
+            ReminderManager.UpdateTile();
         }
 
         public async void CheckReminderItems() // 检查ReminderItems
