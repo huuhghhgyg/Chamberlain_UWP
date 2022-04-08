@@ -19,54 +19,98 @@
 
         <!--列表卡片的DataTemplate，存放所有项目-->
         <DataTemplate x:DataType="local:ReminderItem" x:Key="ReminderItemViewTemplate">
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,8" Padding="12,8"
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,8" Padding="12,6"
                         Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1"
                         CornerRadius="{StaticResource ControlCornerRadius}">
-
-                <RelativePanel Margin="0,0,0,4" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
                     <CheckBox Name="ItemCheckBox"
-                              Content="{x:Bind Title,Mode=OneWay}"
-                              IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"
-                              Click="ItemCheckBox_Click"/>
-                    <TextBlock Text="{x:Bind ProgressString,Mode=OneWay}" 
-                               Name="ProgressTextBlock"
-                               RelativePanel.AlignRightWithPanel="True" 
-                               RelativePanel.AlignVerticalCenterWithPanel="True"/>
-                    <TextBlock Text="{x:Bind PriorityString,Mode=OneWay}"
-                               Margin="0,0,4,0"
-                               RelativePanel.LeftOf="ProgressTextBlock"
-                               Style="{ThemeResource BodyTextBlockStyle}"
-                               RelativePanel.AlignVerticalCenterWithPanel="True"
-                               Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
-                </RelativePanel>
-                <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Maximum="1" Margin="0,0,0,4"/>
-                <RelativePanel Margin="0,4">
-                    <TextBlock Name="ItemDescriptionTextBlock"
-                               Text="{x:Bind Description,Mode=OneWay}" 
-                               Style="{StaticResource CaptionTextBlockStyle}" 
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                  Content="{x:Bind Title,Mode=OneWay}"
+                                  IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"
+                                  Click="ItemCheckBox_Click"/>
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" Padding="0,0,0,4">
+                        <TextBlock Text="{x:Bind PriorityString,Mode=OneWay}"
+                                       Margin="0,0,4,0"
+                                       Style="{ThemeResource BodyTextBlockStyle}"
+                                       Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                        <TextBlock Text="{x:Bind ProgressString,Mode=OneWay}" 
+                                       Name="ProgressTextBlock"
+                                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+                    </StackPanel>
+                </Grid>
+                <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Maximum="1" Margin="0,4"/>
+                <Grid Margin="0,4" RowSpacing="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Bind Description,Mode=OneWay}" 
+                                   Name="ItemDescriptionTextBlock"
+                                   TextWrapping="Wrap"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                     <TextBlock Text="{x:Bind TagsString,Mode=OneWay}" 
-                               Margin="8,0,0,0"
-                               Style="{StaticResource CaptionTextBlockStyle}" 
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                               RelativePanel.RightOf="ItemDescriptionTextBlock"/>
-                    <TextBlock Text="ddl:"
-                               RelativePanel.LeftOf="DateTimeTextBlock"
-                               Margin="0,0,4,0"
-                               Style="{StaticResource CaptionTextBlockStyle}"/>
+                                   Grid.Row="1"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+                    <TextBlock Text="ddl: "
+                                   VerticalAlignment="Bottom"
+                                   Margin="4,0,4,0"
+                                   Grid.Row="1"
+                                   Grid.Column="1"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
                     <TextBlock x:Name="DateTimeTextBlock"
-                               Text="{x:Bind DeadlineString,Mode=OneWay}"
-                               RelativePanel.AlignRightWithPanel="True"
-                               Style="{StaticResource CaptionTextBlockStyle}"/>
-                </RelativePanel>
+                                   Text="{x:Bind DeadlineString,Mode=OneWay}"
+                                   VerticalAlignment="Bottom"
+                                   Grid.Row="1"
+                                   Grid.Column="2"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+                </Grid>
             </StackPanel>
         </DataTemplate>
 
     </Page.Resources>
 
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="Phone">
+                    <VisualState.Setters>
+                        <Setter Target="PageTitleTextBlock.(FrameworkElement.Margin)">
+                            <Setter.Value>
+                                <Thickness>24,48,24,12</Thickness>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="LayoutPanel.(FrameworkElement.Margin)">
+                            <Setter.Value>
+                                <Thickness>24,0,24,24</Thickness>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Desktop">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="768"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
@@ -75,7 +119,7 @@
 
         <!--面板-->
         <ScrollViewer Grid.Row="1">
-            <StackPanel Margin="48,0,48,48">
+            <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48">
                 <RelativePanel HorizontalAlignment="Stretch" VerticalAlignment="Top" 
                         Padding="16" Style="{StaticResource CardRelativePanel}">
                     <FontIcon x:Name="ItemFontIcon" FontFamily="{ThemeResource SymbolThemeFontFamily}"
@@ -104,7 +148,7 @@
                     <AutoSuggestBox PlaceholderText="搜索未完成的任务"
                                         QueryIcon="Find"
                                         Name="OnworkItemSuggestBox"
-                                        Width="280"
+                                        Width="264"
                                         TextChanged="OnworkItemSuggestBox_TextChanged"/>
                     <TextBlock Text="搜索排序："
                             VerticalAlignment="Center" Margin="12,0,0,0"/>

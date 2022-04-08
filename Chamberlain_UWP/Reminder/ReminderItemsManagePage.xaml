@@ -19,51 +19,109 @@
 
         <!--列表卡片的DataTemplate，存放所有项目-->
         <DataTemplate x:DataType="local:ReminderItem" x:Key="ReminderItemViewTemplate">
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,8" Padding="0,8">
-                <RelativePanel Margin="0,0,0,4" >
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Padding="0,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
                     <CheckBox Name="ItemCheckBox"
-                              Content="{x:Bind Title,Mode=OneWay}"
-                              IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"
-                              Click="ItemCheckBox_Click"/>
-                    <TextBlock Text="{x:Bind ProgressString,Mode=OneWay}" 
-                               Name="ProgressTextBlock"
-                               RelativePanel.AlignRightWithPanel="True" 
-                               RelativePanel.AlignVerticalCenterWithPanel="True"
-                               Foreground="{ThemeResource TextFillColorPrimary}"/>
-                    <TextBlock Text="{x:Bind PriorityString,Mode=OneWay}"
-                               Margin="0,0,4,0"
-                               RelativePanel.LeftOf="ProgressTextBlock"
-                               Style="{ThemeResource BodyTextBlockStyle}"
-                               RelativePanel.AlignVerticalCenterWithPanel="True"
-                               Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
-                </RelativePanel>
+                                  Content="{x:Bind Title,Mode=OneWay}"
+                                  IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"
+                                  Click="ItemCheckBox_Click"/>
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" Padding="0,0,0,4">
+                        <TextBlock Text="{x:Bind PriorityString,Mode=OneWay}"
+                                       Margin="0,0,4,0"
+                                       Style="{ThemeResource BodyTextBlockStyle}"
+                                       Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                        <TextBlock Text="{x:Bind ProgressString,Mode=OneWay}" 
+                                       Name="ProgressTextBlock"
+                                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+                    </StackPanel>
+                </Grid>
                 <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Maximum="1" Margin="0,0,0,4"/>
-                <RelativePanel Margin="0,4">
+                <Grid Margin="0,4" RowSpacing="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
                     <TextBlock Text="{x:Bind Description,Mode=OneWay}" 
-                               Name="ItemDescriptionTextBlock"
-                               Style="{StaticResource CaptionTextBlockStyle}" 
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                   Name="ItemDescriptionTextBlock"
+                                   TextWrapping="Wrap"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                     <TextBlock Text="{x:Bind TagsString,Mode=OneWay}" 
-                               Margin="8,0,0,0"
-                               Style="{StaticResource CaptionTextBlockStyle}" 
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                               RelativePanel.RightOf="ItemDescriptionTextBlock"/>
-                    <TextBlock x:Name="DateTimeTextBlock"
-                               Text="{x:Bind DeadlineString,Mode=OneWay}"
-                               RelativePanel.AlignRightWithPanel="True"
-                               Foreground="{ThemeResource TextFillColorPrimary}"/>
+                                   Grid.Row="1"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
                     <TextBlock Text="ddl: "
-                               RelativePanel.LeftOf="DateTimeTextBlock"
-                               Margin="0,0,4,0"
-                               Foreground="{ThemeResource TextFillColorPrimary}"/>
-
-                </RelativePanel>
+                                   VerticalAlignment="Bottom"
+                                   Margin="4,0,4,0"
+                                   Grid.Row="1"
+                                   Grid.Column="1"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+                    <TextBlock x:Name="DateTimeTextBlock"
+                                   Text="{x:Bind DeadlineString,Mode=OneWay}"
+                                   VerticalAlignment="Bottom"
+                                   Grid.Row="1"
+                                   Grid.Column="2"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+                </Grid>
             </StackPanel>
         </DataTemplate>
-
     </Page.Resources>
 
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="Phone">
+                    <VisualState.Setters>
+                        <Setter Target="PageTitleTextBlock.(FrameworkElement.Margin)">
+                            <Setter.Value>
+                                <Thickness>24,48,24,12</Thickness>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="LayoutPanel.(FrameworkElement.Margin)">
+                            <Setter.Value>
+                                <Thickness>24,0,24,24</Thickness>
+                            </Setter.Value>
+                        </Setter>
+                        
+                        <Setter Target="AddItemInfoPanel.(Grid.RowSpan)" Value="1"/>
+                        <Setter Target="AddItemInfoPanel.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="AddItemInfoPanel.(Grid.Row)" Value="1"/>
+                        
+                        <Setter Target="TagPanel.(Grid.Row)" Value="0"/>
+                        <Setter Target="TagPanel.(Grid.RowSpan)" Value="1"/>
+                        <Setter Target="TagPanel.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="TagPanel.(Grid.Column)" Value="0"/>
+
+                        <Setter Target="PendingListPanel.(Grid.Row)" Value="1"/>
+                        <Setter Target="PendingListPanel.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="PendingInfoPanel.(Grid.Column)" Value="0"/>
+                        <Setter Target="PendingInfoPanel.(Grid.Row)" Value="0"/>
+                        <Setter Target="PendingInfoPanel.(Grid.ColumnSpan)" Value="2"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Desktop">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="768"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
@@ -75,24 +133,30 @@
                    Style="{ThemeResource TitleTextBlockStyle}"/>
         <Grid Grid.Row="1">
             <ScrollViewer Name="PageScrollViewer">
-                <StackPanel Margin="48,0,48,48">
+                <StackPanel Name="LayoutPanel" Margin="48,0,48,48">
                     <TextBlock Text="添加" Margin="0,0,0,8" Style="{ThemeResource BaseTextBlockStyle}" />
-                    <!--添加项目-->
+                    <!--添加项目面板-->
                     <StackPanel Name="AddItemPanel">
-                        <Grid ColumnSpacing="12">
+                        <Grid ColumnSpacing="12" RowSpacing="12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="280"/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Style="{StaticResource CardStackPanel}" Padding="12">
+                            <StackPanel Name="AddItemInfoPanel" Padding="12"
+                                        Grid.RowSpan="2" Grid.ColumnSpan="1"
+                                        Style="{StaticResource CardStackPanel}">
                                 <!--提醒项信息-->
                                 <TextBlock Text="提醒" 
                                            Margin="0,0,0,8" 
                                            Style="{ThemeResource BaseTextBlockStyle}" />
                                 <StackPanel Padding="0,8">
                                     <TextBox Header="标题" Name="AddTitleTextBox"/>
-                                    <TextBox Header="提醒描述" Name="AddDescTextBox" Margin="0,12,0,0"/>
+                                    <TextBox Header="提醒描述" Name="AddDescTextBox" Margin="0,12,0,0" TextWrapping="Wrap"/>
                                     <CalendarDatePicker PlaceholderText="到期日期"
                                                         Header="选择日期"
                                                         Name="AddItemDatePicker"
@@ -128,7 +192,10 @@
                                 </StackPanel>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1" Style="{StaticResource CardStackPanel}" Padding="12">
+                            <StackPanel Name="TagPanel" Padding="12"
+                                        Grid.Row="0" Grid.Column="1" 
+                                        Grid.RowSpan="2" Grid.ColumnSpan="1"
+                                        Style="{StaticResource CardStackPanel}">
                                 <!--标签信息-->
                                 <TextBlock Text="标签" 
                                            Margin="0,0,0,12" 
@@ -159,71 +226,80 @@
                     <TextBlock Text="修改提醒" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}" />
                     <!--处理项目面板-->
                     <StackPanel Name="PendingItemsPanel">
-                        <StackPanel>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Style="{StaticResource CardStackPanel}" Padding="12">
-                                    <RelativePanel>
-                                        <AutoSuggestBox Name="ItemSuggestBox" 
-                                                        PlaceholderText="搜索“提醒”"
-                                                        QueryIcon="Find"
-                                                        Width="260"
-                                                        TextChanged="ItemSuggestBox_TextChanged"
-                                                        SuggestionChosen="ItemSuggestBox_SuggestionChosen"/>
-                                        <Button Name="SortListButton" RelativePanel.AlignRightWithPanel="True" Click="SortListButton_Click">
-                                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE72C;" />
-                                        </Button>
-                                    </RelativePanel>
-                                    <ListView Name="RemindItemListView" Margin="0,8,0,0" ItemsSource="{x:Bind ReminderList,Mode=OneWay}"
+                        <Grid ColumnSpacing="12" RowSpacing="12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="280"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <StackPanel Name="PendingListPanel" Style="{StaticResource CardStackPanel}" Padding="12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="220"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <AutoSuggestBox Name="ItemSuggestBox" 
+                                                    PlaceholderText="搜索&quot;提醒&quot;"
+                                                    QueryIcon="Find"
+                                                    HorizontalAlignment="Stretch"
+                                                    TextChanged="ItemSuggestBox_TextChanged"
+                                                    SuggestionChosen="ItemSuggestBox_SuggestionChosen"/>
+                                    <Button Name="SortListButton" Grid.Column="1" HorizontalAlignment="Right" Click="SortListButton_Click">
+                                        <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE72C;" />
+                                    </Button>
+                                </Grid>
+                                <ListView Name="RemindItemListView" Margin="0,8,0,0" ItemsSource="{x:Bind ReminderList,Mode=OneWay}"
                                               SelectionChanged="RemindItemListView_SelectionChanged"
                                               ItemTemplate="{StaticResource ReminderItemViewTemplate}">
-                                        <ListView.Resources>
-                                            <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="{ThemeResource SystemListAccentLowColor}" />
-                                            <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="{ThemeResource SystemListAccentLowColor}" />
-                                        </ListView.Resources>
-                                        <ListView.ItemContainerStyle>
-                                            <Style TargetType="ListViewItem">
-                                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                            </Style>
-                                        </ListView.ItemContainerStyle>
-                                    </ListView>
-                                </StackPanel>
-                                <StackPanel Grid.Column="1" Margin="12,0,0,0" Padding="12" Height="500" VerticalAlignment="Top" Style="{StaticResource CardStackPanel}">
-                                    <!--修改面板-->
-                                    <TextBlock Text="基本信息" Margin="0,0,0,12" Style="{ThemeResource BaseTextBlockStyle}"/>
-                                    <TextBox Name="ItemReviseTitleText" 
+                                    <ListView.Resources>
+                                        <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="{ThemeResource SystemListAccentLowColor}" />
+                                        <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="{ThemeResource SystemListAccentLowColor}" />
+                                    </ListView.Resources>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                </ListView>
+                            </StackPanel>
+                            
+                            <StackPanel Name="PendingInfoPanel" Grid.Column="1" Padding="12" VerticalAlignment="Top" Style="{StaticResource CardStackPanel}">
+                                <!--修改面板-->
+                                <TextBlock Text="基本信息" Margin="0,0,0,12" Style="{ThemeResource BaseTextBlockStyle}"/>
+                                <TextBox Name="ItemReviseTitleText" 
                                              Header="标题"/>
-                                    <TextBox Name="ItemReviseDescText" 
+                                <TextBox Name="ItemReviseDescText" 
                                              Header="提醒描述" 
-                                             Margin="0,12,0,0"/>
-                                    <TextBlock Text="创建时间" Margin="0,12,0,0"/>
-                                    <TextBlock Text="(空)" Name="CreatedTimeTextBlock" Margin="0,8,0,0"/>
-                                    <CalendarDatePicker Name="ItemReviseDatePicker" 
+                                             Margin="0,12,0,0"
+                                             TextWrapping="Wrap"/>
+                                <TextBlock Text="创建时间" Margin="0,12,0,0"/>
+                                <TextBlock Text="(空)" Name="CreatedTimeTextBlock" Margin="0,8,0,0"/>
+                                <CalendarDatePicker Name="ItemReviseDatePicker" 
                                                         PlaceholderText="Deadline日期" 
                                                         Header="Deadline日期" 
                                                         Margin="0,12,0,0"/>
-                                    <TimePicker Name="ItemReviseTimePicker" Header="Deadline时间" Margin="0,12,0,0"/>
-                                    <ComboBox Header="优先级" Name="ItemRevisePriorityComboBox" Margin="0,12,0,0">
-                                        <x:String>默认</x:String>
-                                        <x:String>中</x:String>
-                                        <x:String>高</x:String>
-                                    </ComboBox>
-                                    <RelativePanel Margin="0,16,0,0">
-                                        <Button Name="ModifyItemButton" Content="修改项" 
+                                <TimePicker Name="ItemReviseTimePicker" Header="Deadline时间" Margin="0,12,0,0"/>
+                                <ComboBox Header="优先级" Name="ItemRevisePriorityComboBox" Margin="0,12,0,0">
+                                    <x:String>默认</x:String>
+                                    <x:String>中</x:String>
+                                    <x:String>高</x:String>
+                                </ComboBox>
+                                <RelativePanel Margin="0,16,0,0">
+                                    <Button Name="ModifyItemButton" Content="修改项" 
                                                 RelativePanel.AlignRightWithPanel="True" 
                                                 Style="{StaticResource AccentButtonStyle}" 
                                                 Click="ModifyItemButton_Click"/>
-                                        <Button Name="DeleteItemButton" Content="删除" 
+                                    <Button Name="DeleteItemButton" Content="删除" 
                                                 Margin="0,0,8,0" 
                                                 RelativePanel.LeftOf="ModifyItemButton"
                                                 Click="DeleteItemButton_Click"/>
-                                    </RelativePanel>
-                                </StackPanel>
-                            </Grid>
-                        </StackPanel>
+                                </RelativePanel>
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>

@@ -182,7 +182,7 @@ namespace Chamberlain_UWP.Reminder
         [JsonIgnore]
         public string TagsString
         {
-            get { return "( " + string.Join(", ", _tags) + " )"; }
+            get { return "标签：" + string.Join(", ", _tags); }
         }
 
         [JsonIgnore]

@@ -44,6 +44,8 @@ namespace Chamberlain_UWP
         private async void ImportReminderButton_Click(object sender, RoutedEventArgs e)
         {
             ImportReminderInfoBar.Visibility = Visibility.Visible;
+            ImportReminderInfoBar.IsOpen = true;
+
             if (string.IsNullOrEmpty(ImportReminderTextBox.Text))
             {
                 ImportReminderInfoBar.Title = "未检测到内容";

@@ -10,6 +10,32 @@
     Background="{ThemeResource NavigationViewExpandedPaneBackground}">
 
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="Phone">
+                    <VisualState.Setters>
+                        <Setter Target="PageTitleTextBlock.(FrameworkElement.Margin)">
+                            <Setter.Value>
+                                <Thickness>24,48,24,12</Thickness>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="LayoutPanel.(FrameworkElement.Margin)">
+                            <Setter.Value>
+                                <Thickness>24,0,24,24</Thickness>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Desktop">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="768"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
@@ -20,7 +46,7 @@
                    Style="{ThemeResource TitleTextBlockStyle}"/>
         <ScrollViewer Grid.Row="1">
             <!--设置面板-->
-            <StackPanel Margin="48,0,48,48" Grid.Row="1">
+            <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48" Grid.Row="1">
                 <muxc:Expander Name="ReminderExpander"
                                IsExpanded="False" ExpandDirection="Down"
                                VerticalAlignment="Top" HorizontalAlignment="Stretch"
