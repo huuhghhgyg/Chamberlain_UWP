@@ -28,6 +28,7 @@ namespace Chamberlain_UWP.Reminder
         ObservableCollection<ReminderItem> ReminderListFinished = new ObservableCollection<ReminderItem>(); // 已完成
 
         bool IsPageAlive = true; // 确认页面是否被Unload
+        bool IsProgressUpdaterWorking = false; // 进程锁，防止多次创建进程
 
         public ReminderPage()
         {
@@ -44,6 +45,7 @@ namespace Chamberlain_UWP.Reminder
 
         private async void RefreshData()
         {
+            IsProgressUpdaterWorking = true; // 上锁
             while (IsPageAlive)
             {
                 if (ReminderManager.ItemCountOnwork > 0)
@@ -59,6 +61,7 @@ namespace Chamberlain_UWP.Reminder
                     break; //没有onwork项直接结束线程
                 }
             }
+            IsProgressUpdaterWorking = false; // 解锁
         }
 
         private void RefreshReminderList(bool state)
@@ -153,6 +156,9 @@ namespace Chamberlain_UWP.Reminder
             bool sender_state = (bool)control.IsChecked; // 点击之后的状态
             RefreshReminderList(sender_state);
             await ReminderManager.Data.Save(); // 保存数据
+
+            if (!IsProgressUpdaterWorking) // 判断进程是否不在工作（活动的条目=0）
+                new Thread(RefreshData).Start(); // 重启更新进度的进程
         }
 
         delegate void FilterReminderItems(AutoSuggestBox sender);

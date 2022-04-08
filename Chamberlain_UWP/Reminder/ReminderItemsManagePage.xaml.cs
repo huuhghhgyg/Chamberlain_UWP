@@ -28,6 +28,7 @@ namespace Chamberlain_UWP.Reminder
         ObservableCollection<ReminderItem> ReminderList = new ObservableCollection<ReminderItem>(); // 所有reminder的列表
 
         bool IsPageAlive = true; // 确认页面是否被Unload
+        bool IsProgressUpdaterWorking = false; // 进程锁，防止多次创建进程
 
         public ReminderItemsManagePage()
         {
@@ -38,14 +39,14 @@ namespace Chamberlain_UWP.Reminder
             ReminderManager.GetTagCollection(TagList);
             ReminderManager.GetList(ReminderList);
 
-            // UI方面
-            AddItemDatePicker.Date = DateTime.Today; // 方便添加
+            AddItemDatePicker.Date = DateTime.Today; // 将添加项的时间设为今天，方便添加
 
             new Thread(RefreshData).Start(); // 更新进度
         }
 
         private async void RefreshData()
         {
+            IsProgressUpdaterWorking = true; // 上锁
             while (IsPageAlive)
             {
                 if (ReminderManager.ItemCountOnwork > 0)
@@ -61,6 +62,7 @@ namespace Chamberlain_UWP.Reminder
                     break; //没有onwork项直接结束线程
                 }
             }
+            IsProgressUpdaterWorking = false; // 解锁
         }
 
         private void TagListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -154,6 +156,10 @@ namespace Chamberlain_UWP.Reminder
             ReminderList[index].Priority = (Priority)ItemRevisePriorityComboBox.SelectedIndex; //这项似乎没法不选，不做检测
 
             ReminderManager.UpdateList(ReminderList); //更新列表
+
+            // 考虑重启后台线程
+            if (!IsProgressUpdaterWorking) // 判断进程是否不在工作（活动的条目=0）
+                new Thread(RefreshData).Start(); // 重启更新进度的进程
         }
 
         private void ClearReviseControl() //清空更改控件中的内容
@@ -253,6 +259,10 @@ namespace Chamberlain_UWP.Reminder
             AddTitleTextBox.Text = "";
             AddDescTextBox.Text = "";
             AddItemTimePicker.SelectedTime = null;
+
+            //考虑重启后台线程
+            if (!IsProgressUpdaterWorking) // 判断进程是否不在工作（活动的条目=0）
+                new Thread(RefreshData).Start(); // 重启更新进度的进程
         }
 
         private void DeleteItemButton_Click(object sender, RoutedEventArgs e)
@@ -276,6 +286,9 @@ namespace Chamberlain_UWP.Reminder
         private async void ItemCheckBox_Click(object sender, RoutedEventArgs e)
         {
             await ReminderManager.Data.Save(); // 保存数据
+
+            if (!IsProgressUpdaterWorking) // 判断进程是否不在工作（活动的条目=0）
+                new Thread(RefreshData).Start(); // 重启更新进度的进程
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
