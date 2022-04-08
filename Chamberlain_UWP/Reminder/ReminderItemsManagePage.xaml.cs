@@ -156,10 +156,11 @@ namespace Chamberlain_UWP.Reminder
             ReminderManager.UpdateList(ReminderList); //更新列表
         }
 
-        private void ClearReviseControl()
+        private void ClearReviseControl() //清空更改控件中的内容
         {
             ItemReviseTitleText.Text = "";
             ItemReviseDescText.Text = "";
+            CreatedTimeTextBlock.Text = "";
             ItemReviseDatePicker.Date = null;
             ItemReviseTimePicker.SelectedTime = null;
         }
