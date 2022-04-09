@@ -15,7 +15,7 @@ namespace Chamberlain_UWP.Reminder
     {
         private static List<ReminderItem> ReminderItemList = new List<ReminderItem>(); // 只能通过以下的访问器访问
 
-        private static string DataFilename = "ReminderData.json";
+        internal readonly static string DataFilename = "ReminderData.json";
 
         public static int ItemCountOnwork
         {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -209,12 +209,50 @@ namespace Chamberlain_UWP
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
             if (folder != null)
             {
-                // 应用程序现在有了这个文件夹的所有权限，包括子文件夹
-                StorageApplicationPermissions.FutureAccessList
-                    .AddOrReplace("ReminderFolderToken", folder);
                 SelectedFolderPathText.Text = "选取的文件夹: " + folder.Path;
 
-                await ReminderManager.Data.Save(); //保存到指定的文件夹
+                // 检测文件夹内是否有数据文件
+                StorageFile file = await folder.TryGetItemAsync(ReminderManager.DataFilename) as StorageFile;
+                if (file != null)
+                {
+                    //文件存在
+                    ContentDialog importDataDialog = new ContentDialog
+                    {
+                        Title = "检测到选定的文件夹内存在数据文件",
+                        Content = "从这个文件内导入，还是覆盖这个文件？",
+                        PrimaryButtonText = "导入",
+                        SecondaryButtonText = "覆盖",
+                        CloseButtonText = "取消",
+                        DefaultButton = ContentDialogButton.Primary
+                    };
+                    ContentDialogResult result = await importDataDialog.ShowAsync();
+
+                    if (result == ContentDialogResult.Primary)
+                    {
+                        await ReminderManager.Data.Load(); //从文件导入
+
+                        // 应用程序现在有了这个文件夹的所有权限，包括子文件夹
+                        StorageApplicationPermissions.FutureAccessList.AddOrReplace("ReminderFolderToken", folder);
+                    }
+                    else if (result == ContentDialogResult.Secondary)
+                    {
+                        await ReminderManager.Data.Save(); //覆盖文件
+
+                        // 应用程序现在有了这个文件夹的所有权限，包括子文件夹
+                        StorageApplicationPermissions.FutureAccessList.AddOrReplace("ReminderFolderToken", folder);
+                    }
+                    else //操作取消
+                    {
+                        if (StorageApplicationPermissions.FutureAccessList.ContainsItem("ReminderFolderToken")) //本来有路径
+                        {
+                            folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
+                            SelectedFolderPathText.Text = String.Format("取消导入，" +
+                                $"路径：{folder.Path}");
+                        }
+                        else SelectedFolderPathText.Text = "操作取消";
+                    }
+                }
+                else await ReminderManager.Data.Save(); //选定的文件夹中没有文件，直接保存
             }
             else SelectedFolderPathText.Text = "操作取消";
         }
