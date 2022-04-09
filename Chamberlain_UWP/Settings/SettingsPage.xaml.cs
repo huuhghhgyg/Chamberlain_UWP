@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -156,10 +156,42 @@ namespace Chamberlain_UWP
             ReminderSaveTextBox.Text = await ReminderManager.Data.Save();
         }
 
-        private void DeleteReminderDataButton_Click(object sender, RoutedEventArgs e)
+        private async void DeleteReminderDataButton_Click(object sender, RoutedEventArgs e)
         {
-            ReminderManager.Data.Clear();
-            DeleteReminderDataButton.Content = "已删除";
+            if (StorageApplicationPermissions.FutureAccessList.ContainsItem("ReminderFolderToken")) //检查是否使用外部数据
+            {
+                // 使用外部数据，询问是否删除
+                ContentDialog deleteDataDialog = new ContentDialog
+                {
+                    Title = "您正在使用指定文件夹中的数据",
+                    Content = "是否一并删除？",
+                    PrimaryButtonText = "保留",
+                    SecondaryButtonText = "删除",
+                    CloseButtonText = "取消",
+                    DefaultButton = ContentDialogButton.Primary
+                };
+                ContentDialogResult result = await deleteDataDialog.ShowAsync();
+
+                if (result == ContentDialogResult.Primary)
+                {
+                    object obj = null; RoutedEventArgs args = null;
+                    DeleteSelectedFolderButton_Click(obj, args); // 相当于先取消使用外部数据文件
+
+                    ReminderManager.Data.Clear(); // 取消完再删除
+                }
+                else if (result == ContentDialogResult.Secondary)
+                {
+                    ReminderManager.Data.Clear(); // 删除数据
+                    await ReminderManager.Data.Save(); // 保存空文件
+                }
+            }
+            else
+            {
+                // 不使用外部数据，直接删除
+                ReminderManager.Data.Clear();
+                DeleteReminderDataButton.Content = "已删除";
+                DeleteFlyoutButton.Flyout.Hide();
+            }
         }
 
         private void DeleteFlyoutButton_Click(object sender, RoutedEventArgs e)
@@ -229,17 +261,17 @@ namespace Chamberlain_UWP
 
                     if (result == ContentDialogResult.Primary)
                     {
-                        await ReminderManager.Data.Load(); //从文件导入
-
                         // 应用程序现在有了这个文件夹的所有权限，包括子文件夹
                         StorageApplicationPermissions.FutureAccessList.AddOrReplace("ReminderFolderToken", folder);
+
+                        await ReminderManager.Data.Load(); //从文件导入
                     }
                     else if (result == ContentDialogResult.Secondary)
                     {
-                        await ReminderManager.Data.Save(); //覆盖文件
-
                         // 应用程序现在有了这个文件夹的所有权限，包括子文件夹
                         StorageApplicationPermissions.FutureAccessList.AddOrReplace("ReminderFolderToken", folder);
+
+                        await ReminderManager.Data.Save(); //覆盖文件
                     }
                     else //操作取消
                     {

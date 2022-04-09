@@ -55,7 +55,8 @@
                                     SpinButtonPlacementMode="Inline"
                                     HorizontalAlignment="Left"
                                     SmallChange="10" LargeChange="100" Minimum="15"
-                                    Width="200" Text="{x:Bind UpdateTriggerInterval, Mode=TwoWay}"/>
+                                    Width="200" Margin="0,12,0,0"
+                                    Text="{x:Bind UpdateTriggerInterval, Mode=TwoWay}"/>
                     <ToggleSwitch Header="开启通知" Name="NotificationSwitch"
                                   Margin="0,12,0,0"
                                   IsOn="{x:Bind IsNotificationEnabled, Mode=TwoWay}"/>
@@ -96,11 +97,13 @@
                         <StackPanel>
                             <TextBlock Name="SelectedFolderPathText" VerticalAlignment="Center"/>
                             <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                <Button Name="SetReminderFolderButton" Content="打开文件夹" Click="SetReminderFolderButton_Click"/>
-                                <Button Name="DeleteSelectedFolderButton" Content="清除" Margin="8,0,0,0" Click="DeleteSelectedFolderButton_Click"/>
+                                <Button Name="SetReminderFolderButton" Content="打开文件夹"
+                                        Click="SetReminderFolderButton_Click"/>
+                                <Button Name="DeleteSelectedFolderButton" Content="清除"
+                                        Margin="8,0,0,0"
+                                        Click="DeleteSelectedFolderButton_Click"/>
                             </StackPanel>
                         </StackPanel>
-
 
                         <TextBlock Text="导入Reminder(JSON)"
                                    Margin="0,12,0,8"
