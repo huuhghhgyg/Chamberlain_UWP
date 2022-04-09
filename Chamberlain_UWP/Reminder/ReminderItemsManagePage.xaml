@@ -155,8 +155,9 @@
                                            Margin="0,0,0,8" 
                                            Style="{ThemeResource BaseTextBlockStyle}" />
                                 <StackPanel Padding="0,8">
-                                    <TextBox Header="标题" Name="AddTitleTextBox"/>
-                                    <TextBox Header="提醒描述" Name="AddDescTextBox" Margin="0,12,0,0" TextWrapping="Wrap"/>
+                                    <TextBox Header="标题" Name="AddTitleTextBox" PlaceholderText="标题名称"/>
+                                    <TextBox Header="提醒描述" Name="AddDescTextBox" PlaceholderText="提醒内容"
+                                             Margin="0,12,0,0" TextWrapping="Wrap"/>
                                     <CalendarDatePicker PlaceholderText="到期日期"
                                                         Header="选择日期"
                                                         Name="AddItemDatePicker"
