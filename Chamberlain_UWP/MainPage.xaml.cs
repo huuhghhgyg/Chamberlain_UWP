@@ -1,4 +1,5 @@
-﻿using Chamberlain_UWP.Reminder;
+using Chamberlain_UWP.Reminder;
+using Chamberlain_UWP.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -43,6 +44,8 @@ namespace Chamberlain_UWP
         {
             this.InitializeComponent();
 
+            SettingsConfig.InitialLoad();
+
             InitializeData(initializeNavigate); // 使用回调（Action），先data后navigate
         }
 
@@ -68,7 +71,8 @@ namespace Chamberlain_UWP
                 BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
                 taskBuilder.Name = taskName;
                 taskBuilder.TaskEntryPoint = taskEntryPoint;
-                taskBuilder.SetTrigger(new TimeTrigger(15, false));
+                uint interval = (uint)SettingsConfig.UpdateTriggerInterval; //导入设置变量中的间隔
+                taskBuilder.SetTrigger(new TimeTrigger(interval, false));
                 var registration = taskBuilder.Register();
             }
         }
@@ -95,6 +99,10 @@ namespace Chamberlain_UWP
                         break;
                 }
             }
+
+            //清除返回
+            contentFrame.BackStack.Clear();
+            contentFrame.ForwardStack.Clear();
         }
 
         private void navControl_BackRequested(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewBackRequestedEventArgs args)
@@ -112,8 +120,12 @@ namespace Chamberlain_UWP
             }
             else
             {
-                await ReminderManager.Data.Load();
+                await ReminderManager.Data.Load(); // 跳转页面前加载数据，免得后面使用线程加载（todo）
                 contentFrame.Navigate(typeof(ReminderPage));
+
+                //清除返回（由于await跳过了清除，所以在这里再次清除）
+                contentFrame.BackStack.Clear();
+                contentFrame.ForwardStack.Clear();
             }
         }
     }

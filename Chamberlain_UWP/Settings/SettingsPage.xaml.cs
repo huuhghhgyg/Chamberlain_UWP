@@ -18,6 +18,8 @@ using Windows.ApplicationModel.DataTransfer;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Chamberlain_UWP.Settings;
+using Windows.Storage.AccessCache;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -31,6 +33,31 @@ namespace Chamberlain_UWP
         public SettingsPage()
         {
             this.InitializeComponent();
+
+            Settings_LoadText();
+        }
+
+        private async void Settings_LoadText() //读取提示文字
+        {
+            //Reminder文件夹权限
+            if (StorageApplicationPermissions.FutureAccessList.ContainsItem("ReminderFolderToken"))
+            {
+                StorageFolder future_folder;
+                try
+                {
+                    future_folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
+                    SelectedFolderPathText.Text = string.Format($"已启用，具有访问权限：{future_folder.Path}");
+                }
+                catch (FileNotFoundException)
+                {
+                    StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken"); //指定文件夹不存在，清除指定项
+                    SelectedFolderPathText.Text = "指定文件夹不存在，已被清除";
+                }
+            }
+            else
+            {
+                SelectedFolderPathText.Text = "未指定任何文件夹";
+            }
         }
 
         private void DebugOptionExpander_Expanding(Microsoft.UI.Xaml.Controls.Expander sender, Microsoft.UI.Xaml.Controls.ExpanderExpandingEventArgs args)
@@ -93,9 +120,9 @@ namespace Chamberlain_UWP
 
                     StorageFolder folder = ApplicationData.Current.TemporaryFolder;// 程序临时目录
                     // folder.Path为本地目录路径
-                    if (contentType== "application/json")
+                    if (contentType == "application/json")
                     {
-                        StorageFile jsonFile = await storageFile.CopyAsync(folder, "ReminderImport.json",NameCollisionOption.ReplaceExisting); // 得到文件的引用
+                        StorageFile jsonFile = await storageFile.CopyAsync(folder, "ReminderImport.json", NameCollisionOption.ReplaceExisting); // 得到文件的引用
                         ImportReminderTextBox.Text = await File.ReadAllTextAsync(jsonFile.Path);
                         await jsonFile.DeleteAsync();
                     }
@@ -138,6 +165,65 @@ namespace Chamberlain_UWP
         private void DeleteFlyoutButton_Click(object sender, RoutedEventArgs e)
         {
             DeleteReminderDataButton.Content = "确认删除";
+        }
+
+        /// <summary>
+        /// 数据绑定区
+        /// </summary>
+        // 应用设置
+        private int UpdateTriggerInterval
+        {
+            get { return SettingsConfig.UpdateTriggerInterval; }
+            set { SettingsConfig.UpdateTriggerInterval = value; }
+        }
+        private bool IsNotificationEnabled
+        {
+            get { return SettingsConfig.IsNotificationEnabled; }
+            set { SettingsConfig.IsNotificationEnabled = value; }
+        }
+        private bool IsNotificationBlockingVisible
+        {
+            get { return SettingsConfig.IsNotificationBlockingVisible; }
+            set { SettingsConfig.IsNotificationBlockingVisible = value; }
+        }
+        //数据漫游
+        private bool IsSettingsRoamingEnabled
+        {
+            get { return SettingsConfig.IsSettingsRoamingEnabled; }
+            set { SettingsConfig.IsSettingsRoamingEnabled = value; }
+        }
+
+        private void SettingSyncSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            ToggleSwitch control = (ToggleSwitch)sender;
+            if (control.IsOn == true) SettingsConfig.SaveAllRoaming();
+        }
+
+        private async void SetReminderFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 获取文件对象
+            var folderPicker = new FolderPicker();
+            folderPicker.SuggestedStartLocation = PickerLocationId.Desktop;
+            folderPicker.FileTypeFilter.Add("*");
+
+            StorageFolder folder = await folderPicker.PickSingleFolderAsync();
+            if (folder != null)
+            {
+                // 应用程序现在有了这个文件夹的所有权限，包括子文件夹
+                StorageApplicationPermissions.FutureAccessList
+                    .AddOrReplace("ReminderFolderToken", folder);
+                SelectedFolderPathText.Text = "选取的文件夹: " + folder.Path;
+
+                await ReminderManager.Data.Save(); //保存到指定的文件夹
+            }
+            else SelectedFolderPathText.Text = "操作取消";
+        }
+
+        private void DeleteSelectedFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken");
+            DeleteSelectedFolderButton.IsEnabled = false;
+            SelectedFolderPathText.Text = "未指定任何文件夹";
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using Windows.Storage;
 using static Chamberlain_UWP.Notify;
+using Windows.Storage.AccessCache;
 
 namespace Chamberlain_UWP.Reminder
 {
@@ -208,14 +209,46 @@ namespace Chamberlain_UWP.Reminder
             public static async Task<string> Save()
             {
                 UpdateTile(); //更新磁贴
-                StorageFolder folder = ApplicationData.Current.LocalFolder;
+                
+                StorageFolder folder;
+                //检查是否需要存到指定目录
+                if (StorageApplicationPermissions.FutureAccessList.ContainsItem("ReminderFolderToken"))
+                {
+                    try
+                    {
+                        folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
+                        await ExportToFile(folder, DataFilename, CreationCollisionOption.ReplaceExisting, true); // 将数据先导出到本地数据文件夹
+                    }
+                    catch (System.IO.FileNotFoundException) //文件夹不存在
+                    {
+                        StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken"); //清除指定项
+                        folder = ApplicationData.Current.LocalFolder;
+                    }
+                }
+                else folder = ApplicationData.Current.LocalFolder;
                 return await ExportToFile(folder, DataFilename, CreationCollisionOption.ReplaceExisting, true); // 将数据导出到文件（本地路径）
             }
 
             public static async Task<string> Load()
             {
                 string msg = "";
-                StorageFolder folder = ApplicationData.Current.LocalFolder; // 创建本地目录文件夹对象
+                StorageFolder folder; // 创建本地目录文件夹对象
+                //检查是否需从指定目录读取
+                if (StorageApplicationPermissions.FutureAccessList.ContainsItem("ReminderFolderToken"))
+                {
+                    try
+                    {
+                        folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
+                    }
+                    catch(System.IO.FileNotFoundException)
+                    {
+                        StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken"); //清除指定项
+                        msg = "指定的文件夹不存在，已清除";
+                        folder = ApplicationData.Current.LocalFolder;
+                    }
+                }
+                else folder = ApplicationData.Current.LocalFolder;
+
                 try
                 {
                     StorageFile file = await folder.GetFileAsync(DataFilename); // 创建文件对象

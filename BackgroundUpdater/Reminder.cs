@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
 using static BackgroundUpdater.Notify;
 
 namespace BackgroundUpdater
@@ -90,6 +91,8 @@ namespace BackgroundUpdater
     /// </summary>
     internal static class ReminderManager
     {
+        public static bool ReminderItemListLoaded = false; //已从文件读取标记（用于阻塞）
+
         private static List<ReminderItem> ReminderItemList = new List<ReminderItem>(); // 只能通过以下的访问器访问
 
         internal static class Statistics
@@ -224,7 +227,23 @@ namespace BackgroundUpdater
             public static async Task<string> Load() //从程序目录读取数据
             {
                 string msg = "";
-                StorageFolder folder = ApplicationData.Current.LocalFolder; // 创建本地目录文件夹对象
+                StorageFolder folder; // 创建本地目录文件夹对象
+                //检查是否需从指定目录读取
+                if (StorageApplicationPermissions.FutureAccessList.ContainsItem("ReminderFolderToken"))
+                {
+                    try
+                    {
+                        folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
+                    }
+                    catch (System.IO.FileNotFoundException)
+                    {
+                        StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken"); //清除指定项
+                        msg = "指定的文件夹不存在，已清除";
+                        folder = ApplicationData.Current.LocalFolder;
+                    }
+                }
+                else folder = ApplicationData.Current.LocalFolder;
+
                 try
                 {
                     StorageFile file = await folder.GetFileAsync(DataFilename); // 创建文件对象
