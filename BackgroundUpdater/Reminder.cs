@@ -249,6 +249,10 @@ namespace BackgroundUpdater
                     StorageFile file = await folder.GetFileAsync(DataFilename); // 创建文件对象
                     msg = await LoadFile(file);
                 }
+                catch (System.IO.FileNotFoundException) //数据文件不存在，先使用空集
+                {
+                    ReminderItemList = new List<ReminderItem>();
+                }
                 catch (Exception ex)
                 {
                     msg += ex.Message;
