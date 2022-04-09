@@ -7,6 +7,7 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -95,13 +96,56 @@ namespace Chamberlain_UWP.Reminder.OOBE
         private async void ImportFailed(string msg)
         {
             // 导入出错
-            ContentDialog deleteFileDialog = new ContentDialog
+            ContentDialog ImportFailedDialog = new ContentDialog
             {
                 Title = "导入的文件似乎有些问题🤔",
                 Content = msg,
                 PrimaryButtonText = "确定",
             };
-            await deleteFileDialog.ShowAsync();
+            await ImportFailedDialog.ShowAsync();
+        }
+
+        private async void PickFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 获取文件对象
+            var folderPicker = new FolderPicker();
+            folderPicker.SuggestedStartLocation = PickerLocationId.Desktop;
+            folderPicker.FileTypeFilter.Add("*");
+
+            StorageFolder folder = await folderPicker.PickSingleFolderAsync();
+            if (folder != null)
+            {
+                // 检测文件夹内是否有数据文件
+                StorageFile file = await folder.TryGetItemAsync(ReminderManager.DataFilename) as StorageFile;
+                if (file != null)
+                {
+                    // 应用程序现在有了这个文件夹的所有权限，包括子文件夹
+                    StorageApplicationPermissions.FutureAccessList.AddOrReplace("ReminderFolderToken", folder);
+
+                    //文件存在
+                    string msg = "";
+                    msg += await ReminderManager.Data.Load(); //从文件导入
+                    msg += await ReminderManager.Data.Save(); //存到数据文件中（虽然包括保存到外部数据文件）
+
+                    if (!string.IsNullOrEmpty(msg))
+                    {
+                        // 导入成功
+                        this.Frame.Navigate(typeof(ReminderPage));
+                        Frame.BackStack.Clear(); // 禁止返回
+                    }
+                }
+                else //选定的文件夹中没有文件
+                {
+                    ContentDialog importDataDialog = new ContentDialog
+                    {
+                        Title = "选定的文件夹没有找到数据文件",
+                        Content = "请重新指定文件夹",
+                        CloseButtonText = "好",
+                        DefaultButton = ContentDialogButton.Close
+                    };
+                    ContentDialogResult result = await importDataDialog.ShowAsync();
+                }
+            }
         }
     }
 }

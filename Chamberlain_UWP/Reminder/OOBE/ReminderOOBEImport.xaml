@@ -23,16 +23,19 @@
                    AllowDrop="True"
                    DragOver="TitleTextBox_DragOver"
                    Drop="TitleTextBox_Drop"/>
-        <TextBlock
-                   FontSize="20"
+        <TextBlock FontSize="20"
                    Grid.Row="1" Margin="0"
                    VerticalAlignment="Center"
-                   HorizontalAlignment="Center">点击按钮打开文件或将文件拖动到标题上</TextBlock>
-        <Button Content="打开文件"
-                Name="OpenFileButton"
-                Grid.Row="2"
-                VerticalAlignment="Top"
-                HorizontalAlignment="Center"
-                Click="OpenFileButton_Click"/>
+                   HorizontalAlignment="Center" Text="点击按钮打开文件或将文件拖动到标题上，或指定文件夹"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center">
+            <Button Content="指定文件夹"
+                    Name="PickFolderButton"
+                    Click="PickFolderButton_Click"/>
+            <Button Content="打开文件"
+                    Name="OpenFileButton"
+                    Margin="12,0,0,0"
+                    Style="{StaticResource AccentButtonStyle}"
+                    Click="OpenFileButton_Click"/>
+        </StackPanel>
     </Grid>
 </Page>
