@@ -284,7 +284,11 @@ namespace Chamberlain_UWP
                         else SelectedFolderPathText.Text = "操作取消";
                     }
                 }
-                else await ReminderManager.Data.Save(); //选定的文件夹中没有文件，直接保存
+                else //选定的文件夹中没有文件，直接保存
+                {
+                    StorageApplicationPermissions.FutureAccessList.AddOrReplace("ReminderFolderToken", folder);
+                    await ReminderManager.Data.Save(); 
+                }
             }
             else SelectedFolderPathText.Text = "操作取消";
         }
