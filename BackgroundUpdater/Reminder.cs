@@ -109,7 +109,7 @@ namespace BackgroundUpdater
             {
                 return ReminderItemList
                     .Where(item => item.TaskState == TaskState.Onwork)
-                    .Where(item => item.TaskSpan < new TimeSpan(remain_hours, 0, 0))
+                    .Where(item => item.Deadline - DateTime.Now < new TimeSpan(remain_hours, 0, 0)) //剩余时间小于n小时
                     .ToList();
             }
         }
