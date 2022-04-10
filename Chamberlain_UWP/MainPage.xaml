@@ -7,14 +7,43 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
-    Background="{ThemeResource LayerFillColorDefaultBrush}">
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
+
+    <Page.Resources>
+        <!--自定义TitleBar的高度-->
+        <Thickness x:Key="NavigationViewContentMargin">0,48,0,0</Thickness>
+    </Page.Resources>
 
     <Grid>
-        <muxc:NavigationView Name="navControl" PaneTitle="Chamberlain" 
+        <Border x:Name="AppTitleBar"
+                IsHitTestVisible="True"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                Height="40"
+                Canvas.ZIndex="1" 
+                Margin="48,8,0,0">
+            <StackPanel Orientation="Horizontal">
+                <Image x:Name="AppFontIcon"
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Center"
+                    Source="Assets/Square44x44Logo.png" 
+                    Width="16" 
+                    Height="16"/>
+                <TextBlock x:Name="AppTitle"
+                    Text="Chamberlain"
+                    VerticalAlignment="Center"
+                    Margin="12,0,0,0"
+                    Style="{StaticResource CaptionTextBlockStyle}" />
+            </StackPanel>
+        </Border>
+        
+        <muxc:NavigationView Name="navControl"
+                             IsTitleBarAutoPaddingEnabled="False"
                              ItemInvoked="navControl_ItemInvoked"
                              IsBackEnabled="{x:Bind contentFrame.CanGoBack, Mode=OneWay}"
-                             BackRequested="navControl_BackRequested">
+                             BackRequested="navControl_BackRequested"
+                             DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
+                             Canvas.ZIndex="0">
             <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem Icon="Clock" Content="任务" Tag="task"/>
                 <muxc:NavigationViewItem Content="提醒" Tag="reminder">
