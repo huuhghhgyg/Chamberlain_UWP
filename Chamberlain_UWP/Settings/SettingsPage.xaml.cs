@@ -265,6 +265,7 @@ namespace Chamberlain_UWP
                         StorageApplicationPermissions.FutureAccessList.AddOrReplace("ReminderFolderToken", folder);
 
                         await ReminderManager.Data.Load(); //从文件导入
+                        await ReminderManager.Data.Save(); //保存文件（包括本地目录）
                     }
                     else if (result == ContentDialogResult.Secondary)
                     {

@@ -217,7 +217,7 @@ namespace Chamberlain_UWP.Reminder
                     try
                     {
                         folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
-                        await ExportToFile(folder, DataFilename, CreationCollisionOption.ReplaceExisting, true); // 将数据先导出到本地数据文件夹
+                        await ExportToFile(ApplicationData.Current.LocalFolder, DataFilename, CreationCollisionOption.ReplaceExisting, true); // 将数据先导出到本地数据文件夹
                     }
                     catch (System.IO.FileNotFoundException) //文件夹不存在
                     {
