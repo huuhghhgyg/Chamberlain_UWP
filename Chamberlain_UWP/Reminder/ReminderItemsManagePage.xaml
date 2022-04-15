@@ -272,9 +272,9 @@
                                 <!--修改面板-->
                                 <TextBlock Text="基本信息" Margin="0,0,0,12" Style="{ThemeResource BaseTextBlockStyle}"/>
                                 <TextBox Name="ItemReviseTitleText" 
-                                             Header="标题"/>
+                                             Header="标题" PlaceholderText="(未选择)"/>
                                 <TextBox Name="ItemReviseDescText" 
-                                             Header="提醒描述" 
+                                             Header="提醒描述" PlaceholderText="(未选择)"
                                              Margin="0,12,0,0"
                                              TextWrapping="Wrap"/>
                                 <TextBlock Text="创建时间" Margin="0,12,0,0"/>
@@ -289,16 +289,22 @@
                                     <x:String>中</x:String>
                                     <x:String>高</x:String>
                                 </ComboBox>
-                                <RelativePanel Margin="0,16,0,0">
-                                    <Button Name="ModifyItemButton" Content="修改项" 
-                                                RelativePanel.AlignRightWithPanel="True" 
-                                                Style="{StaticResource AccentButtonStyle}" 
-                                                Click="ModifyItemButton_Click"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                                    <muxc:InfoBadge x:Name="ReviseItemInfoBadge"
+                                                    Visibility="Collapsed"
+                                                    Margin="0,0,8,0"
+                                                    VerticalAlignment="Center"
+                                                    Style="{StaticResource SuccessIconInfoBadgeStyle}"/>
                                     <Button Name="DeleteItemButton" Content="删除" 
                                                 Margin="0,0,8,0" 
-                                                RelativePanel.LeftOf="ModifyItemButton"
+                                                VerticalAlignment="Center"
                                                 Click="DeleteItemButton_Click"/>
-                                </RelativePanel>
+                                    <Button Name="ModifyItemButton" Content="修改项"
+                                                VerticalAlignment="Center"
+                                                Style="{StaticResource AccentButtonStyle}" 
+                                                Click="ModifyItemButton_Click">
+                                    </Button>
+                                </StackPanel>
                             </StackPanel>
                         </Grid>
                     </StackPanel>

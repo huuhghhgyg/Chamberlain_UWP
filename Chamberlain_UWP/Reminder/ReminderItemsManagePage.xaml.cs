@@ -93,6 +93,11 @@ namespace Chamberlain_UWP.Reminder
 
         private void RemindItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // 更新UI反馈
+            revise_num = 0;
+            ReviseItemInfoBadge.Value = -1;
+            ReviseItemInfoBadge.Visibility = Visibility.Collapsed;
+
             int index = RemindItemListView.SelectedIndex; // 找到RemindItemListView中选择的元素下标
             if (index == -1)
             {
@@ -115,6 +120,7 @@ namespace Chamberlain_UWP.Reminder
             CreatedTimeTextBlock.Text = ReminderList[index].CreatedTime.ToString("f");
         }
 
+        int revise_num = 0;
         private void ModifyItemButton_Click(object sender, RoutedEventArgs e)
         {
             int index = RemindItemListView.SelectedIndex; //找到RemindItemListView中选择的元素下标
@@ -154,6 +160,11 @@ namespace Chamberlain_UWP.Reminder
             ReminderList[index].Description = ItemReviseDescText.Text; //更新Description字段
             ReminderList[index].SetDeadline(ddlDate); //按照类中的方法，更新Deadline字段
             ReminderList[index].Priority = (Priority)ItemRevisePriorityComboBox.SelectedIndex; //这项似乎没法不选，不做检测
+            ReviseItemInfoBadge.Visibility = Visibility.Visible;
+
+            //UI反馈（Badge）
+            revise_num++;
+            if (revise_num > 1) ReviseItemInfoBadge.Value = revise_num;
 
             ReminderManager.UpdateList(ReminderList); //更新列表
 
@@ -164,11 +175,14 @@ namespace Chamberlain_UWP.Reminder
 
         private void ClearReviseControl() //清空更改控件中的内容
         {
-            ItemReviseTitleText.Text = "";
-            ItemReviseDescText.Text = "";
-            CreatedTimeTextBlock.Text = "";
-            ItemReviseDatePicker.Date = null;
-            ItemReviseTimePicker.SelectedTime = null;
+            ItemReviseTitleText.Text = "（未选择）";
+            ItemReviseDescText.Text = "（未选择）";
+            CreatedTimeTextBlock.Text = "（空）";
+            ItemReviseDatePicker.Date = null; //清空选中的日期
+            ItemReviseTimePicker.SelectedTime = null; //清空选中的时间
+            ItemRevisePriorityComboBox.SelectedIndex = 0; //选中“默认”
+            ReviseItemInfoBadge.Visibility = Visibility.Collapsed; //隐藏修改反馈图标
+            revise_num = 0; //清除反馈图标的计数
         }
 
         private void UpdateItemsProgress()
@@ -294,6 +308,7 @@ namespace Chamberlain_UWP.Reminder
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             IsPageAlive = false; //结束线程
+            this.Unloaded -= Page_Unloaded; //注销事件
         }
     }
 }
