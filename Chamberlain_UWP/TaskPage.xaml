@@ -11,80 +11,6 @@
     Background="{ThemeResource NavigationViewExpandedPaneBackground}"
     Unloaded="Page_Unloaded">
 
-    <Page.Resources>
-        <!--ReminderItem列表的模板-->
-        <Style TargetType="ListViewItem" x:Key="SectionView">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="Padding" Value="0"/>
-        </Style>
-
-        <!--列表卡片的DataTemplate，存放所有项目-->
-        <DataTemplate x:DataType="local1:ReminderItem" x:Key="ReminderItemViewTemplate">
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,8" Padding="12,6"
-                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                        BorderThickness="1"
-                        CornerRadius="{StaticResource ControlCornerRadius}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <CheckBox Name="ItemCheckBox"
-                                  Content="{x:Bind Title,Mode=OneWay}"
-                                  IsChecked="{x:Bind IsReminderDone,Mode=TwoWay}"
-                                  Click="ItemCheckBox_Click"/>
-                    <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" Padding="0,0,0,4">
-                        <TextBlock Text="{x:Bind PriorityString,Mode=OneWay}"
-                                       Margin="0,0,4,0"
-                                       Style="{ThemeResource BodyTextBlockStyle}"
-                                       Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
-                        <TextBlock Text="{x:Bind ProgressString,Mode=OneWay}" 
-                                       Name="ProgressTextBlock"
-                                       Foreground="{ThemeResource TextFillColorPrimary}"/>
-                    </StackPanel>
-                </Grid>
-                <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind ProgressValue,Mode=OneWay}" Maximum="1" Margin="0,4"/>
-                <Grid Margin="0,4" RowSpacing="4">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="{x:Bind Description,Mode=OneWay}" 
-                                   Name="ItemDescriptionTextBlock"
-                                   TextWrapping="Wrap"
-                                   Grid.ColumnSpan="2"
-                                   Style="{StaticResource CaptionTextBlockStyle}" 
-                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                    <TextBlock Text="{x:Bind TagsString,Mode=OneWay}" 
-                                   Grid.Row="1"
-                                   Style="{StaticResource CaptionTextBlockStyle}" 
-                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
-                    <TextBlock Text="ddl: "
-                                   VerticalAlignment="Bottom"
-                                   Margin="4,0,4,0"
-                                   Grid.Row="1"
-                                   Grid.Column="1"
-                                   Style="{StaticResource CaptionTextBlockStyle}" 
-                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
-                    <TextBlock x:Name="DateTimeTextBlock"
-                                   Text="{x:Bind DeadlineString,Mode=OneWay}"
-                                   VerticalAlignment="Bottom"
-                                   Grid.Row="1"
-                                   Grid.Column="2"
-                                   Style="{StaticResource CaptionTextBlockStyle}" 
-                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
-                </Grid>
-            </StackPanel>
-        </DataTemplate>
-
-    </Page.Resources>
-
     <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
@@ -126,11 +52,7 @@
             <!--面板-->
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48">
                 <TextBlock Name="NoTaskTextBlock" Text="所有任务已完成☕"/>
-                <ListView ItemsSource="{x:Bind ReminderListOnwork, Mode=OneWay}" 
-                        SelectionMode="None"
-                        ItemContainerStyle="{StaticResource SectionView}"
-                        ItemTemplate="{StaticResource ReminderItemViewTemplate}">
-                </ListView>
+                <local1:ReminderCardListView ReminderList="{x:Bind ReminderListOnwork,Mode=OneWay}" ListViewItemChecked="ReminderCardListView_ListViewItemChecked"/>
             </StackPanel>
         </ScrollViewer>
 

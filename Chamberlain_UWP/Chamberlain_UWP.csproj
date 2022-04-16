@@ -140,7 +140,13 @@
     <Compile Include="Reminder\OOBE\ReminderOOBEWelcome.xaml.cs">
       <DependentUpon>ReminderOOBEWelcome.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Reminder\ReminderCardListView.xaml.cs">
+      <DependentUpon>ReminderCardListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Reminder\ReminderItem.cs" />
+    <Compile Include="Reminder\ReminderItemCard.xaml.cs">
+      <DependentUpon>ReminderItemCard.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Reminder\ReminderItemsManagePage.xaml.cs">
       <DependentUpon>ReminderItemsManagePage.xaml</DependentUpon>
     </Compile>
@@ -229,6 +235,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Reminder\OOBE\ReminderOOBEWelcome.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Reminder\ReminderCardListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Reminder\ReminderItemCard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

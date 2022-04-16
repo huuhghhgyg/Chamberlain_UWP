@@ -150,17 +150,6 @@ namespace Chamberlain_UWP.Reminder
             this.Frame.Navigate(typeof(ReminderItemsManagePage));
         }
 
-        private async void ItemCheckBox_Click(object sender, RoutedEventArgs e)
-        {
-            var control = (CheckBox)sender;
-            bool sender_state = (bool)control.IsChecked; // 点击之后的状态
-            RefreshReminderList(sender_state);
-            await ReminderManager.Data.Save(); // 保存数据
-
-            if (!IsProgressUpdaterWorking) // 判断进程是否不在工作（活动的条目=0）
-                new Thread(RefreshData).Start(); // 重启更新进度的进程
-        }
-
         delegate void FilterReminderItems(AutoSuggestBox sender);
 
         private void OnworkItemSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
@@ -228,6 +217,20 @@ namespace Chamberlain_UWP.Reminder
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             IsPageAlive = false; //结束线程
+
+            ListOnWork.ListViewItemChecked -= ReminderCardListView_ItemChecked;
+            ListFinished.ListViewItemChecked -= ReminderCardListView_ItemChecked;
+        }
+
+        private async void ReminderCardListView_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            bool state = e.IsChecked;
+            // 点击之后的状态
+            RefreshReminderList(state);
+            await ReminderManager.Data.Save(); // 保存数据
+
+            if (!IsProgressUpdaterWorking) // 判断进程是否不在工作（活动的条目=0）
+                new Thread(RefreshData).Start(); // 重启更新进度的进程
         }
     }
 }

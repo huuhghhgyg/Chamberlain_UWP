@@ -86,5 +86,22 @@ namespace Chamberlain_UWP
         {
             IsPageAlive = false;
         }
+
+        private async void ReminderCardListView_ListViewItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            // 未完成减少了
+            List<ReminderItem> listOnwork = new List<ReminderItem>(ReminderListOnwork);
+            List<ReminderItem> newlistOnwork = new List<ReminderItem>(); //少
+            ReminderManager.GetList(newlistOnwork, TaskState.Finished);
+            listOnwork.ForEach(item =>
+            {
+                if (newlistOnwork.Contains(item)) ReminderListOnwork.Remove(item); //删除不存在的项
+            });
+
+            if (ReminderListOnwork.Count == 0)
+                NoTaskTextBlock.Visibility = Visibility.Visible; // 无任务时提示任务已完成
+
+            await ReminderManager.Data.Save(); // 保存数据
+        }
     }
 }
