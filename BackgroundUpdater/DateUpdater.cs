@@ -40,7 +40,7 @@ namespace BackgroundUpdater
             if (isNotificationEnabled)
             {
                 int blocking_count=0; //阻塞次数
-                int blocking_timespan = 100; //阻塞时间（毫秒）
+                int blocking_timespan = 10; //阻塞时间（毫秒）
 
                 while (!ReminderManager.Data.Loaded) //线程阻塞
                 {
