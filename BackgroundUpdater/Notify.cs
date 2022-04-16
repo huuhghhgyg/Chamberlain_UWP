@@ -345,6 +345,81 @@ namespace BackgroundUpdater
             {
                 TileUpdateManager.CreateTileUpdaterForApplication().Clear();
             }
+
+            public static void SendNotification(string title, string content)
+            {
+                // 触发通知
+                var toastContent = new ToastContent()
+                {
+                    Visual = new ToastVisual()
+                    {
+                        BindingGeneric = new ToastBindingGeneric()
+                        {
+                            Children =
+                            {
+                                new AdaptiveText()
+                                {
+                                    Text = title
+                                },
+                                new AdaptiveText()
+                                {
+                                    Text = content
+                                }
+                            }
+                        }
+                    }
+                };
+
+                // Create the toast notification
+                var toastNotif = new ToastNotification(toastContent.GetXml());
+
+                // And send the notification
+                ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
+            }
+
+            public static void SendNotification_ReminderCheck(string title, string content)
+            {
+                var toastContent = new ToastContent()
+                {
+                    Visual = new ToastVisual()
+                    {
+                        BindingGeneric = new ToastBindingGeneric()
+                        {
+                            Children =
+                            {
+                                new AdaptiveText()
+                                {
+                                    Text = title
+                                },
+                                new AdaptiveText()
+                                {
+                                    Text = content
+                                }
+                            }
+                        }
+                    },
+                    Actions = new ToastActionsCustom()
+                    {
+                        Buttons =
+                        {
+                            new ToastButton("标记完成", "Check")
+                            {
+                                ActivationType = ToastActivationType.Background
+                            },
+                            new ToastButton("稍后提醒", "None")
+                            {
+                                ActivationType = ToastActivationType.Background
+                            }
+                        }
+                    }
+                };
+
+                // Create the toast notification
+                var toastNotif = new ToastNotification(toastContent.GetXml());
+
+                // And send the notification
+                ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
+            }
         }
 
     }

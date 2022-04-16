@@ -91,8 +91,6 @@ namespace BackgroundUpdater
     /// </summary>
     internal static class ReminderManager
     {
-        public static bool ReminderItemListLoaded = false; //已从文件读取标记（用于阻塞）
-
         private static List<ReminderItem> ReminderItemList = new List<ReminderItem>(); // 只能通过以下的访问器访问
 
         internal static class Statistics
@@ -179,6 +177,8 @@ namespace BackgroundUpdater
         public static class Data
         {
             private static string DataFilename = "ReminderData.json";
+
+            public static bool Loaded = false; //已从文件读取标记（用于阻塞）
             public static bool IsDataEmpty
             {
                 get
@@ -220,8 +220,23 @@ namespace BackgroundUpdater
 
             public static async Task<string> Save() //将数据保存到程序目录
             {
-                StorageFolder folder = ApplicationData.Current.LocalFolder;
-                return await ExportToFile(folder, DataFilename, CreationCollisionOption.ReplaceExisting, false); // 将数据导出到文件（本地路径）
+                StorageFolder folder;
+                //检查是否需要存到指定目录
+                if (StorageApplicationPermissions.FutureAccessList.ContainsItem("ReminderFolderToken"))
+                {
+                    try
+                    {
+                        folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
+                        await ExportToFile(ApplicationData.Current.LocalFolder, DataFilename, CreationCollisionOption.ReplaceExisting, true); // 将数据先导出到本地数据文件夹
+                    }
+                    catch (System.IO.FileNotFoundException) //文件夹不存在
+                    {
+                        StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken"); //清除指定项
+                        folder = ApplicationData.Current.LocalFolder;
+                    }
+                }
+                else folder = ApplicationData.Current.LocalFolder;
+                return await ExportToFile(folder, DataFilename, CreationCollisionOption.ReplaceExisting, true); // 将数据导出到文件（本地路径）
             }
 
             public static async Task<string> Load() //从程序目录读取数据

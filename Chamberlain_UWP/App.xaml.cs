@@ -4,10 +4,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -40,6 +45,18 @@ namespace Chamberlain_UWP
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            OnLaunchedOrActivated(e);
+        }
+
+        protected override void OnActivated(IActivatedEventArgs e)
+        {
+            OnLaunchedOrActivated(e);
+        }
+
+        private void OnLaunchedOrActivated(IActivatedEventArgs e)
+        {
+            RegisterBackgroundTaskAsync();
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -60,57 +77,111 @@ namespace Chamberlain_UWP
                 Window.Current.Content = rootFrame;
             }
 
-            if (e.PrelaunchActivated == false)
+            //正常启动
+            if (e is LaunchActivatedEventArgs)
             {
-                if (rootFrame.Content == null)
+                LaunchActivatedEventArgs args = (LaunchActivatedEventArgs)e;
+                if (args.PrelaunchActivated == false)
                 {
-                    // 当导航堆栈尚未还原时，导航到第一页，
-                    // 并通过将所需信息作为导航参数传入来配置
-                    // 参数
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    if (rootFrame.Content == null)
+                    {
+                        // 当导航堆栈尚未还原时，导航到第一页，
+                        // 并通过将所需信息作为导航参数传入来配置
+                        // 参数
+                        rootFrame.Navigate(typeof(MainPage), args.Arguments);
+                    }
+                    // 确保当前窗口处于活动状态
+                    Window.Current.Activate();
                 }
-                // 确保当前窗口处于活动状态
-                Window.Current.Activate();
             }
+            // 处理通知激活
+            else if (e is ToastNotificationActivatedEventArgs toastActivationArgs)
+            {
+                if (toastActivationArgs.Argument.Length == 0) //没有参数，直接启动
+                {
+                    if (rootFrame.Content == null)
+                        rootFrame.Navigate(typeof(MainPage));
+                }
+                else
+                {
+                    // 从通知获取参数
+                    ToastArguments args = ToastArguments.Parse(toastActivationArgs.Argument);
+
+                    // 从通知中获取所有用户输入 (text boxes, menu selections)
+                    ValueSet userInput = toastActivationArgs.UserInput;
+
+                    // TODO: 显示相应的内容
+                }
+            }
+
+            // 保证当前窗口激活
+            Window.Current.Activate();
         }
 
-        protected override void OnActivated(IActivatedEventArgs e)
+        private async void RegisterBackgroundTaskAsync()
         {
-            // 处理通知激活
-            if (e is ToastNotificationActivatedEventArgs toastActivationArgs)
+            const string taskName = "ReminderToastBackgroundTask";
+
+            // If background task is already registered, do nothing
+            if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(taskName)))
+                return;
+
+            // Otherwise request access
+            BackgroundAccessStatus status = await BackgroundExecutionManager.RequestAccessAsync();
+
+            // Create the background task
+            BackgroundTaskBuilder builder = new BackgroundTaskBuilder()
             {
-                // 从通知获取参数
-                ToastArguments args = ToastArguments.Parse(toastActivationArgs.Argument);
+                Name = taskName
+            };
 
-                // 从通知中获取所有用户输入 (text boxes, menu selections)
-                ValueSet userInput = toastActivationArgs.UserInput;
+            // Assign the toast action trigger
+            builder.SetTrigger(new ToastNotificationActionTrigger());
 
-                // TODO: 显示相应的内容
+            // And register the task
+            BackgroundTaskRegistration registration = builder.Register();
+        }
+
+        protected override async void OnBackgroundActivated(BackgroundActivatedEventArgs args)
+        {
+            var deferral = args.TaskInstance.GetDeferral();
+
+            switch (args.TaskInstance.Task.Name) // 后台任务类型
+            {
+                case "ReminderToastBackgroundTask":
+                    var details = args.TaskInstance.TriggerDetails as ToastNotificationActionTriggerDetail;
+                    if (details != null)
+                    {
+                        ToastArguments arguments = ToastArguments.Parse(details.Argument);
+                        var userInput = details.UserInput;
+
+                        // Perform tasks
+                        if (arguments.ToString() == "Check")
+                        {
+                            int blocking_count = 0;
+                            int blocking_timespan = 10;
+                            await Reminder.ReminderManager.Data.Load();
+                            while (!Reminder.ReminderManager.Data.Loaded)
+                            {
+                                Thread.Sleep(blocking_timespan);
+                                blocking_count++;
+                            }
+
+                            Settings.SettingsConfig.InitialLoad(); //读取设置
+                            bool roaming = Settings.SettingsConfig.IsSettingsRoamingEnabled;
+
+                            Reminder.ReminderManager.CheckAdjournmentItem(1); //将指定时间（小时）内到期项确认
+
+                            string desc = "指定项已标记完成"; //通知描述
+                            if (roaming) desc = string.Format($"{desc}(空转次数{blocking_count}，共{blocking_count * blocking_timespan}ms)");
+
+                            Notify.NotificationManager.SendNotification("完成", desc);
+                        }
+                    }
+                    break;
             }
 
-            // 载入窗口
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            // 不要在窗口已包含内容时重复应用程序初始化，
-            // 只需确保窗口处于活动状态
-            if (rootFrame == null)
-            {
-                // 创建要充当导航上下文的框架，并导航到第一页
-                rootFrame = new Frame();
-                rootFrame.NavigationFailed += OnNavigationFailed;
-
-                // 将框架放在当前窗口中
-                Window.Current.Content = rootFrame;
-
-                if (rootFrame.Content == null)
-                {
-                    // 当导航堆栈尚未还原时，导航到第一页， 并通过将所需信息作为导航参数传入来配置参数
-                    rootFrame.Navigate(typeof(MainPage));
-                }
-                // 确保当前窗口处于活动状态
-                Window.Current.Activate();
-            }
-
+            deferral.Complete();
         }
 
         /// <summary>

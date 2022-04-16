@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Storage;
 using Windows.UI.Notifications;
+using static BackgroundUpdater.Notify;
 
 namespace BackgroundUpdater
 {
@@ -38,11 +39,13 @@ namespace BackgroundUpdater
 
             if (isNotificationEnabled)
             {
-                int round_count=0;
-                while (!ReminderManager.ReminderItemListLoaded) //线程阻塞
+                int blocking_count=0; //阻塞次数
+                int blocking_timespan = 100; //阻塞时间（毫秒）
+
+                while (!ReminderManager.Data.Loaded) //线程阻塞
                 {
-                    Thread.Sleep(100);
-                    round_count++;
+                    Thread.Sleep(blocking_timespan);
+                    blocking_count++;
                 }
 
                 int remian_hour = 1; //规定时间：1个小时
@@ -56,8 +59,12 @@ namespace BackgroundUpdater
 
                     // 发送通知
                     // todo: 通过通知确认完成
-
-                    if (list.Count <= 3)
+                    if(list.Count == 1)
+                    {
+                        // 临期项只有有一项
+                        desc = String.Format($"\"{list[0].Title}\"即将到期，是否已经完成？");
+                    }
+                    else if (list.Count <= 3)
                     {
                         // 临期项在3项以内
                         list.ForEach(item =>
@@ -84,9 +91,13 @@ namespace BackgroundUpdater
                     // 发送通知
                     cache = roaming_settings ? roamingSettings.Values["IsNotificationBlockingVisible"] : localSettings.Values["IsNotificationBlockingVisible"];
                     bool IsNotificationBlockingVisible = (cache == null) ? false : (bool)cache; //是否显示通知阻塞信息，默认关闭
+                    //阻塞信息处理
+                    if (IsNotificationBlockingVisible)
+                        desc = string.Format($"{desc}(空转次数{blocking_count}，共{blocking_count * blocking_timespan}ms)");
+
                     //分情况发送通知
-                    if(IsNotificationBlockingVisible) SendNotification(title, string.Format($"{desc}(空转次数{round_count})"));
-                    else SendNotification(title, desc);
+                    if (count==1) NotificationManager.SendNotification_ReminderCheck(title, desc); //仅在临期项只有一项时使用，否则将勾选所有符合的项
+                    else NotificationManager.SendNotification(title, desc);
                 }
             }
 
@@ -103,7 +114,7 @@ namespace BackgroundUpdater
                 // 读取成功
                 ReminderManager.RefreshList(); //更新数据
                 ReminderManager.SortListByDefault(); //对数据排序
-                ReminderManager.ReminderItemListLoaded = true;
+                ReminderManager.Data.Loaded = true;
             }
             else throw new Exception(err);
         }
@@ -113,38 +124,6 @@ namespace BackgroundUpdater
             object cache;
             cache = localSettings.Values["IsSettingsRoamingEnabled"];
             roaming_settings = (cache == null) ? false : (bool)cache; //设置是否漫游，默认不漫游
-        }
-
-        private void SendNotification(string title, string content)
-        {
-            // 触发通知
-            var toastContent = new ToastContent()
-            {
-                Visual = new ToastVisual()
-                {
-                    BindingGeneric = new ToastBindingGeneric()
-                    {
-                        Children =
-                        {
-                            new AdaptiveText()
-                            {
-                                Text = title
-                            },
-                            new AdaptiveText()
-                            {
-                                Text = content
-                            }
-                        }
-                    }
-                }
-            };
-
-            // Create the toast notification
-            var toastNotif = new ToastNotification(toastContent.GetXml());
-
-            // And send the notification
-            ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
-
         }
     }
 }

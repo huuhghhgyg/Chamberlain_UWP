@@ -17,6 +17,8 @@ namespace Chamberlain_UWP.Reminder
 
         internal readonly static string DataFilename = "ReminderData.json";
 
+        public static bool Loaded = false; //已从文件读取标记（用于阻塞）
+
         public static int ItemCountOnwork
         {
             get { return ReminderItemList.Where(item => item.TaskState != TaskState.Finished).ToList().Count; }
@@ -26,6 +28,22 @@ namespace Chamberlain_UWP.Reminder
         {
             ReminderItemList.Add(item);
         }
+
+        public static async void CheckAdjournmentItem(int remain_hours) // 选出剩余时间为n小时的未完成项的项，打勾（注意，是全部）
+        {
+            TimeSpan remain_timespan = new TimeSpan(remain_hours, 0, 0);
+            // 找到所有符合条件的临期项，打勾
+            foreach(ReminderItem item in ReminderItemList)
+            {
+                if (item.TaskState == TaskState.Onwork && item.Deadline - DateTime.Now < remain_timespan)
+                {
+                    item.TaskState = TaskState.Finished;
+                }
+            }
+
+            await Data.Save();
+        }
+
 
         // 名称以Find开头，返回index
         public static int FindItemWithTitle(string name) // 返回在List中的下标
@@ -173,6 +191,8 @@ namespace Chamberlain_UWP.Reminder
         /// </summary>
         public static class Data
         {
+            public static bool Loaded = false; //已从文件读取标记（用于阻塞）
+
             // 导出为文件
             public static async Task<string> ExportToFile(StorageFolder folder, string file_name, CreationCollisionOption file_option, bool return_path)
             {
@@ -258,6 +278,7 @@ namespace Chamberlain_UWP.Reminder
                 {
                     msg += ex.Message;
                 }
+                Loaded = true; //标记已经读取
                 return msg;
             }
 

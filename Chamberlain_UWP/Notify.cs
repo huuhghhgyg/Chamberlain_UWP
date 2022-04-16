@@ -345,6 +345,37 @@ namespace Chamberlain_UWP
             {
                 TileUpdateManager.CreateTileUpdaterForApplication().Clear();
             }
+
+            public static void SendNotification(string title, string content)
+            {
+                // 触发通知
+                var toastContent = new ToastContent()
+                {
+                    Visual = new ToastVisual()
+                    {
+                        BindingGeneric = new ToastBindingGeneric()
+                        {
+                            Children =
+                            {
+                                new AdaptiveText()
+                                {
+                                    Text = title
+                                },
+                                new AdaptiveText()
+                                {
+                                    Text = content
+                                }
+                            }
+                        }
+                    }
+                };
+
+                // Create the toast notification
+                var toastNotif = new ToastNotification(toastContent.GetXml());
+
+                // And send the notification
+                ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
+            }
         }
 
     }
