@@ -140,14 +140,14 @@
     <Compile Include="Reminder\OOBE\ReminderOOBEWelcome.xaml.cs">
       <DependentUpon>ReminderOOBEWelcome.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Reminder\ReminderCardListView.xaml.cs">
+    <Compile Include="Reminder\UserControl\ReminderCardListView.xaml.cs">
       <DependentUpon>ReminderCardListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Reminder\ReminderItem.cs" />
-    <Compile Include="Reminder\ReminderItemCard.xaml.cs">
+    <Compile Include="Reminder\UserControl\ReminderItemCard.xaml.cs">
       <DependentUpon>ReminderItemCard.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Reminder\ReminderItemRevise.xaml.cs">
+    <Compile Include="Reminder\UserControl\ReminderItemRevise.xaml.cs">
       <DependentUpon>ReminderItemRevise.xaml</DependentUpon>
     </Compile>
     <Compile Include="Reminder\ReminderItemsManagePage.xaml.cs">
@@ -241,15 +241,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Reminder\ReminderCardListView.xaml">
+    <Page Include="Reminder\UserControl\ReminderCardListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Reminder\ReminderItemCard.xaml">
+    <Page Include="Reminder\UserControl\ReminderItemCard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Reminder\ReminderItemRevise.xaml">
+    <Page Include="Reminder\UserControl\ReminderItemRevise.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

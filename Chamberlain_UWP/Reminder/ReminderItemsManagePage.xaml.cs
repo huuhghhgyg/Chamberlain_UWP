@@ -47,9 +47,14 @@ namespace Chamberlain_UWP.Reminder
             ReminderManager.GetTagCollection(TagList);
             ReminderManager.GetList(ReminderList);
 
-            AddItemDatePicker.Date = DateTime.Today; // 将添加项的时间设为今天，方便添加
+            UI_Initialize(); //对UI进行初始化设定
 
             new Thread(RefreshData).Start(); // 更新进度
+        }
+
+        private void UI_Initialize()
+        {
+            AddItemDatePicker.Date = DateTime.Today; // 将添加项的时间设为今天，方便添加
         }
 
         private async void RefreshData()
