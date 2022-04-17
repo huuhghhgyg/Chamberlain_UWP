@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,6 +20,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Chamberlain_UWP.Settings;
 using Windows.Storage.AccessCache;
+using Windows.ApplicationModel;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -37,6 +38,16 @@ namespace Chamberlain_UWP
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            LoadUI();
+        }
+
+        private void LoadUI()
+        {
+            PackageVersion version = Package.Current.Id.Version;
+            ProgramVersionText.Text = String.Format($"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}");
+
+            ProgramInstalledDate.Text = Package.Current.InstalledDate.ToString("D");
+
             Settings_LoadText();
         }
 

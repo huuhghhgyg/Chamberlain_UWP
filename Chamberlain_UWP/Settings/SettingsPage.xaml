@@ -1,4 +1,4 @@
-<Page
+﻿<Page
     x:Class="Chamberlain_UWP.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -250,6 +250,60 @@
                     </StackPanel>
                 </muxc:Expander>
 
+
+                <TextBlock Text="关于" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <muxc:Expander Name="ProgramInfoExpander"
+                               IsExpanded="True" ExpandDirection="Down"
+                               Margin="0,4,0,0"
+                               VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                               HorizontalContentAlignment="Stretch"
+                               Background="{ThemeResource CardBackgroundFillColorDefault}">
+                    <muxc:Expander.Header>
+                        <StackPanel Orientation="Horizontal" Height="64">
+                            <FontIcon Name="ProgramInfoIcon" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                      Glyph="&#xE946;" FontSize="20"/>
+                            <TextBlock Text="详细信息" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </muxc:Expander.Header>
+                    <StackPanel>
+                        <Grid RowSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Chamberlain" Style="{ThemeResource BaseTextBlockStyle}"/>
+                            <TextBlock Text="版本" Grid.Row="1" Style="{ThemeResource BaseTextBlockStyle}"/>
+                            <TextBlock Name="ProgramVersionText" Grid.Row="1" Grid.Column="1"/>
+                            <TextBlock Text="安装日期" Grid.Row="2" Style="{ThemeResource BaseTextBlockStyle}"/>
+                            <TextBlock Name="ProgramInstalledDate" Grid.Row="2" Grid.Column="1"/>
+                        </Grid>
+                        <Grid Margin="0,24,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="108"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="开发者" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
+                            <HyperlinkButton Content="@huuhghhgyg" NavigateUri="https://github.com/huuhghhgyg"
+                                             Grid.Column="1"/>
+                            <TextBlock Text="项目主页" Grid.Row="1" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
+                            <HyperlinkButton Content="Github/Chamberlain_UWP" NavigateUri="https://github.com/huuhghhgyg/Chamberlain_UWP"
+                                             Grid.Row="1" Grid.Column="1"/>
+                            <TextBlock Text="遇到问题？" Grid.Row="2" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
+                            <HyperlinkButton Content="前往Github反馈" NavigateUri="https://github.com/huuhghhgyg/Chamberlain_UWP/issues"
+                                             Grid.Row="2" Grid.Column="1"/>
+                        </Grid>
+                    </StackPanel>
+                </muxc:Expander>
             </StackPanel>
         </ScrollViewer>
     </Grid>
