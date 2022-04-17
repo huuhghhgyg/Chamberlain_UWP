@@ -32,13 +32,20 @@ namespace Chamberlain_UWP
         public TaskPage()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            IsPageAlive = true;
 
             ReminderManager.SortListByDefault();
+
+            ReminderListOnwork.Clear();
 
             ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
             ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
 
-            if(ReminderListOnwork.Count > 0)
+            if (ReminderListOnwork.Count > 0)
                 NoTaskTextBlock.Visibility = Visibility.Collapsed; //有任务，隐藏无任务的提示
 
             new Thread(RefreshData).Start(); //更新进度
@@ -46,11 +53,12 @@ namespace Chamberlain_UWP
             ReminderManager.UpdateTile(); //更新磁贴
         }
 
+
         private async void RefreshData()
         {
             while (IsPageAlive)
             {
-                if (ReminderManager.ItemCountOnwork > 0)
+                if (ReminderManager.ItemCountRunning > 0) //检测是否存在需要更新进度的条目
                 {
                     Thread.Sleep(ReminderManager.UpdateTimeSpan); // 根据列表中项的最小时间间隔来计算
                     await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
@@ -82,7 +90,7 @@ namespace Chamberlain_UWP
             await ReminderManager.Data.Save(); // 保存数据
         }
 
-        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             IsPageAlive = false;
         }

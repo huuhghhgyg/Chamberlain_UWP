@@ -33,7 +33,10 @@ namespace Chamberlain_UWP
         public SettingsPage()
         {
             this.InitializeComponent();
+        }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
             Settings_LoadText();
         }
 

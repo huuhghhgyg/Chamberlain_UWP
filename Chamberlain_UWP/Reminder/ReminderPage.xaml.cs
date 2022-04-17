@@ -33,14 +33,6 @@ namespace Chamberlain_UWP.Reminder
         public ReminderPage()
         {
             this.InitializeComponent();
-
-            ReminderManager.SortListByDefault(); // 对List先进行排序
-
-            ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 1. 获取过期提醒，放入正在处理（减少排序工作量，代码按照这个顺序）
-            ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 2. 获取未完成提醒，放入正在处理
-            ReminderManager.GetList(ReminderListFinished, TaskState.Finished); // 获取已完成提醒，放入已完成
-
-            new Thread(RefreshData).Start(); // 更新进度
         }
 
         private async void RefreshData()
@@ -48,7 +40,7 @@ namespace Chamberlain_UWP.Reminder
             IsProgressUpdaterWorking = true; // 上锁
             while (IsPageAlive)
             {
-                if (ReminderManager.ItemCountOnwork > 0)
+                if (ReminderManager.ItemCountRunning > 0) //检测是否存在需要更新进度的条目
                 {
                     Thread.Sleep(ReminderManager.UpdateTimeSpan); // 根据列表中项的最小时间间隔来计算
                     await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
@@ -217,9 +209,6 @@ namespace Chamberlain_UWP.Reminder
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             IsPageAlive = false; //结束线程
-
-            ListOnWork.ListViewItemChecked -= ReminderCardListView_ItemChecked;
-            ListFinished.ListViewItemChecked -= ReminderCardListView_ItemChecked;
         }
 
         private async void ReminderCardListView_ItemChecked(object sender, ItemCheckedEventArgs e)
@@ -231,6 +220,26 @@ namespace Chamberlain_UWP.Reminder
 
             if (!IsProgressUpdaterWorking) // 判断进程是否不在工作（活动的条目=0）
                 new Thread(RefreshData).Start(); // 重启更新进度的进程
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            IsPageAlive = true;
+            ReminderManager.SortListByDefault(); // 对List先进行排序
+
+            ReminderListOnwork.Clear();
+            ReminderListFinished.Clear();
+
+            ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 1. 获取过期提醒，放入正在处理（减少排序工作量，代码按照这个顺序）
+            ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 2. 获取未完成提醒，放入正在处理
+            ReminderManager.GetList(ReminderListFinished, TaskState.Finished); // 获取已完成提醒，放入已完成
+
+            new Thread(RefreshData).Start(); // 更新进度
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            IsPageAlive=false;
         }
     }
 }

@@ -24,6 +24,11 @@ namespace Chamberlain_UWP.Reminder
             get { return ReminderItemList.Where(item => item.TaskState != TaskState.Finished).ToList().Count; }
         }
 
+        public static int ItemCountRunning
+        {
+            get { return ReminderItemList.Where(item => item.TaskState == TaskState.Onwork).ToList().Count; }
+        }
+
         public static void Add(ReminderItem item)
         {
             ReminderItemList.Add(item);

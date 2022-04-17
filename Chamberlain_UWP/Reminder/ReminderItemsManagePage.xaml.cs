@@ -33,8 +33,16 @@ namespace Chamberlain_UWP.Reminder
         public ReminderItemsManagePage()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            IsPageAlive = true;
 
             ReminderManager.SortListByDefault(); // 对List先进行排序
+
+            TagList.Clear();
+            ReminderList.Clear();
 
             ReminderManager.GetTagCollection(TagList);
             ReminderManager.GetList(ReminderList);
@@ -49,7 +57,7 @@ namespace Chamberlain_UWP.Reminder
             IsProgressUpdaterWorking = true; // 上锁
             while (IsPageAlive)
             {
-                if (ReminderManager.ItemCountOnwork > 0)
+                if (ReminderManager.ItemCountRunning > 0) //检测是否存在需要更新进度的条目
                 {
                     Thread.Sleep(ReminderManager.UpdateTimeSpan); // 根据列表中项的最小时间间隔来计算
                     await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
@@ -68,7 +76,10 @@ namespace Chamberlain_UWP.Reminder
         private void TagListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             object[] tags = TagListBox.SelectedItems.ToArray();
-            SelectedTagsTextBlock.Text = string.Join(',', tags);
+            if (tags.Length > 0)
+                SelectedTagsTextBlock.Text = string.Join(',', tags);
+            else
+                SelectedTagsTextBlock.Text = "（未选择）";
         }
 
         private void AddTagButton_Click(object sender, RoutedEventArgs e)
@@ -297,18 +308,17 @@ namespace Chamberlain_UWP.Reminder
             ReminderManager.GetList(ReminderList);
         }
 
-        private async void ItemCheckBox_Click(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            IsPageAlive = false;
+        }
+
+        private async void ReminderItemRevise_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
             await ReminderManager.Data.Save(); // 保存数据
 
             if (!IsProgressUpdaterWorking) // 判断进程是否不在工作（活动的条目=0）
                 new Thread(RefreshData).Start(); // 重启更新进度的进程
-        }
-
-        private void Page_Unloaded(object sender, RoutedEventArgs e)
-        {
-            IsPageAlive = false; //结束线程
-            this.Unloaded -= Page_Unloaded; //注销事件
         }
     }
 }

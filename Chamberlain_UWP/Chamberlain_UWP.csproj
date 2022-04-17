@@ -147,6 +147,9 @@
     <Compile Include="Reminder\ReminderItemCard.xaml.cs">
       <DependentUpon>ReminderItemCard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Reminder\ReminderItemRevise.xaml.cs">
+      <DependentUpon>ReminderItemRevise.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Reminder\ReminderItemsManagePage.xaml.cs">
       <DependentUpon>ReminderItemsManagePage.xaml</DependentUpon>
     </Compile>
@@ -243,6 +246,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Reminder\ReminderItemCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Reminder\ReminderItemRevise.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

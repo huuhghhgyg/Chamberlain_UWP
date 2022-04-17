@@ -1,0 +1,69 @@
+﻿<UserControl
+    x:Class="Chamberlain_UWP.Reminder.ReminderItemRevise"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Chamberlain_UWP.Reminder"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Padding="0,8">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox Name="ItemCheckBox"
+                                  Content="{x:Bind Reminder.Title,Mode=OneWay}"
+                                  IsChecked="{x:Bind Reminder.IsReminderDone,Mode=TwoWay}"
+                                  Click="ItemCheckBox_Click"/>
+            <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" Padding="0,0,0,4">
+                <TextBlock Text="{x:Bind Reminder.PriorityString,Mode=OneWay}"
+                                       Margin="0,0,4,0"
+                                       Style="{ThemeResource BodyTextBlockStyle}"
+                                       Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                <TextBlock Text="{x:Bind Reminder.ProgressString,Mode=OneWay}" 
+                                       Name="ProgressTextBlock"
+                                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+            </StackPanel>
+        </Grid>
+        <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind Reminder.ProgressValue,Mode=OneWay}" Maximum="1" Margin="0,0,0,4"/>
+        <Grid Margin="0,4" RowSpacing="4">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{x:Bind Reminder.Description,Mode=OneWay}" 
+                                   Name="ItemDescriptionTextBlock"
+                                   TextWrapping="Wrap"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+            <TextBlock Text="{x:Bind Reminder.TagsString,Mode=OneWay}" 
+                                   Grid.Row="1"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+            <TextBlock Text="ddl: "
+                                   VerticalAlignment="Bottom"
+                                   Margin="4,0,4,0"
+                                   Grid.Row="1"
+                                   Grid.Column="1"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+            <TextBlock x:Name="DateTimeTextBlock"
+                                   Text="{x:Bind Reminder.DeadlineString,Mode=OneWay}"
+                                   VerticalAlignment="Bottom"
+                                   Grid.Row="1"
+                                   Grid.Column="2"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+        </Grid>
+    </StackPanel>
+</UserControl>
