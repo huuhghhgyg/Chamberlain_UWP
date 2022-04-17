@@ -1,4 +1,4 @@
-﻿<Page
+<Page
     x:Class="Chamberlain_UWP.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -50,56 +50,104 @@
             <!--设置面板-->
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48" Grid.Row="1">
                 <!--应用设置-->
-                <TextBlock Text="易用性设置" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                <StackPanel Margin="0,0,0,24">
-                    <muxc:NumberBox Name="TimepickerIntervalComboBox" Header="时间选择器选项间隔（分钟）"
+                <TextBlock Text="易用性设置" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <Grid Margin="0,4,0,0" Padding="16" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE169;"/>
+                    <TextBlock Text="时间选择器选项间隔（分钟）" 
+                               VerticalAlignment="Center" Grid.Column="1"/>
+                    <muxc:NumberBox Name="TimepickerIntervalComboBox"
                                     SpinButtonPlacementMode="Inline"
-                                    HorizontalAlignment="Left"
-                                    SmallChange="1" LargeChange="100" Minimum="1" Maximum="30"
-                                    Width="200" Margin="0,12,0,0"
+                                    SmallChange="1" LargeChange="5" Minimum="1" Maximum="30"
+                                    Width="180"
+                                    Grid.Column="2" HorizontalAlignment="Right"
                                     Text="{x:Bind TimepickerInterval, Mode=TwoWay}"/>
-                </StackPanel>
+                </Grid>
 
-                <TextBlock Text="后台任务" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                <StackPanel Margin="0,0,0,24">
-                    <muxc:NumberBox Name="TriggerSpanComboBox" Header="后台唤醒间隔（分钟）"
+                <TextBlock Text="后台任务" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <Grid Margin="0,4,0,0" Padding="16" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE7C4;"/>
+                    <TextBlock Text="后台唤醒间隔（分钟）" Grid.Column="1" VerticalAlignment="Center"/>
+                    <muxc:NumberBox Name="TriggerSpanComboBox"
                                     SpinButtonPlacementMode="Inline"
-                                    HorizontalAlignment="Left"
                                     SmallChange="10" LargeChange="100" Minimum="15"
-                                    Width="200" Margin="0,12,0,0"
+                                    Width="180" Grid.Column="2" HorizontalAlignment="Right"
                                     Text="{x:Bind UpdateTriggerInterval, Mode=TwoWay}"/>
-                    <ToggleSwitch Header="开启通知" Name="NotificationSwitch"
-                                  Margin="0,12,0,0"
-                                  IsOn="{x:Bind IsNotificationEnabled, Mode=TwoWay}"/>
-                    <ToggleSwitch Header="显示通知显示阻塞信息"
-                                  Margin="0,12,0,0"
+                </Grid>
+
+                <muxc:Expander 
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch"
+                    Margin="0,4,0,0"
+                    IsExpanded="{x:Bind NotificationSwitch.IsOn, Mode=OneWay}"
+                    Background="{ThemeResource CardBackgroundFillColorDefault}">
+                    <muxc:Expander.Header>
+                        <Grid Margin="0,12" ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xED0C;"/>
+                            <TextBlock Text="开启通知" Grid.Column="1" VerticalAlignment="Center"/>
+                            <ToggleSwitch Name="NotificationSwitch" 
+                                  Grid.Column="2" HorizontalAlignment="Right"
+                                  IsOn="{x:Bind IsNotificationEnabled, Mode=TwoWay}" Width="20" MinWidth="80"/>
+                        </Grid>
+                    </muxc:Expander.Header>
+                    
+                    <muxc:Expander.Content>
+                        <Grid Margin="0,-4" ColumnSpacing="16" HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xF5E7;"/>
+                            <TextBlock Text="显示通知显示阻塞信息" Grid.Column="1" VerticalAlignment="Center"/>
+                            <ToggleSwitch Grid.Column="2" HorizontalAlignment="Right" MinWidth="124"
                                   IsOn="{x:Bind IsNotificationBlockingVisible, Mode=TwoWay}"
                                   Visibility="{Binding IsOn, ElementName=NotificationSwitch}"/>
-                </StackPanel>
+                        </Grid>
+                    </muxc:Expander.Content>
+                </muxc:Expander>
 
-                <TextBlock Text="同步" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                <StackPanel Margin="0,0,0,24">
-                    <ToggleSwitch x:Name="SettingSyncSwitch" Header="应用设置跨设备同步" 
-                                  Margin="0,12,0,0" 
+                <TextBlock Text="同步" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <Grid Margin="0,4,0,0" Padding="16,12" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE7C4;"/>
+                    <TextBlock Text="应用设置跨设备同步" Grid.Column="1" VerticalAlignment="Center"/>
+                    <ToggleSwitch x:Name="SettingSyncSwitch"
+                                  MinWidth="80" Grid.Column="2" HorizontalAlignment="Right"
                                   IsOn="{x:Bind IsSettingsRoamingEnabled, Mode=TwoWay}"
                                   Toggled="SettingSyncSwitch_Toggled"/>
-                </StackPanel>
+                </Grid>
 
-                <TextBlock Text="组件设置" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,0,0,12"/>
-
-                <muxc:Expander Name="ReminderExpander"
-                               IsExpanded="False" ExpandDirection="Down"
+                <TextBlock Text="组件设置" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <muxc:Expander Name="ReminderExpander" Margin="0,4,0,0"
+                               IsExpanded="True" ExpandDirection="Down"
                                VerticalAlignment="Top" HorizontalAlignment="Stretch"
-                               HorizontalContentAlignment="Stretch">
+                               HorizontalContentAlignment="Stretch"
+                               Background="{ThemeResource CardBackgroundFillColorDefault}">
                     <muxc:Expander.Header>
-                        <RelativePanel>
-                            <FontIcon Name="ReminderIcon" FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                      Glyph="&#xE73A;" FontSize="16"
-                                      RelativePanel.AlignVerticalCenterWithPanel="True"/>
-                            <TextBlock Text="提醒" Margin="12,0,0,0"
-                                       RelativePanel.RightOf="ReminderIcon"
-                                       RelativePanel.AlignVerticalCenterWithPanel="True"/>
-                        </RelativePanel>
+                        <StackPanel Orientation="Horizontal" Height="64">
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                      Glyph="&#xE73A;"/>
+                            <TextBlock Text="提醒" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </muxc:Expander.Header>
                     <StackPanel>
                         <TextBlock Text="指定位置存放数据"
@@ -168,13 +216,21 @@
                     </StackPanel>
                 </muxc:Expander>
 
-                <muxc:Expander Name="DebugOptionExpander" Header="调试选项"
+                <muxc:Expander Name="DebugOptionExpander"
                                IsExpanded="False" ExpandDirection="Down"
-                               Margin="0,12,0,0"
+                               Margin="0,4,0,0"
                                VerticalAlignment="Top" 
                                HorizontalAlignment="Stretch"
                                HorizontalContentAlignment="Stretch"
-                               Expanding="DebugOptionExpander_Expanding">
+                               Expanding="DebugOptionExpander_Expanding"
+                               Background="{ThemeResource CardBackgroundFillColorDefault}">
+                    <muxc:Expander.Header>
+                        <StackPanel Orientation="Horizontal" Height="64">
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                      Glyph="&#xE90F;" FontSize="20"/>
+                            <TextBlock Text="调试选项" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </muxc:Expander.Header>
                     <StackPanel>
                         <TextBlock Text="Reminder" Style="{ThemeResource BaseTextBlockStyle}"/>
                         <TextBlock Text="JSON（仅输出）"
