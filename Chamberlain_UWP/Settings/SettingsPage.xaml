@@ -50,6 +50,16 @@
             <!--设置面板-->
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48" Grid.Row="1">
                 <!--应用设置-->
+                <TextBlock Text="易用性设置" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <StackPanel Margin="0,0,0,24">
+                    <muxc:NumberBox Name="TimepickerIntervalComboBox" Header="时间选择器选项间隔（分钟）"
+                                    SpinButtonPlacementMode="Inline"
+                                    HorizontalAlignment="Left"
+                                    SmallChange="1" LargeChange="100" Minimum="1" Maximum="30"
+                                    Width="200" Margin="0,12,0,0"
+                                    Text="{x:Bind TimepickerInterval, Mode=TwoWay}"/>
+                </StackPanel>
+
                 <TextBlock Text="后台任务" Style="{StaticResource SubtitleTextBlockStyle}"/>
                 <StackPanel Margin="0,0,0,24">
                     <muxc:NumberBox Name="TriggerSpanComboBox" Header="后台唤醒间隔（分钟）"

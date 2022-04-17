@@ -27,7 +27,10 @@ namespace Chamberlain_UWP.Settings
             IsNotificationBlockingVisible = (cache == null) ? false : (bool)cache; //是否显示通知阻塞信息，默认关闭
 
             cache = roaming_settings ? roamingSettings.Values["UpdateTriggerInterval"] : localSettings.Values["UpdateTriggerInterval"];
-            UpdateTriggerInterval = (cache == null) ? 15 : (int)cache;; //通知更新间隔，最小、默认=15
+            UpdateTriggerInterval = (cache == null) ? 15 : (int)cache; ; //通知更新间隔，最小、默认=15
+
+            cache = localSettings.Values["TimepickerInterval"];
+            TimepickerInterval = (cache == null) ? 1 : (int)cache; ; //时间选择器时间间隔，最小、默认=1
         }
 
         /// <summary>
@@ -42,6 +45,7 @@ namespace Chamberlain_UWP.Settings
         private static bool _isNotificationEnabled;
         private static bool _isSettingsRoamingEnabled;
         private static bool _isNotificationBlockingVisible;
+        private static int _timepickerInterval;
 
         public static bool IsSettingsRoamingEnabled //是否允许设置漫游，不允许添加到漫游设置中！
         {
@@ -68,6 +72,11 @@ namespace Chamberlain_UWP.Settings
         {
             get { return _isNotificationBlockingVisible; }
             set { _isNotificationBlockingVisible = value; SaveSetting(value, "IsNotificationBlockingVisible", true); }
+        }
+        public static int TimepickerInterval
+        {
+            get { return _timepickerInterval; }
+            set { _timepickerInterval = value; SaveSetting(value, "TimepickerInterval", false); }
         }
 
         /// <summary>

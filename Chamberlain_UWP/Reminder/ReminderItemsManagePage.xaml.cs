@@ -1,8 +1,11 @@
+using Chamberlain_UWP.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using Windows.Foundation;
@@ -22,13 +25,24 @@ namespace Chamberlain_UWP.Reminder
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ReminderItemsManagePage : Page
+    public sealed partial class ReminderItemsManagePage : Page, INotifyPropertyChanged
     {
         ObservableCollection<string> TagList = new ObservableCollection<string>(); // 标签列表
         ObservableCollection<ReminderItem> ReminderList = new ObservableCollection<ReminderItem>(); // 所有reminder的列表
 
         bool IsPageAlive = true; // 确认页面是否被Unload
         bool IsProgressUpdaterWorking = false; // 进程锁，防止多次创建进程
+        private int TimepickerInterval
+        {
+            get { return SettingsConfig.TimepickerInterval; }
+            set { SettingsConfig.TimepickerInterval = value; }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public ReminderItemsManagePage()
         {
@@ -55,6 +69,8 @@ namespace Chamberlain_UWP.Reminder
         private void UI_Initialize()
         {
             AddItemDatePicker.Date = DateTime.Today; // 将添加项的时间设为今天，方便添加
+            TimepickerInterval = SettingsConfig.TimepickerInterval;
+            NotifyPropertyChanged("TimepickerInterval");
         }
 
         private async void RefreshData()
@@ -137,6 +153,7 @@ namespace Chamberlain_UWP.Reminder
         }
 
         int revise_num = 0;
+
         private void ModifyItemButton_Click(object sender, RoutedEventArgs e)
         {
             int index = RemindItemListView.SelectedIndex; //找到RemindItemListView中选择的元素下标

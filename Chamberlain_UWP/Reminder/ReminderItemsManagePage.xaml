@@ -108,6 +108,7 @@
                                                         Margin="0,12,0,0"/>
                                     <TimePicker Header="到期时间"
                                                 Name="AddItemTimePicker"
+                                                MinuteIncrement="{x:Bind TimepickerInterval, Mode=OneWay}"
                                                 Margin="0,12,0,0"/>
                                     <!--标签-->
                                     <StackPanel>
@@ -197,7 +198,7 @@
                                         <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE72C;" />
                                     </Button>
                                 </Grid>
-                                <ListView Name="RemindItemListView" Margin="0,8,0,0" ItemsSource="{x:Bind ReminderList,Mode=OneWay}"
+                                <ListView Name="RemindItemListView" Margin="0,8,0,0" ItemsSource="{x:Bind ReminderList, Mode=OneWay}"
                                               SelectionChanged="RemindItemListView_SelectionChanged"
                                               ItemTemplate="{StaticResource ReminderItemViewTemplate}">
                                     <ListView.Resources>
@@ -227,7 +228,9 @@
                                                         PlaceholderText="Deadline日期" 
                                                         Header="Deadline日期" 
                                                         Margin="0,12,0,0"/>
-                                <TimePicker Name="ItemReviseTimePicker" Header="Deadline时间" Margin="0,12,0,0"/>
+                                <TimePicker Name="ItemReviseTimePicker" Header="Deadline时间"
+                                            MinuteIncrement="{x:Bind TimepickerInterval, Mode=OneWay}"
+                                            Margin="0,12,0,0"/>
                                 <ComboBox Header="优先级" Name="ItemRevisePriorityComboBox" Margin="0,12,0,0" SelectedIndex="0">
                                     <x:String>默认</x:String>
                                     <x:String>中</x:String>

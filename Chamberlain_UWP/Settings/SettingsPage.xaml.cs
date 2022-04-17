@@ -221,6 +221,12 @@ namespace Chamberlain_UWP
             get { return SettingsConfig.IsNotificationBlockingVisible; }
             set { SettingsConfig.IsNotificationBlockingVisible = value; }
         }
+        private int TimepickerInterval
+        {
+            get { return SettingsConfig.TimepickerInterval; }
+            set { SettingsConfig.TimepickerInterval = value; }
+        }
+
         //数据漫游
         private bool IsSettingsRoamingEnabled
         {
