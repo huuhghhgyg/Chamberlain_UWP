@@ -73,14 +73,18 @@ namespace Chamberlain_UWP.Reminder
             NotifyPropertyChanged("TimepickerInterval");
         }
 
-        private async void RefreshData()
+        private async void RefreshData() //修改页面的线程睡眠时间稍短，适应任务变化
         {
             IsProgressUpdaterWorking = true; // 上锁
             while (IsPageAlive)
             {
                 if (ReminderManager.ItemCountRunning > 0) //检测是否存在需要更新进度的条目
                 {
-                    Thread.Sleep(ReminderManager.UpdateTimeSpan); // 根据列表中项的最小时间间隔来计算
+                    int thread_sleep_span = 1200; //线程最长休眠时间
+                    if (ReminderManager.UpdateTimeSpan <= thread_sleep_span) // 如果小于最长休眠时间，按照小的来
+                        thread_sleep_span = ReminderManager.UpdateTimeSpan;
+
+                    Thread.Sleep(thread_sleep_span); // 根据列表中项的最小时间间隔来计算
                     await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                     {
                         ReminderManager.UpdateListProgress();
