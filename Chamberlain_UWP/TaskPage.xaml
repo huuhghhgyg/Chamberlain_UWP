@@ -51,7 +51,7 @@
         <ScrollViewer Grid.Row="1">
             <!--面板-->
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48">
-                <TextBlock Name="NoTaskTextBlock" Text="所有任务已完成☕"/>
+                <TextBlock Name="NoTaskTextBlock" Text="所有任务已完成☕" Padding="0,4,0,0" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                 <local1:ReminderCardListView ReminderList="{x:Bind ReminderListOnwork,Mode=OneWay}" ListViewItemChecked="ReminderCardListView_ListViewItemChecked"/>
             </StackPanel>
         </ScrollViewer>
