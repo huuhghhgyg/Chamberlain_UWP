@@ -1,5 +1,6 @@
 using Chamberlain_UWP.Reminder;
 using Chamberlain_UWP.Settings;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -87,6 +88,8 @@ namespace Chamberlain_UWP
 
         private async void InitializeData(Action callback)
         {
+            ToastNotificationManagerCompat.History.Clear(); //打开程序时清除所有通知
+
             await ReminderManager.Data.Load();
 
             if (callback != null)

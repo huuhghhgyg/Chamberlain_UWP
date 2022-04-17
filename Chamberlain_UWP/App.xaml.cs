@@ -156,7 +156,8 @@ namespace Chamberlain_UWP
                         var userInput = details.UserInput;
 
                         // Perform tasks
-                        if (arguments.ToString() == "Check")
+                        string arg = arguments.Get("action");
+                        if (arg == "Check")
                         {
                             int blocking_count = 0;
                             int blocking_timespan = 10;

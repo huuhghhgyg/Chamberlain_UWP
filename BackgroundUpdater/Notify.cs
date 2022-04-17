@@ -377,48 +377,24 @@ namespace BackgroundUpdater
                 ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
             }
 
-            public static void SendNotification_ReminderCheck(string title, string content)
+            public static void SendNotification_ReminderCheck(string title, string content, TimeSpan remain_timespan)
             {
-                var toastContent = new ToastContent()
+                new ToastContentBuilder()
+                .AddText(title)
+                .AddText(content)
+                // Buttons
+                .AddButton(new ToastButton()
+                    .SetContent("标记完成")
+                    .AddArgument("action", "Check")
+                    .SetBackgroundActivation())
+                .AddButton(new ToastButton()
+                    .SetContent("稍后提醒")
+                    .AddArgument("action", "None")
+                    .SetBackgroundActivation())
+                .Show(toast =>
                 {
-                    Visual = new ToastVisual()
-                    {
-                        BindingGeneric = new ToastBindingGeneric()
-                        {
-                            Children =
-                            {
-                                new AdaptiveText()
-                                {
-                                    Text = title
-                                },
-                                new AdaptiveText()
-                                {
-                                    Text = content
-                                }
-                            }
-                        }
-                    },
-                    Actions = new ToastActionsCustom()
-                    {
-                        Buttons =
-                        {
-                            new ToastButton("标记完成", "Check")
-                            {
-                                ActivationType = ToastActivationType.Background
-                            },
-                            new ToastButton("稍后提醒", "None")
-                            {
-                                ActivationType = ToastActivationType.Background
-                            }
-                        }
-                    }
-                };
-
-                // Create the toast notification
-                var toastNotif = new ToastNotification(toastContent.GetXml());
-
-                // And send the notification
-                ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
+                    toast.ExpirationTime = DateTime.Now + remain_timespan;
+                });
             }
         }
 

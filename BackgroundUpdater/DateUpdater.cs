@@ -96,7 +96,7 @@ namespace BackgroundUpdater
                         desc = string.Format($"{desc}(空转次数{blocking_count}，共{blocking_count * blocking_timespan}ms)");
 
                     //分情况发送通知
-                    if (count==1) NotificationManager.SendNotification_ReminderCheck(title, desc); //仅在临期项只有一项时使用，否则将勾选所有符合的项
+                    if (count==1) NotificationManager.SendNotification_ReminderCheck(title, desc, list[0].Deadline-DateTime.Now); //仅在临期项只有一项时使用，否则将勾选所有符合的项
                     else NotificationManager.SendNotification(title, desc);
                 }
             }
