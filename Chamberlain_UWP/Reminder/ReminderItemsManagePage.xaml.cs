@@ -178,8 +178,7 @@ namespace Chamberlain_UWP.Reminder
 
             if(string.IsNullOrEmpty(ItemReviseDescText.Text))
             {
-                CallTeachingTip("描述不能为空", "创建的时候不能为空，修改的时候也不能为空捏🤗",ItemReviseDescText);
-                return;
+                ItemReviseDescText.Text = "(无描述)";
             }
 
             DateTimeOffset dto = (DateTimeOffset)ItemReviseDatePicker.Date; //转换为DateTimeOffset类型
@@ -212,8 +211,8 @@ namespace Chamberlain_UWP.Reminder
 
         private void ClearReviseControl() //清空更改控件中的内容
         {
-            ItemReviseTitleText.Text = "（未选择）";
-            ItemReviseDescText.Text = "（未选择）";
+            ItemReviseTitleText.Text = "";
+            ItemReviseDescText.Text = "";
             CreatedTimeTextBlock.Text = "（空）";
             ItemReviseDatePicker.Date = null; //清空选中的日期
             ItemReviseTimePicker.SelectedTime = null; //清空选中的时间
@@ -255,10 +254,7 @@ namespace Chamberlain_UWP.Reminder
             if (!string.IsNullOrEmpty(AddDescTextBox.Text))
                 desc = AddDescTextBox.Text;
             else
-            {
-                CallTeachingTip("描述不能为空", "可以详细描述子事件。如果没有可以直接截取标题的一部分作为描述😂", AddDescTextBox);
-                return;
-            }
+                desc = "(无描述)";
 
             //日期和时间
             DateTime ddlDate;
