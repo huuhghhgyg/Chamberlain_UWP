@@ -78,10 +78,10 @@
         <Grid Grid.Row="1">
             <ScrollViewer Name="PageScrollViewer">
                 <StackPanel Name="LayoutPanel" Margin="48,0,48,48">
-                    <TextBlock Text="添加" Margin="0,0,0,8" Style="{ThemeResource BaseTextBlockStyle}" />
+                    <TextBlock Text="添加" Margin="0,0,0,4" Style="{ThemeResource BaseTextBlockStyle}" />
                     <!--添加项目面板-->
                     <StackPanel Name="AddItemPanel">
-                        <Grid ColumnSpacing="12" RowSpacing="12">
+                        <Grid ColumnSpacing="8" RowSpacing="8">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -169,10 +169,10 @@
                         </Grid>
                     </StackPanel>
 
-                    <TextBlock Text="修改提醒" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}" />
+                    <TextBlock Text="修改提醒" Margin="0,16,0,4" Style="{ThemeResource BaseTextBlockStyle}" />
                     <!--处理项目面板-->
                     <StackPanel Name="PendingItemsPanel">
-                        <Grid ColumnSpacing="12" RowSpacing="12">
+                        <Grid ColumnSpacing="8" RowSpacing="8">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>

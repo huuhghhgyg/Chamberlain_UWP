@@ -46,26 +46,27 @@
         <!--面板-->
         <ScrollViewer Grid.Row="1">
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48">
-                <RelativePanel HorizontalAlignment="Stretch" VerticalAlignment="Top" 
-                        Padding="16" Style="{StaticResource CardRelativePanel}">
+                <Grid Margin="0,4,0,0" Padding="16" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
                     <FontIcon x:Name="ItemFontIcon" FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                  Glyph="&#xE133;" FontSize="26"
-                                  RelativePanel.AlignVerticalCenterWithPanel="True"/>
-                    <StackPanel Margin="16,0,0,0"
-                                    RelativePanel.RightOf="ItemFontIcon"
-                                    RelativePanel.AlignVerticalCenterWithPanel="True">
+                                  Glyph="&#xE133;"/>
+                    <StackPanel VerticalAlignment="Center" Grid.Column="1">
                         <TextBlock Text="管理提醒" 
-                                       Style="{ThemeResource BodyTextBlockStyle}"/>
+                                           Style="{ThemeResource BodyTextBlockStyle}"/>
                         <TextBlock Text="添加 / 删除提醒项" 
-                                       Style="{StaticResource CaptionTextBlockStyle}"
-                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                   Style="{StaticResource CaptionTextBlockStyle}"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                     </StackPanel>
-
-                    <Button Name="ManageRemindItemButton" Content="转到管理页面" 
-                            RelativePanel.AlignRightWithPanel="True" 
+                    <Button Name="ManageRemindItemButton" Content="转到管理页面"
+                            Grid.Column="2" HorizontalAlignment="Right"
                             Style="{StaticResource AccentButtonStyle}"
                             Click="ManageRemindItemButton_Click"/>
-                </RelativePanel>
+                </Grid>
+
 
                 <TextBlock Text="搜索" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
 
