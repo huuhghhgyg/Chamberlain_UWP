@@ -10,6 +10,10 @@
     Background="{ThemeResource NavigationViewExpandedPaneBackground}"
     NavigationCacheMode="Enabled">
 
+    <Page.Resources>
+        <local:ListCount2VisibilityConverter x:Key="VisibilityConverter"/>
+    </Page.Resources>
+
     <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
@@ -83,12 +87,18 @@
                         <ComboBoxItem Content="按照名称"/>
                     </ComboBox>
                 </StackPanel>
-                
+
                 <TextBlock Text="待处理" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <TextBlock Visibility="{x:Bind ReminderListOnwork.Count, Mode=OneWay, Converter={StaticResource VisibilityConverter}}"
+                           Text="（无）"
+                           Style="{StaticResource BodyTextBlockStyle}"/>
                 <local:ReminderCardListView x:Name="ListOnWork"
                     ReminderList="{x:Bind ReminderListOnwork,Mode=OneWay}"
                     ListViewItemChecked="ReminderCardListView_ItemChecked"/>
                 <TextBlock Text="已完成" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <TextBlock Visibility="{x:Bind ReminderListFinished.Count, Mode=OneWay, Converter={StaticResource VisibilityConverter}}"
+                           Text="（无）"
+                           Style="{StaticResource BodyTextBlockStyle}"/>
                 <local:ReminderCardListView x:Name="ListFinished"
                     ReminderList="{x:Bind ReminderListFinished,Mode=OneWay}" 
                     ListViewItemChecked="ReminderCardListView_ItemChecked"/>

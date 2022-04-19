@@ -242,4 +242,18 @@ namespace Chamberlain_UWP.Reminder
             IsPageAlive=false;
         }
     }
+
+    class ListCount2VisibilityConverter : IValueConverter
+    {
+        // 输入ListCount，返回是否可见
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return (int)value > 0 ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException(); // 单向绑定，不做规定
+        }
+    }
 }
