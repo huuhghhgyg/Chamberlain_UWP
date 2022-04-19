@@ -61,11 +61,13 @@ namespace Chamberlain_UWP
                 {
                     future_folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
                     SelectedFolderPathText.Text = string.Format($"已启用，具有访问权限：{future_folder.Path}");
+                    DeleteSelectedFolderButton.IsEnabled = true;
                 }
                 catch (FileNotFoundException)
                 {
                     StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken"); //指定文件夹不存在，清除指定项
                     SelectedFolderPathText.Text = "指定文件夹不存在，已被清除";
+                    DeleteSelectedFolderButton.IsEnabled= false;
                 }
             }
             else
@@ -286,6 +288,8 @@ namespace Chamberlain_UWP
 
                         await ReminderManager.Data.Load(); //从文件导入
                         await ReminderManager.Data.Save(); //保存文件（包括本地目录）
+
+                        DeleteSelectedFolderButton.IsEnabled = true; //开启清除按钮
                     }
                     else if (result == ContentDialogResult.Secondary)
                     {
@@ -293,6 +297,8 @@ namespace Chamberlain_UWP
                         StorageApplicationPermissions.FutureAccessList.AddOrReplace("ReminderFolderToken", folder);
 
                         await ReminderManager.Data.Save(); //覆盖文件
+
+                        DeleteSelectedFolderButton.IsEnabled = true; //开启清除按钮
                     }
                     else //操作取消
                     {
@@ -308,7 +314,8 @@ namespace Chamberlain_UWP
                 else //选定的文件夹中没有文件，直接保存
                 {
                     StorageApplicationPermissions.FutureAccessList.AddOrReplace("ReminderFolderToken", folder);
-                    await ReminderManager.Data.Save(); 
+                    await ReminderManager.Data.Save();
+                    DeleteSelectedFolderButton.IsEnabled = true; //开启清除按钮
                 }
             }
             else SelectedFolderPathText.Text = "操作取消";
