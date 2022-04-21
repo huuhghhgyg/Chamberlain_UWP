@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,7 +96,8 @@ namespace BackgroundUpdater
                         desc = string.Format($"{desc}(空转次数{blocking_count}，共{blocking_count * blocking_timespan}ms)");
 
                     //分情况发送通知
-                    if (count==1) NotificationManager.SendNotification_ReminderCheck(title, desc, list[0].Deadline-DateTime.Now); //仅在临期项只有一项时使用，否则将勾选所有符合的项
+                    //todo: 此部分可以改进，可以发送多个可确认toast
+                    if (count==1) NotificationManager.SendNotification_ReminderCheck(title, desc, list[0]); //仅在临期项只有一项时使用，否则将勾选所有符合的项
                     else NotificationManager.SendNotification(title, desc);
                 }
             }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -110,6 +110,7 @@ namespace BackgroundUpdater
                     .Where(item => item.Deadline - DateTime.Now < new TimeSpan(remain_hours, 0, 0)) //剩余时间小于n小时
                     .ToList();
             }
+            public static string GetDateTimeString(DateTime dt) => dt.ToString("yyyy-MM-dd-hh:mm:ss.ffff");
         }
 
         public static void RefreshList() // 更新列表状态

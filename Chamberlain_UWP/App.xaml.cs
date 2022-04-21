@@ -169,12 +169,13 @@ namespace Chamberlain_UWP
                             }
 
                             Settings.SettingsConfig.InitialLoad(); //读取设置
-                            bool roaming = Settings.SettingsConfig.IsSettingsRoamingEnabled;
+                            bool isNotificationBlockingVisible = Settings.SettingsConfig.IsNotificationBlockingVisible; //读取是否显示阻塞信息
 
-                            Reminder.ReminderManager.CheckAdjournmentItem(1); //将指定时间（小时）内到期项确认
-
-                            string desc = "指定项已标记完成"; //通知描述
-                            if (roaming) desc = string.Format($"{desc}(空转次数{blocking_count}，共{blocking_count * blocking_timespan}ms)");
+                            string created_time = arguments.Get("created_time");
+                            Reminder.ReminderManager.CheckItemByCreatedTimeString(created_time);
+                            //通知描述
+                            string desc = "指定项已标记完成";
+                            if (isNotificationBlockingVisible) desc = string.Format($"{desc}(空转次数{blocking_count}，共{blocking_count * blocking_timespan}ms)");
 
                             Notify.NotificationManager.SendNotification("完成", desc);
                         }

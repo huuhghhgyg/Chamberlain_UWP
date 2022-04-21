@@ -377,8 +377,13 @@ namespace BackgroundUpdater
                 ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
             }
 
-            public static void SendNotification_ReminderCheck(string title, string content, TimeSpan remain_timespan)
+            //能够将列表项标记完成的toast
+            public static void SendNotification_ReminderCheck(string title, string content, ReminderItem item)
             {
+                //获取 项的关键信息
+                TimeSpan remain_timespan = item.Deadline - DateTime.Now;
+                string created_time = ReminderManager.Statistics.GetDateTimeString(item.CreatedTime);
+
                 new ToastContentBuilder()
                 .AddText(title)
                 .AddText(content)
@@ -386,6 +391,7 @@ namespace BackgroundUpdater
                 .AddButton(new ToastButton()
                     .SetContent("标记完成")
                     .AddArgument("action", "Check")
+                    .AddArgument("created_time", created_time)
                     .SetBackgroundActivation())
                 .AddButton(new ToastButton()
                     .SetContent("稍后提醒")
@@ -394,6 +400,7 @@ namespace BackgroundUpdater
                 .Show(toast =>
                 {
                     toast.ExpirationTime = DateTime.Now + remain_timespan;
+                    toast.Tag = created_time;
                 });
             }
         }

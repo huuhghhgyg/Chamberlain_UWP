@@ -49,6 +49,20 @@ namespace Chamberlain_UWP.Reminder
             await Data.Save();
         }
 
+        public static string GetDateTimeString(DateTime dt) => dt.ToString("yyyy-MM-dd-hh:mm:ss.ffff");
+
+        public static async void CheckItemByCreatedTimeString(string created_time)
+        {
+            foreach(ReminderItem item in ReminderItemList)
+            {
+                if (GetDateTimeString(item.CreatedTime) == created_time)
+                {
+                    item.TaskState = TaskState.Finished;
+                    break;
+                }
+            }
+            await Data.Save();
+        }
 
         // 名称以Find开头，返回index
         public static int FindItemWithTitle(string name) // 返回在List中的下标
