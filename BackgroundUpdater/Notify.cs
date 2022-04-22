@@ -391,6 +391,7 @@ namespace BackgroundUpdater
                 .AddButton(new ToastButton()
                     .SetContent("标记完成")
                     .AddArgument("action", "Check")
+                    .AddArgument("item_title", item.Title)
                     .AddArgument("created_time", created_time)
                     .SetBackgroundActivation())
                 .AddButton(new ToastButton()

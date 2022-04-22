@@ -39,7 +39,7 @@ namespace BackgroundUpdater
 
             if (isNotificationEnabled)
             {
-                int blocking_count=0; //阻塞次数
+                int blocking_count = 0; //阻塞次数
                 int blocking_timespan = 10; //阻塞时间（毫秒）
 
                 while (!ReminderManager.Data.Loaded) //线程阻塞
@@ -54,33 +54,38 @@ namespace BackgroundUpdater
                 {
                     int count = list.Count; //规定时间内到期的项数
 
-                    string title = string.Format($"{count}项deadline不足{remian_hour}小时");
-                    string desc = "";
+                    string title, desc = "";
 
                     // 发送通知
-                    // todo: 通过通知确认完成
-                    if(list.Count == 1)
+                    // 小于3项直接跳过，大于3项堆叠通知名
+                    if (list.Count <= 2)
                     {
-                        // 临期项只有有一项
-                        desc = String.Format($"\"{list[0].Title}\"即将到期，是否已经完成？");
-                    }
-                    else if (list.Count <= 3)
-                    {
-                        // 临期项在3项以内
-                        list.ForEach(item =>
-                        {
-                            desc += string.Format($"\"{item.Title}\"、"); //添加临期项
-                            });
-                        desc = desc.TrimEnd('、'); //去掉末尾的顿号
-                        desc += string.Format($"将在{remian_hour}个小时内到期。");
+                        // 小于等于2项，每项的标题
+                        title = string.Format($"deadline不足{remian_hour}小时");
                     }
                     else
                     {
-                        //临期项大于3项
-                        for (int i = 0; i < 3; i++)
-                            desc += string.Format($"\"{list[i].Title}\"、"); //添加临期项
-                        desc = desc.TrimEnd('、'); //去掉末尾的顿号
-                        desc += string.Format($"等，共{count}项将在{remian_hour}个小时内到期。");
+                        // 三项或以上的标题
+                        title = string.Format($"{count}项deadline不足{remian_hour}小时");
+
+                        if (list.Count == 3)
+                        {
+                            // 临期项在3项以内
+                            list.ForEach(item =>
+                            {
+                                desc += string.Format($"\"{item.Title}\"、"); //添加临期项
+                            });
+                            desc = desc.TrimEnd('、'); //去掉末尾的顿号
+                            desc += string.Format($"将在{remian_hour}个小时内到期。");
+                        }
+                        else
+                        {
+                            //临期项大于3项
+                            for (int i = 0; i < 3; i++)
+                                desc += string.Format($"\"{list[i].Title}\"、"); //添加临期项
+                            desc = desc.TrimEnd('、'); //去掉末尾的顿号
+                            desc += string.Format($"等，共{count}项将在{remian_hour}个小时内到期。");
+                        }
                     }
 
                     // 已过期项提示
@@ -97,7 +102,14 @@ namespace BackgroundUpdater
 
                     //分情况发送通知
                     //todo: 此部分可以改进，可以发送多个可确认toast
-                    if (count==1) NotificationManager.SendNotification_ReminderCheck(title, desc, list[0]); //仅在临期项只有一项时使用，否则将勾选所有符合的项
+                    if (count < 3)
+                    {
+                        list.ForEach(item =>
+                        {
+                            string item_desc = string.Format($"\"{item.Title}\"即将到期，是否已经完成？");
+                            NotificationManager.SendNotification_ReminderCheck(title, item_desc, item); //仅在临期项只有一项时使用，否则将勾选所有符合的项
+                        });
+                    }
                     else NotificationManager.SendNotification(title, desc);
                 }
             }

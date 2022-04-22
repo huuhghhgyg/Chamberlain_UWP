@@ -172,9 +172,10 @@ namespace Chamberlain_UWP
                             bool isNotificationBlockingVisible = Settings.SettingsConfig.IsNotificationBlockingVisible; //读取是否显示阻塞信息
 
                             string created_time = arguments.Get("created_time");
+                            string item_title = arguments.Get("item_title");
                             Reminder.ReminderManager.CheckItemByCreatedTimeString(created_time);
                             //通知描述
-                            string desc = "指定项已标记完成";
+                            string desc = string.Format($"\"{item_title}\"已标记完成");
                             if (isNotificationBlockingVisible) desc = string.Format($"{desc}(空转次数{blocking_count}，共{blocking_count * blocking_timespan}ms)");
 
                             Notify.NotificationManager.SendNotification("完成", desc);
