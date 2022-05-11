@@ -47,6 +47,8 @@ namespace Chamberlain_UWP
 
             if (ReminderListOnwork.Count > 0)
                 NoTaskTextBlock.Visibility = Visibility.Collapsed; //有任务，隐藏无任务的提示
+            else
+                NoTaskTextBlock.Visibility = Visibility.Visible; //无任务，显示无任务提示
 
             new Thread(RefreshData).Start(); //更新进度
 

@@ -95,12 +95,12 @@ namespace Chamberlain_UWP.Reminder
             tagList.AddRange(AllTags); // 导出
         }
 
-        public static void GetList(ObservableCollection<ReminderItem> collection) // 用于初始化ObservableCollection
+        public static void GetList(ObservableCollection<ReminderItem> collection) // 用于往ObservableCollection中添加条目
         {
             ReminderItemList.ForEach(item => collection.Add(item));
         }
 
-        public static void GetList(ObservableCollection<ReminderItem> collection, TaskState taskstate) // 用于初始化ObservableCollection（有条件）
+        public static void GetList(ObservableCollection<ReminderItem> collection, TaskState taskstate) // 用于往ObservableCollection中添加条目（有条件）
         {
             var reminder_item_list = ReminderItemList.Where(item => item.TaskState == taskstate).ToList(); // 筛选符合taskstate的元素
             reminder_item_list.ForEach(item => collection.Add(item)); // 添加元素
