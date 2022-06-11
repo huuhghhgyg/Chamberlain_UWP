@@ -239,6 +239,16 @@ namespace Chamberlain_UWP
             get { return SettingsConfig.TimepickerInterval; }
             set { SettingsConfig.TimepickerInterval = value; }
         }
+        private bool IsRemindOnTimeEnabled
+        {
+            get { return SettingsConfig.IsRemindOnTimeEnabled; }
+            set { SettingsConfig.IsRemindOnTimeEnabled = value; }
+        }
+        private TimeSpan RemindTime
+        {
+            get { return SettingsConfig.RemindTime; }
+            set { SettingsConfig.RemindTime = value; }
+        }
 
         //数据漫游
         private bool IsSettingsRoamingEnabled

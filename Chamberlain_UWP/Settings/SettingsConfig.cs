@@ -12,6 +12,7 @@ namespace Chamberlain_UWP.Settings
         /// <summary>
         /// 程序启动时加载所有设置
         /// 如果没有设置（初始情况），读取的值为null，需要设置初始值
+        /// 按照目前的模型，如果需要更改默认值，还需要更改后台任务中读取时的默认值设定
         /// </summary>
         public static void InitialLoad()
         {
@@ -31,6 +32,12 @@ namespace Chamberlain_UWP.Settings
 
             cache = localSettings.Values["TimepickerInterval"];
             TimepickerInterval = (cache == null) ? 1 : (int)cache; ; //时间选择器时间间隔，最小、默认=1
+
+            cache = roaming_settings ? roamingSettings.Values["IsRemindOnTimeEnabled"] : localSettings.Values["IsRemindOnTimeEnabled"];
+            IsRemindOnTimeEnabled = (cache == null) ? true : (bool)cache; //是否开启每日定时通知，默认开启
+
+            cache = roaming_settings ? roamingSettings.Values["RemindTime"] : localSettings.Values["RemindTime"];
+            RemindTime = (cache == null) ? new TimeSpan(17,0,0) : (TimeSpan)cache; //每日定时通知时间，默认17：00
         }
 
         /// <summary>
@@ -46,6 +53,8 @@ namespace Chamberlain_UWP.Settings
         private static bool _isSettingsRoamingEnabled;
         private static bool _isNotificationBlockingVisible;
         private static int _timepickerInterval;
+        private static bool _isRemindOnTimeEnabled;
+        private static TimeSpan _RemindTime;
 
         public static bool IsSettingsRoamingEnabled //是否允许设置漫游，不允许添加到漫游设置中！
         {
@@ -78,6 +87,17 @@ namespace Chamberlain_UWP.Settings
             get { return _timepickerInterval; }
             set { _timepickerInterval = value; SaveSetting(value, "TimepickerInterval", false); }
         }
+        public static bool IsRemindOnTimeEnabled //是否允许每日定时通知
+        {
+            get { return _isRemindOnTimeEnabled; }
+            set { _isRemindOnTimeEnabled = value; SaveSetting(value, "IsRemindOnTimeEnabled", true); }
+        }
+        public static TimeSpan RemindTime //每日定时通知时间
+        {
+            get { return _RemindTime; }
+            set { _RemindTime = value; SaveSetting(value, "RemindTime", true); }
+        }
+
 
         /// <summary>
         /// 公共变量
@@ -98,6 +118,8 @@ namespace Chamberlain_UWP.Settings
         {
             SaveSetting(UpdateTriggerInterval, "UpdateTriggerInterval", true);
             SaveSetting(IsNotificationEnabled, "IsNotificationEnabled", true);
+            SaveSetting(IsRemindOnTimeEnabled, "IsRemindOnTimeEnabled", true);
+            SaveSetting(RemindTime, "RemindTime", true);
         }
         //取消漫游时不需要额外执行，取消后做的更改不会再漫游
     }

@@ -18,6 +18,7 @@ namespace BackgroundUpdater
         {
             LoadSettings();
             LoadReminder(); //检查Reminder的信息
+            RemindCheck(); //检查是否到时间执行每日提醒
         }
 
         private void LoadReminder()
@@ -30,12 +31,13 @@ namespace BackgroundUpdater
         private static ApplicationDataContainer roamingSettings = ApplicationData.Current.RoamingSettings; //漫游存储的设置
 
         bool roaming_settings;
+        bool isNotificationEnabled;
 
         private void ApplyReminderStatistics()
         {
             object cache;
             cache = roaming_settings ? roamingSettings.Values["IsNotificationEnabled"] : localSettings.Values["IsNotificationEnabled"];
-            bool isNotificationEnabled = (cache == null) ? true : (bool)cache; //是否开启通知，默认开启
+            isNotificationEnabled = (cache == null) ? true : (bool)cache; //是否开启通知，默认开启
 
             if (isNotificationEnabled)
             {
@@ -137,6 +139,57 @@ namespace BackgroundUpdater
             object cache;
             cache = localSettings.Values["IsSettingsRoamingEnabled"];
             roaming_settings = (cache == null) ? false : (bool)cache; //设置是否漫游，默认不漫游
+        }
+
+        private void RemindCheck()
+        {
+            if (isNotificationEnabled)
+            {
+                object cache;
+                cache = roaming_settings ? roamingSettings.Values["IsRemindOnTimeEnabled"] : localSettings.Values["IsRemindOnTimeEnabled"];
+                bool IsRemindOnTimeEnabled = (cache == null) ? true : (bool)cache; //是否开启每日定时通知，默认开启
+
+                if (IsRemindOnTimeEnabled)
+                {
+                    cache = roaming_settings ? roamingSettings.Values["RemindTime"] : localSettings.Values["RemindTime"];
+                    TimeSpan RemindTime = (cache == null) ? new TimeSpan(17, 0, 0) : (TimeSpan)cache; //每日定时通知时间，默认17：00
+
+                    cache = roaming_settings ? roamingSettings.Values["UpdateTriggerInterval"] : localSettings.Values["UpdateTriggerInterval"];
+                    int UpdateTriggerInterval = (cache == null) ? 15 : (int)cache; ; //通知更新间隔，最小、默认=15
+
+                    DateTime RemindTimeToday = DateTime.Today + RemindTime; //获取今天提醒的具体时间
+                    TimeSpan delta = RemindTimeToday - DateTime.Now; //时间差
+                    if (delta >= TimeSpan.Zero && delta <= new TimeSpan(0, UpdateTriggerInterval, 0)) //相差时间小于唤醒时间间隔（在唤醒时间前1个“通知更新时间间隔”内就会提醒）
+                    {
+                        //提醒
+                        string title = "事项提醒", desc = "";
+                        List<ReminderItem> list = ReminderManager.Statistics.AdjournmentItemList(24); //获取24小时内的到期项
+                        if (list.Count > 0) //剩余24小时内到期的项大于0
+                        {
+                            title = "剩余" + title;
+                            if (list.Count > 5)
+                            {
+                                desc += $"有{list.Count}项将在1天之内到期。\n";
+                            }
+                            else if(list.Count > 1)
+                            {
+                                List<string> titles = new List<string>();
+                                list.ForEach(item => titles.Add($"\"{item.Title}\""));
+                                desc += $"{string.Join(",", titles)}共{list.Count}项将在1天之内到期。\n";
+                            }
+                            else
+                            {
+                                desc += $"\"{list[0].Title}\"将在1天之内到期，请留意。\n";
+                            }
+                        }
+                        if (ReminderManager.Statistics.Outdated > 0) desc += $"此外，有{ReminderManager.Statistics.Outdated}项已过期，请尽快处理。"; //过期项提醒
+                        
+                        // 如果没有事项是否需要通知？暂时没有通知
+                        NotificationManager.SendNotification($"每日{title}" ,desc);
+                    }
+                }
+
+            }
         }
     }
 }

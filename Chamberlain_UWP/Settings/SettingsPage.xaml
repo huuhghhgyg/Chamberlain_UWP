@@ -121,6 +121,51 @@
                     </muxc:Expander.Content>
                 </muxc:Expander>
 
+                <muxc:Expander 
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch"
+                    Margin="0,4,0,0"
+                    IsExpanded="{x:Bind RemindOnTimeSwitch.IsOn, Mode=OneWay}"
+                    Background="{ThemeResource CardBackgroundFillColorDefault}">
+                    <muxc:Expander.Header>
+                        <Grid Margin="0,12" ColumnSpacing="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="42"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE15F;"/>
+                            <TextBlock Text="每日定时通知" Grid.Column="1" VerticalAlignment="Center"/>
+                            <ToggleSwitch Name="RemindOnTimeSwitch" 
+                                          Grid.Column="2" HorizontalAlignment="Right"
+                                          IsOn="{x:Bind IsRemindOnTimeEnabled, Mode=TwoWay}" 
+                                          IsEnabled="{Binding IsOn, ElementName=NotificationSwitch}"
+                                          Width="20" MinWidth="80"/>
+                        </Grid>
+                    </muxc:Expander.Header>
+                    <muxc:Expander.Content>
+                        <Grid Margin="0,-4" ColumnSpacing="16" HorizontalAlignment="Stretch">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="42"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE121;"/>
+                            <TextBlock Text="定时提醒时间" Grid.Column="1" VerticalAlignment="Center"/>
+                            <TimePicker Grid.Column="2" HorizontalAlignment="Right"
+                                        SelectedTime="{x:Bind RemindTime,Mode=TwoWay}"/>
+                        </Grid>
+                    </muxc:Expander.Content>
+                </muxc:Expander>
+                
                 <TextBlock Text="同步" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <Grid Margin="0,4,0,0" Padding="16,12" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
