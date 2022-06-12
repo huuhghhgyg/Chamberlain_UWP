@@ -1,3 +1,4 @@
+using Chamberlain_UWP.Backup;
 using Chamberlain_UWP.Reminder;
 using Chamberlain_UWP.Settings;
 using Microsoft.Toolkit.Uwp.Notifications;
@@ -180,6 +181,9 @@ namespace Chamberlain_UWP
                         break;
                     case "提醒":
                         Navigate2Reminder();
+                        break;
+                    case "备份":
+                        contentFrame.Navigate(typeof(BackupPage));
                         break;
                 }
             }
