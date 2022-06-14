@@ -171,7 +171,7 @@ namespace BackgroundUpdater
                             {
                                 desc += $"有{list.Count}项将在1天之内到期。\n";
                             }
-                            else if(list.Count > 1)
+                            else if (list.Count > 1)
                             {
                                 List<string> titles = new List<string>();
                                 list.ForEach(item => titles.Add($"\"{item.Title}\""));
@@ -183,9 +183,10 @@ namespace BackgroundUpdater
                             }
                         }
                         if (ReminderManager.Statistics.Outdated > 0) desc += $"此外，有{ReminderManager.Statistics.Outdated}项已过期，请尽快处理。"; //过期项提醒
-                        
+
                         // 如果没有事项是否需要通知？暂时没有通知
-                        NotificationManager.SendNotification($"每日{title}" ,desc);
+                        if (!string.IsNullOrEmpty(desc))
+                            NotificationManager.SendNotification($"每日{title}", desc);
                     }
                 }
 
