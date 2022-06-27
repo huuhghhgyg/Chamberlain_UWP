@@ -139,7 +139,7 @@ namespace Chamberlain_UWP.Reminder
         }
 
         static int onwork_count_cache = 0;
-        static int update_timespan_cache = 1000;
+        static double update_timespan_cache = 1000;
         public static int UpdateTimeSpan //计算进度条更新的时间间隔
         {
             get
@@ -155,9 +155,9 @@ namespace Chamberlain_UWP.Reminder
                             if (task_span > item.TaskSpan)
                                 task_span = item.TaskSpan;
                         });// 找到时间间隔最小的项
-                    update_timespan_cache = (int)task_span.TotalMilliseconds / 1000; // 计算时间间隔
+                    update_timespan_cache = task_span.TotalMilliseconds / 1000; // 计算时间间隔
                 }
-                return update_timespan_cache;
+                return (int)update_timespan_cache;
             }
         }
 
