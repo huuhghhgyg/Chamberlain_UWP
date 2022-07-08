@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Chamberlain_UWP.Backup"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource NavigationViewExpandedPaneBackground}"
     NavigationCacheMode="Enabled">
@@ -49,7 +49,70 @@
         <ScrollViewer Grid.Row="1">
             <!--面板-->
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48">
-                
+                <TextBlock Text="正在备份" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+
+                <muxc:Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                    <muxc:Expander.Header>
+                        <Grid Padding="0,12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="第13项，共24项" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                                <TextBlock Text="23%" Grid.Column="1"
+                                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+                            </Grid>
+                            <muxc:ProgressBar Value="90" Grid.Row="1" Margin="0,8"/>
+                            <TextBlock Text="描述" Grid.Row="2"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        </Grid>
+                    </muxc:Expander.Header>
+                    <muxc:Expander.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="取消" Margin="0,0,8,0"/>
+                            <Button Style="{StaticResource AccentButtonStyle}" Content="暂停"/>
+                        </StackPanel>
+                    </muxc:Expander.Content>
+                </muxc:Expander>
+
+                <TextBlock Text="备份至路径" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <Grid ColumnSpacing="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox/>
+                    <Button Content="选择" Grid.Column="2"/>
+                </Grid>
+
+                <TextBlock Text="备份列表" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+
+                <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
+                        <AppBarButton Icon="Add" Label="添加"/>
+                        <AppBarButton Icon="Delete" Label="删除"/>
+                    </CommandBar>
+                    <ListView BorderThickness="1"
+                          BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                          Height="400" Grid.Row="1"
+                          HorizontalAlignment="Stretch"/>
+                </Grid>
+
             </StackPanel>
         </ScrollViewer>
 
