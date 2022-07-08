@@ -86,32 +86,82 @@
                     </muxc:Expander.Content>
                 </muxc:Expander>
 
-                <TextBlock Text="备份至路径" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
-                <Grid ColumnSpacing="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox/>
-                    <Button Content="选择" Grid.Column="2"/>
-                </Grid>
+                <ListView>
+                </ListView>
 
-                <TextBlock Text="备份列表" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <!--列表Pivot，外面套壳是为了调整间隙-->
+                <StackPanel Margin="-8,0,-8,0">
+                    <Pivot Margin="0,8,0,0">
+                        <PivotItem Header="任务列表">
+                            <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
+                                    <AppBarButton Icon="Play" Label="开始备份"/>
+                                    <AppBarButton Icon="Add" Label="添加"/>
+                                    <AppBarButton Icon="Delete" Label="删除"/>
+                                </CommandBar>
+                                <ListView BorderThickness="1"
+                                      BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                                      Height="380" Grid.Row="1"
+                                      HorizontalAlignment="Stretch"/>
+                            </Grid>
+                        </PivotItem>
+                        
+                        <PivotItem Header="记录">
+                            <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
+                                    <AppBarButton Icon="Download" Label="恢复"/>
+                                    <AppBarButton Icon="Delete" Label="删除"/>
+                                </CommandBar>
+                                <ListView BorderThickness="1"
+                                      BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                                      Height="380" Grid.Row="1"
+                                      HorizontalAlignment="Stretch"/>
+                            </Grid>
+                        </PivotItem>
 
-                <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
-                        <AppBarButton Icon="Add" Label="添加"/>
-                        <AppBarButton Icon="Delete" Label="删除"/>
-                    </CommandBar>
-                    <ListView BorderThickness="1"
-                          BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
-                          Height="400" Grid.Row="1"
-                          HorizontalAlignment="Stretch"/>
-                </Grid>
+                        <PivotItem Header="保存列表">
+                            <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
+                                    <AppBarButton Icon="Add" Label="添加"/>
+                                    <AppBarButton Icon="Delete" Label="删除"/>
+                                </CommandBar>
+                                <ListView BorderThickness="1"
+                                      BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                                      Height="380" Grid.Row="1"
+                                      HorizontalAlignment="Stretch"/>
+                            </Grid>
+                        </PivotItem>
+
+                        <PivotItem Header="备份列表">
+                            <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
+                                    <AppBarButton Icon="Add" Label="添加"/>
+                                    <AppBarButton Icon="Delete" Label="删除"/>
+                                </CommandBar>
+                                <ListView BorderThickness="1"
+                                          BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                                          Height="380" Grid.Row="1"
+                                          HorizontalAlignment="Stretch"/>
+                            </Grid>
+                        </PivotItem>
+                    </Pivot>
+                </StackPanel>
 
             </StackPanel>
         </ScrollViewer>
