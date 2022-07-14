@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chamberlain_UWP.Backup.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -20,7 +21,10 @@ namespace Chamberlain_UWP.Backup
         bool _backupTask = false; //是否正在执行备份任务
         ObservableCollection<string> _saveList = new ObservableCollection<string>(); //备份路径列表
         ObservableCollection<string> _backupList = new ObservableCollection<string>(); //备份目标列表
+        ObservableCollection<BackupPathRecord> _fullbackupList = new ObservableCollection<BackupPathRecord>(); //备份目标列表(test)
         ObservableCollection<string> _backupNameList = new ObservableCollection<string>(); //备份目标名称列表
+        ObservableCollection<BackupTask> _backupTasks = new ObservableCollection<BackupTask>(); //备份任务列表
+
 
         /// <summary>
         /// 属性区
@@ -107,6 +111,29 @@ namespace Chamberlain_UWP.Backup
             }
         }
         public int BackupNameListSelectedIndex { get; set; } = 0; //备份名称列表选中index
+        public ObservableCollection<BackupTask> BackupTaskList
+        {
+            get => _backupTasks;
+            set
+            {
+                _backupTasks = value;
+                BackupManager.BackupTaskList.Clear(); //与BackupManager中的项同步
+                foreach (BackupTask item in _backupTasks)
+                {
+                    BackupManager.BackupTaskList.Add(item);
+                }
+                OnPropertyChanged(nameof(BackupTaskList));
+            }
+        }
+        public ObservableCollection<BackupPathRecord> BackupPathRecordList //完整的记录列表
+        {
+            get => _fullbackupList;
+            set
+            {
+                _fullbackupList = value;
+                OnPropertyChanged(nameof(BackupPathRecordList));
+            }
+        }
 
         /// <summary>
         /// 方法区
@@ -170,11 +197,19 @@ namespace Chamberlain_UWP.Backup
         public async void Add2SavePathList()
         {
             StorageFolder folder = await OpenFolder();
-            if (folder != null) SavePathList.Add(folder.Path);
+            if (folder != null)
+            {
+                SavePathList.Add(folder.Path);
+                BackupManager.GoalFolderList.Add(new SavePathRecord(folder.Path, folder));
+            }
         }
         public void DelFromSavePathList()
         {
-            if (SavePathListSelectedIndex != -1) SavePathList.RemoveAt(SavePathListSelectedIndex);
+            if (SavePathListSelectedIndex != -1)
+            {
+                BackupManager.GoalFolderList.RemoveAt(SavePathListSelectedIndex);
+                SavePathList.RemoveAt(SavePathListSelectedIndex);
+            }
         }
         public async void Add2BackupPathList()
         {
@@ -183,14 +218,24 @@ namespace Chamberlain_UWP.Backup
             {
                 BackupPathList.Add(folder.Path);
                 BackupNameList.Add(folder.Name);
+                BackupPathRecordList.Add(new BackupPathRecord(folder.Path, folder));
+                BackupManager.BackupFolderList.Add(new BackupPathRecord(folder.Path, folder));
             }
         }
         public void DelFromBackupPathList()
         {
             if (BackupPathListSelectedIndex != -1)
             {
+                BackupManager.BackupFolderList.RemoveAt(BackupPathListSelectedIndex);
                 BackupPathList.RemoveAt(BackupPathListSelectedIndex);
                 //根据任务删除
+            }
+        }
+        public void AddBackupTask()
+        {
+            if (BackupPathList.Count > 0 && SavePathList.Count > 0)
+            {
+                BackupTaskList.Add(new BackupTask(BackupManager.BackupFolderList[0], BackupManager.GoalFolderList[0]));
             }
         }
     }

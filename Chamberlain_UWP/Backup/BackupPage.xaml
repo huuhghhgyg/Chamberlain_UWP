@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Background="{ThemeResource NavigationViewExpandedPaneBackground}"
     NavigationCacheMode="Enabled">
 
@@ -106,13 +107,26 @@
                                 <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
                                     <AppBarButton Icon="Play" Label="快速备份"/>
                                     <AppBarButton Icon="MoveToFolder" Label="完整备份" Click="{x:Bind ViewModel.SwitchTaskState}"/>
-                                    <AppBarButton Icon="Add" Label="添加"/>
+                                    <AppBarButton Icon="Add" Label="添加" Click="{x:Bind ViewModel.AddBackupTask}"/>
                                     <AppBarButton Icon="Delete" Label="删除"/>
                                 </CommandBar>
                                 <ListView BorderThickness="1"
                                       BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
                                       Height="380" Grid.Row="1"
                                       HorizontalAlignment="Stretch"/>
+                                <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"
+                                                   ItemsSource="{x:Bind ViewModel.BackupTaskList,Mode=TwoWay}">
+                                    <controls:DataGrid.Columns>
+                                        <controls:DataGridTextColumn Header="备份目录"
+                                                                     Binding="{Binding BackupFolderName, Mode=OneWay}"/>
+                                        <controls:DataGridTextColumn Header="保存路径"
+                                                                     Binding="{Binding SaveFolderPath, Mode=OneWay}"/>
+                                        <controls:DataGridComboBoxColumn Header="备份目标"
+                                                 Binding="{Binding BackupFolder,Mode=TwoWay}"                                                  
+                                                 ItemsSource="{x:Bind ViewModel.BackupPathRecordList, Mode=OneWay}"
+                                                 DisplayMemberPath="BackupFolderPath"/>
+                                    </controls:DataGrid.Columns>
+                                </controls:DataGrid>
                             </Grid>
                         </PivotItem>
 

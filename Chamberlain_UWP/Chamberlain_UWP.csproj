@@ -134,8 +134,8 @@
     </Compile>
     <Compile Include="Backup\ViewModel\ViewModelBase.cs" />
     <Compile Include="Backup\ViewModel\BackupPageViewModel.cs" />
-    <Compile Include="Backup\Models\Tree.cs" />
-    <Compile Include="Backup\Models\TreeManager.cs" />
+    <Compile Include="Backup\Models\BackupInfoItem.cs" />
+    <Compile Include="Backup\Models\BackupManager.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -286,6 +286,9 @@
       <Version>6.2.13</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
+      <Version>7.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">
       <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">

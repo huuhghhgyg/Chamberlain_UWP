@@ -15,7 +15,7 @@ namespace Chamberlain_UWP.Backup.Models
     internal static class BackupManager
     {
         // 变量区
-        private static string backup_folder_path=""; //备份文件夹的路径
+        private static string backup_folder_path = ""; //备份文件夹的路径
         public static List<PathRecord> BackupFolderList = new List<PathRecord>(); //备份文件夹路径列表
         public static List<PathRecord> GoalFolderList = new List<PathRecord>(); //目标文件夹路径列表
         public static List<BackupTask> BackupTaskList = new List<BackupTask>(); //备份任务描述列表
