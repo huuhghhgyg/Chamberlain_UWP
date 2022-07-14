@@ -7,32 +7,33 @@ using Windows.Storage;
 
 namespace Chamberlain_UWP.Backup.Models
 {
-    internal class FolderNode //文件夹节点
-    {
-        public string Name { get; set; } //文件夹名称
-        public int foldernum { get => Folders.Count; } //文件夹下的文件夹数量
-        public StorageFolder Folder { get; set; } //可供操作的文件夹对象
-        public List<FolderNode> Folders { get; set; } //此文件夹下的文件夹列表，便于往下访问
-        public List<FileNode> FileNodes { get; set; } //此文件夹下的文件节点列表
-
-        public FolderNode(string name, StorageFolder folder, List<FolderNode> folders, List<FileNode> fileNodes)
-        {
-            Name = name;
-            Folder = folder;
-            Folders = folders;
-            FileNodes = fileNodes;
-        }
-    }
-
     internal class FileNode //文件节点
     {
         public StorageFile File { get; set; } //可供操作的文件对象
         public string Hash { get; set; } //文件哈希值
-
-        public FileNode(StorageFile file, string hash)
+        public string RelativePath { get; set; } //文件相对路径
+        public FileNode(StorageFile file, string hash, string relative_path)
         {
             File = file;
             Hash = hash;
+            RelativePath = relative_path;
+        }
+    }
+    internal class PathRecord //路径记录
+    {
+        public string Path { get; set; }
+        public StorageFolder Folder { get; set; }
+        public int Hash { get => Folder.Path.GetHashCode(); }
+    }
+    internal class BackupTask //备份任务描述
+    {
+        public PathRecord BackupFolder { get; set; }
+        public PathRecord GoalFolder { get; set; }
+
+        public BackupTask(PathRecord backupFolder, PathRecord goalFolder)
+        {
+            BackupFolder = backupFolder;
+            GoalFolder = goalFolder;
         }
     }
 }

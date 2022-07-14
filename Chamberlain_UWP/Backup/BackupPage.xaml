@@ -9,6 +9,10 @@
     Background="{ThemeResource NavigationViewExpandedPaneBackground}"
     NavigationCacheMode="Enabled">
 
+    <Page.DataContext>
+        <local:BackupPageViewModel/>
+    </Page.DataContext>
+
     <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
@@ -49,49 +53,50 @@
         <ScrollViewer Grid.Row="1">
             <!--面板-->
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48">
-                <TextBlock Text="正在备份" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
-
-                <muxc:Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
-                    <muxc:Expander.Header>
-                        <Grid Padding="0,12">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid>
+                <!--备份StackPanel-->
+                <StackPanel>
+                    <TextBlock Text="备份状态" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <muxc:Expander Visibility="{x:Bind ViewModel.IsBackupCardVisible, Mode=OneWay}"
+                                   HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                        <muxc:Expander.Header>
+                            <Grid Padding="0,12">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="第13项，共24项" Foreground="{ThemeResource TextFillColorPrimary}"/>
-                                <TextBlock Text="23%" Grid.Column="1"
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{x:Bind ViewModel.BackupTitle,Mode=OneWay}" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                                    <TextBlock Text="{x:Bind ViewModel.BackupProgressString,Mode=OneWay}" Grid.Column="1"
                                        Foreground="{ThemeResource TextFillColorPrimary}"/>
-                            </Grid>
-                            <muxc:ProgressBar Value="90" Grid.Row="1" Margin="0,8"/>
-                            <TextBlock Text="描述" Grid.Row="2"
+                                </Grid>
+                                <muxc:ProgressBar Value="{x:Bind ViewModel.BackupProgress,Mode=OneWay}" Grid.Row="1" Margin="0,8"/>
+                                <TextBlock Text="{x:Bind ViewModel.BackupDescription,Mode=OneWay}" Grid.Row="2"
                                    Style="{StaticResource CaptionTextBlockStyle}" 
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                        </Grid>
-                    </muxc:Expander.Header>
-                    <muxc:Expander.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="取消" Margin="0,0,8,0"/>
-                            <Button Style="{StaticResource AccentButtonStyle}" Content="暂停"/>
-                        </StackPanel>
-                    </muxc:Expander.Content>
-                </muxc:Expander>
-
-                <ListView>
-                </ListView>
+                            </Grid>
+                        </muxc:Expander.Header>
+                        <muxc:Expander.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="取消" Margin="0,0,8,0"/>
+                                <Button Style="{StaticResource AccentButtonStyle}" Content="暂停" Click="{x:Bind ViewModel.Backup_Suspend}"/>
+                            </StackPanel>
+                        </muxc:Expander.Content>
+                    </muxc:Expander>
+                    <TextBlock Text="（无任务）" Visibility="{x:Bind ViewModel.IsNoTaskTextVisible,Mode=OneWay}"/>
+                </StackPanel>
 
                 <!--列表Pivot，外面套壳是为了调整间隙-->
                 <StackPanel Margin="-8,0,-8,0">
-                    <Pivot Margin="0,8,0,0">
+                    <Pivot Title="备份信息" Margin="0,8,0,0">
                         <PivotItem Header="任务列表">
                             <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                 <Grid.RowDefinitions>
@@ -99,7 +104,8 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
-                                    <AppBarButton Icon="Play" Label="开始备份"/>
+                                    <AppBarButton Icon="Play" Label="快速备份"/>
+                                    <AppBarButton Icon="MoveToFolder" Label="完整备份" Click="{x:Bind ViewModel.SwitchTaskState}"/>
                                     <AppBarButton Icon="Add" Label="添加"/>
                                     <AppBarButton Icon="Delete" Label="删除"/>
                                 </CommandBar>
@@ -109,55 +115,66 @@
                                       HorizontalAlignment="Stretch"/>
                             </Grid>
                         </PivotItem>
-                        
+
                         <PivotItem Header="记录">
-                            <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
-                                    <AppBarButton Icon="Download" Label="恢复"/>
-                                    <AppBarButton Icon="Delete" Label="删除"/>
-                                </CommandBar>
-                                <ListView BorderThickness="1"
+                            <StackPanel>
+                                <StackPanel>
+                                    <ComboBox ItemsSource="{x:Bind ViewModel.BackupNameList, Mode=OneWay}"
+                                                  SelectedIndex="{x:Bind ViewModel.BackupNameListSelectedIndex, Mode=TwoWay}"/>
+                                    <TextBlock Text="backup_path_here"/>
+                                </StackPanel>
+                                <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
+                                        <AppBarButton Icon="Download" Label="恢复"/>
+                                        <AppBarButton Icon="Delete" Label="删除"/>
+                                    </CommandBar>
+                                    <ListView BorderThickness="1"
                                       BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
                                       Height="380" Grid.Row="1"
                                       HorizontalAlignment="Stretch"/>
-                            </Grid>
+                                </Grid>
+                            </StackPanel>
                         </PivotItem>
 
-                        <PivotItem Header="保存列表">
+                        <PivotItem Header="备份目录">
                             <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
-                                    <AppBarButton Icon="Add" Label="添加"/>
-                                    <AppBarButton Icon="Delete" Label="删除"/>
-                                </CommandBar>
-                                <ListView BorderThickness="1"
-                                      BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
-                                      Height="380" Grid.Row="1"
-                                      HorizontalAlignment="Stretch"/>
-                            </Grid>
-                        </PivotItem>
-
-                        <PivotItem Header="备份列表">
-                            <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
-                                    <AppBarButton Icon="Add" Label="添加"/>
-                                    <AppBarButton Icon="Delete" Label="删除"/>
+                                    <AppBarButton Icon="Add" Label="添加" Click="{x:Bind ViewModel.Add2BackupPathList}"/>
+                                    <AppBarButton Icon="Delete" Label="删除" Click="{x:Bind ViewModel.DelFromBackupPathList}"/>
                                 </CommandBar>
                                 <ListView BorderThickness="1"
                                           BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
                                           Height="380" Grid.Row="1"
-                                          HorizontalAlignment="Stretch"/>
+                                          HorizontalAlignment="Stretch"
+                                          ItemsSource="{x:Bind ViewModel.BackupPathList, Mode=OneWay}"
+                                          SelectedIndex="{x:Bind ViewModel.BackupPathListSelectedIndex, Mode=TwoWay}"/>
+                            </Grid>
+                        </PivotItem>
+
+                        <PivotItem Header="保存目录">
+                            <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
+                                    <AppBarButton Icon="Add" Label="添加" Click="{x:Bind ViewModel.Add2SavePathList}"/>
+                                    <AppBarButton Icon="Delete" Label="删除" Click="{x:Bind ViewModel.DelFromSavePathList}"/>
+                                </CommandBar>
+                                <ListView BorderThickness="1"
+                                      BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                                      Height="380" Grid.Row="1"
+                                      HorizontalAlignment="Stretch"
+                                      ItemsSource="{x:Bind ViewModel.SavePathList, Mode=OneWay}"
+                                      SelectedIndex="{x:Bind ViewModel.SavePathListSelectedIndex, Mode=TwoWay}"/>
                             </Grid>
                         </PivotItem>
                     </Pivot>

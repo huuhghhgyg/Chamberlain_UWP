@@ -26,5 +26,6 @@ namespace Chamberlain_UWP.Backup
         {
             this.InitializeComponent();
         }
+        public BackupPageViewModel ViewModel { get; } = new BackupPageViewModel();
     }
 }
