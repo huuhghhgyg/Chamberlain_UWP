@@ -12,7 +12,7 @@ using Windows.Storage.Streams;
 
 namespace Chamberlain_UWP.Backup.Models
 {
-    internal static class TreeManager
+    internal static class BackupManager
     {
         // 变量区
         private static string backup_folder_path=""; //备份文件夹的路径

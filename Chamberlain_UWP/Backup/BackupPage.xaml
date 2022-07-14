@@ -118,10 +118,10 @@
 
                         <PivotItem Header="记录">
                             <StackPanel>
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <ComboBox ItemsSource="{x:Bind ViewModel.BackupNameList, Mode=OneWay}"
                                                   SelectedIndex="{x:Bind ViewModel.BackupNameListSelectedIndex, Mode=TwoWay}"/>
-                                    <TextBlock Text="backup_path_here"/>
+                                    <TextBlock Text="backup_path_here" VerticalAlignment="Center" Margin="8,0,0,0"/>
                                 </StackPanel>
                                 <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                     <Grid.RowDefinitions>
