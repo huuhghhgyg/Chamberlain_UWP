@@ -2,14 +2,42 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
+using Windows.UI.Xaml.Controls;
 
 namespace Chamberlain_UWP.Backup
 {
+    public class BackupTaskData //用于DataGrid的绑定
+    {
+        public string BackupPath { get; set; }
+        public string SavePath { get; set; }
+        public BackupTaskData(PathRecord BackupFolder, PathRecord SaveFolder)
+        {
+            BackupPath = BackupFolder.Path;
+            SavePath = SaveFolder.Path;
+        }
+    }
+    public class BackupPathString
+    {
+        public string BackupPath { get; set; }
+        public BackupPathString(string backupPath)
+        {
+            BackupPath = backupPath;
+        }
+    }
+    public class SavePathString
+    {
+        public string SavePath { get; set; }
+        public SavePathString(string savePath)
+        {
+            SavePath = savePath;
+        }
+    }
     public class BackupPageViewModel : ViewModelBase
     {
         /// <summary>
@@ -18,12 +46,15 @@ namespace Chamberlain_UWP.Backup
         string _backupTitle = "第1项，共3项"; //备份卡片标题
         string _backupDesc = "正在备份[具体的文件]"; //备份卡片描述（正在备份的文件）
         double _backupProgress = 20.0; //备份进度（max=100）
-        bool _backupTask = false; //是否正在执行备份任务
+        bool _isAnyBackupTask = false; //是否正在执行备份任务
 
-        ObservableCollection<PathRecord> _backupPathRecords = new ObservableCollection<PathRecord>();
-        ObservableCollection<PathRecord> _savePathRecords = new ObservableCollection<PathRecord>();
-        ObservableCollection<BackupTask> _backupTasks = new ObservableCollection<BackupTask>();
+        ObservableCollection<PathRecord> _backupPathRecords = new ObservableCollection<PathRecord>(); //备份页数据
         int _backupRecordComboBoxSelectedIndex = -1;
+        ObservableCollection<PathRecord> _savePathRecords = new ObservableCollection<PathRecord>(); //保存页数据
+        //备份任务DataGrid
+        ObservableCollection<BackupTaskData> _backupTasks = new ObservableCollection<BackupTaskData>(); //备份任务数据
+        ObservableCollection<BackupPathString> _backupPathNames = new ObservableCollection<BackupPathString>();
+        ObservableCollection<SavePathString> _savePathNames = new ObservableCollection<SavePathString>();
 
         /// <summary>
         /// 属性区
@@ -62,20 +93,20 @@ namespace Chamberlain_UWP.Backup
         }
         public bool IsBackupCardVisible //备份卡片是否可见
         {
-            get => _backupTask;
+            get => _isAnyBackupTask;
             set
             {
-                _backupTask = value;
+                _isAnyBackupTask = value;
                 OnPropertyChanged(nameof(IsBackupCardVisible));
                 OnPropertyChanged(nameof(IsNoTaskTextVisible));
             }
         }
         public bool IsNoTaskTextVisible //无任务提示是否可见
         {
-            get => !_backupTask;
+            get => !_isAnyBackupTask;
             set
             {
-                _backupTask = value;
+                _isAnyBackupTask = value;
                 OnPropertyChanged(nameof(IsBackupCardVisible));
                 OnPropertyChanged(nameof(IsNoTaskTextVisible));
             }
@@ -86,7 +117,9 @@ namespace Chamberlain_UWP.Backup
             set
             {
                 _backupPathRecords = value;
-                OnPropertyChanged(nameof(_backupPathRecords));
+
+                OnPropertyChanged(nameof(BackupPathRecords));
+                OnPropertyChanged(nameof(BackupPathNames));
             }
         }
         public int BackupPathRecordsSelectedIndex { get; set; } = -1; //选中的Index
@@ -120,7 +153,7 @@ namespace Chamberlain_UWP.Backup
                     return BackupPathRecords[BackupRecordComboBoxSelectedIndex].Path;
             }
         }
-        public ObservableCollection<BackupTask> BackupTasks //ObservableCollection备份列表
+        public ObservableCollection<BackupTaskData> BackupTasks //ObservableCollection备份列表
         {
             get => _backupTasks;
             set
@@ -129,8 +162,15 @@ namespace Chamberlain_UWP.Backup
                 OnPropertyChanged(nameof(BackupTasks));
             }
         }
-
-
+        public ObservableCollection<BackupPathString> BackupPathNames
+        {
+            get => _backupPathNames;
+        }
+        public ObservableCollection<SavePathString> SavePathNames
+        {
+            get => _savePathNames;
+        }
+        public int BackupTaskSelectedIndex { get; set; } = -1; //任务列表选中任务项
 
         /// <summary>
         /// 方法区
@@ -147,12 +187,28 @@ namespace Chamberlain_UWP.Backup
             }
         }
 
+        public async void Backup_Start()
+        {
+            if (BackupTaskSelectedIndex != -1)
+            {
+                BackupTaskData selectedTask = BackupTasks[BackupTaskSelectedIndex];
+                ContentDialog noWifiDialog = new ContentDialog
+                {
+                    Title = "选中的任务如下",
+                    Content = $"\"{selectedTask.BackupPath}\" -> \"{selectedTask.SavePath}\"",
+                    CloseButtonText = "Ok"
+                };
+
+                ContentDialogResult result = await noWifiDialog.ShowAsync();
+            }
+        }
+
         public void Backup_Cancel() //备份取消
         {
 
         }
 
-        public void SwitchTaskState()
+        public void SwitchTaskState() //更改备份状态
         {
             IsBackupCardVisible = !IsBackupCardVisible;
         }
@@ -172,34 +228,54 @@ namespace Chamberlain_UWP.Backup
             else return null;
         }
 
-        public async void Add2SavePathList()
+        public async void Add2SavePathList() //添加到保存路径
         {
             StorageFolder folder = await OpenFolder();
             if (folder != null)
             {
-                SavePathRecords.Add(new PathRecord(folder));
+                SavePathRecords.Add(new PathRecord(folder)); //UI
+                _savePathNames.Add(new SavePathString(folder.Path));
+                BackupManager.SaveFolderList.Add(new PathRecord(folder));
             }
         }
-        public void DelFromSavePathList()
+        public void DelFromSavePathList() //从保存路径移除
         {
-            if (SavePathRecordsSelectedIndex != -1) SavePathRecords.RemoveAt(SavePathRecordsSelectedIndex);
+            if (SavePathRecordsSelectedIndex != -1)
+            {
+                _savePathNames.RemoveAt(SavePathRecordsSelectedIndex);
+                BackupManager.SaveFolderList.RemoveAt(SavePathRecordsSelectedIndex);
+                SavePathRecords.RemoveAt(SavePathRecordsSelectedIndex); //UI
+            }
         }
-        public async void Add2BackupPathList()
+        public async void Add2BackupPathList() //添加到备份路径
         {
             StorageFolder folder = await OpenFolder();
             if (folder != null)
             {
-                BackupPathRecords.Add(new PathRecord(folder));
+                BackupPathRecords.Add(new PathRecord(folder)); //UI
+                _backupPathNames.Add(new BackupPathString(folder.Path));
+                BackupManager.BackupFolderList.Add(new PathRecord(folder));
             }
         }
-        public void DelFromBackupPathList()
+        public void DelFromBackupPathList() //从删除路径中移除
         {
-            if (BackupPathRecordsSelectedIndex != -1) BackupPathRecords.RemoveAt(BackupPathRecordsSelectedIndex);
+            if (BackupPathRecordsSelectedIndex != -1)
+            {
+                BackupPathNames.RemoveAt(BackupPathRecordsSelectedIndex);
+                BackupManager.BackupFolderList.RemoveAt(BackupPathRecordsSelectedIndex);
+                BackupPathRecords.RemoveAt(BackupPathRecordsSelectedIndex); //UI
+            }
         }
         public void AddBackupTask()
         {
-            //if(BackupPathRecords.Count>0 && SavePathRecords.Count > 0)
-            //    BackupTasks.Add(new BackupTask(BackupPathRecords[0],SavePathRecords[0]));
+            if (BackupPathRecords.Count > 0 && SavePathRecords.Count > 0)
+            {
+                BackupTasks.Add(new BackupTaskData(BackupPathRecords[0], SavePathRecords[0]));
+            }
+        }
+        public void DelFromBackupTask()
+        {
+            if (BackupTaskSelectedIndex!=-1) BackupTasks.RemoveAt(BackupTaskSelectedIndex);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Chamberlain_UWP.Backup.Models
         // 变量区
         private static string backup_folder_path = ""; //备份文件夹的路径
         public static List<PathRecord> BackupFolderList = new List<PathRecord>(); //备份文件夹路径列表
-        public static List<PathRecord> GoalFolderList = new List<PathRecord>(); //目标文件夹路径列表
+        public static List<PathRecord> SaveFolderList = new List<PathRecord>(); //目标文件夹路径列表
         public static List<BackupTask> BackupTaskList = new List<BackupTask>(); //备份任务描述列表
 
         // 函数区
@@ -38,6 +38,21 @@ namespace Chamberlain_UWP.Backup.Models
             string hex = CryptographicBuffer.EncodeToHexString(buffHash);
 
             return hex;
+        }
+
+        public static void QueryBackupTask(string backup_path, string save_path)
+        {
+            //查询得到数据
+            var backup_query = from PathRecord record in BackupFolderList
+                               where record.Path == backup_path
+                               select record;
+            PathRecord backup_record = backup_query.FirstOrDefault();
+            var save_query = from PathRecord record in SaveFolderList
+                             where record.Path == save_path
+                             select record;
+            PathRecord save_record = save_query.FirstOrDefault();
+            if (save_record == null || backup_record == null)
+                throw new Exception("路径不存在"); //需要返回重新选择
         }
 
         public static async void QuickBackupFolder(string folder_token, string goal_token) // 快速备份
