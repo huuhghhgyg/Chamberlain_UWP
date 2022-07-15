@@ -96,11 +96,11 @@ namespace Chamberlain_UWP.Backup
             set
             {
                 _savePathRecords = value;
-                OnPropertyChanged(nameof(_savePathRecords));
+                OnPropertyChanged(nameof(SavePathRecords));
             }
         }
         public int SavePathRecordsSelectedIndex { get; set; } = -1; //选中的Index
-        public int BackupRecordComboBoxSelectedIndex
+        public int BackupRecordComboBoxSelectedIndex //备份记录页的ComboBox选择项
         {
             get => _backupRecordComboBoxSelectedIndex;
             set
@@ -109,7 +109,7 @@ namespace Chamberlain_UWP.Backup
                 OnPropertyChanged(nameof(BackupRecordComboBoxSelectedIndex));
                 OnPropertyChanged(nameof(BackupRecordPathText)); //连锁
             }
-        } //备份记录页的ComboBox选择项
+        }
         public string BackupRecordPathText //备份记录页ComboBox选择项对应的路径
         {
             get
@@ -120,6 +120,16 @@ namespace Chamberlain_UWP.Backup
                     return BackupPathRecords[BackupRecordComboBoxSelectedIndex].Path;
             }
         }
+        public ObservableCollection<BackupTask> BackupTasks //ObservableCollection备份列表
+        {
+            get => _backupTasks;
+            set
+            {
+                _backupTasks = value;
+                OnPropertyChanged(nameof(BackupTasks));
+            }
+        }
+
 
 
         /// <summary>
@@ -188,6 +198,8 @@ namespace Chamberlain_UWP.Backup
         }
         public void AddBackupTask()
         {
+            //if(BackupPathRecords.Count>0 && SavePathRecords.Count > 0)
+            //    BackupTasks.Add(new BackupTask(BackupPathRecords[0],SavePathRecords[0]));
         }
     }
 }
