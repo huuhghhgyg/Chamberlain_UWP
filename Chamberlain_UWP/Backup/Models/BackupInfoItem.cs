@@ -11,13 +11,14 @@ namespace Chamberlain_UWP.Backup.Models
     public class FileNode //文件节点
     {
         public StorageFile File { get; set; } //可供操作的文件对象
-        public string Hash { get; set; } //文件哈希值
+        public int Hash { get => File.GetHashCode(); } //文件哈希值
         public string RelativePath { get; set; } //文件相对路径
-        public FileNode(StorageFile file, string hash, string relative_path)
+        public string RelativeFolder { get; set; } //文件相对文件夹
+        public FileNode(StorageFile file, string relative_path)
         {
             File = file;
-            Hash = hash;
             RelativePath = relative_path;
+            RelativeFolder = relative_path.Substring(0, relative_path.Length - file.Name.Length - 1);
         }
     }
     public class PathRecord //路径记录
@@ -25,7 +26,7 @@ namespace Chamberlain_UWP.Backup.Models
         public StorageFolder Folder { get; set; }
         public string Path { get => Folder.Path; }
         public string Name { get => Folder.Name; }
-        public int Hash { get => Folder.Path.GetHashCode(); }
+        public string Hash { get => Folder.Path.GetHashCode().ToString(); } //路径本身的Hash
 
         public PathRecord(StorageFolder folder)
         {

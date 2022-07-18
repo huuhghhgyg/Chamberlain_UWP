@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
 using Windows.UI.Xaml.Controls;
 
 namespace Chamberlain_UWP.Backup
@@ -55,6 +56,7 @@ namespace Chamberlain_UWP.Backup
         ObservableCollection<BackupTaskData> _backupTasks = new ObservableCollection<BackupTaskData>(); //备份任务数据
         ObservableCollection<BackupPathString> _backupPathNames = new ObservableCollection<BackupPathString>();
         ObservableCollection<SavePathString> _savePathNames = new ObservableCollection<SavePathString>();
+        internal BackupManager Manager = new BackupManager();
 
         /// <summary>
         /// 属性区
@@ -84,13 +86,10 @@ namespace Chamberlain_UWP.Backup
             {
                 _backupProgress = value;
                 OnPropertyChanged(nameof(BackupProgress));
-                OnPropertyChanged(nameof(BackupProgressString));
+                //OnPropertyChanged(nameof(BackupProgressString));
             }
         }
-        public string BackupProgressString //备份卡片进度标志
-        {
-            get => $"{_backupProgress}%";
-        }
+
         public bool IsBackupCardVisible //备份卡片是否可见
         {
             get => _isAnyBackupTask;
@@ -192,14 +191,16 @@ namespace Chamberlain_UWP.Backup
             if (BackupTaskSelectedIndex != -1)
             {
                 BackupTaskData selectedTask = BackupTasks[BackupTaskSelectedIndex];
-                ContentDialog noWifiDialog = new ContentDialog
+                ContentDialog selectedTaskDiaglog = new ContentDialog
                 {
                     Title = "选中的任务如下",
                     Content = $"\"{selectedTask.BackupPath}\" -> \"{selectedTask.SavePath}\"",
                     CloseButtonText = "Ok"
                 };
 
-                ContentDialogResult result = await noWifiDialog.ShowAsync();
+                ContentDialogResult result = await selectedTaskDiaglog.ShowAsync();
+
+                Manager.RunTotalBackup(selectedTask.BackupPath, selectedTask.SavePath);
             }
         }
 
@@ -220,12 +221,7 @@ namespace Chamberlain_UWP.Backup
             folderPicker.FileTypeFilter.Add("*");
 
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
-            if (folder != null)
-            {
-                //GetFolder(folder);
-                return folder;
-            }
-            else return null;
+            return folder;
         }
 
         public async void Add2SavePathList() //添加到保存路径
@@ -235,15 +231,22 @@ namespace Chamberlain_UWP.Backup
             {
                 SavePathRecords.Add(new PathRecord(folder)); //UI
                 _savePathNames.Add(new SavePathString(folder.Path));
-                BackupManager.SaveFolderList.Add(new PathRecord(folder));
+                PathRecord save_path = new PathRecord(folder);
+                Manager.SaveFolderList.Add(save_path);
+                //添加访问权限
+                StorageApplicationPermissions.FutureAccessList.AddOrReplace(save_path.Hash, save_path.Folder); //添加访问token
             }
         }
         public void DelFromSavePathList() //从保存路径移除
         {
             if (SavePathRecordsSelectedIndex != -1)
             {
+                // 删除访问权限
+                PathRecord save_path = Manager.SaveFolderList[SavePathRecordsSelectedIndex];
+                StorageApplicationPermissions.FutureAccessList.Remove(save_path.Hash); //删除访问token
+
                 _savePathNames.RemoveAt(SavePathRecordsSelectedIndex);
-                BackupManager.SaveFolderList.RemoveAt(SavePathRecordsSelectedIndex);
+                Manager.SaveFolderList.RemoveAt(SavePathRecordsSelectedIndex);
                 SavePathRecords.RemoveAt(SavePathRecordsSelectedIndex); //UI
             }
         }
@@ -254,15 +257,22 @@ namespace Chamberlain_UWP.Backup
             {
                 BackupPathRecords.Add(new PathRecord(folder)); //UI
                 _backupPathNames.Add(new BackupPathString(folder.Path));
-                BackupManager.BackupFolderList.Add(new PathRecord(folder));
+                PathRecord backup_path = new PathRecord(folder);
+                Manager.BackupFolderList.Add(backup_path);
+                //添加访问权限
+                StorageApplicationPermissions.FutureAccessList.AddOrReplace(backup_path.Hash, backup_path.Folder); //添加访问token
             }
         }
         public void DelFromBackupPathList() //从删除路径中移除
         {
             if (BackupPathRecordsSelectedIndex != -1)
             {
+                // 删除访问权限
+                PathRecord backup_path = Manager.BackupFolderList[BackupPathRecordsSelectedIndex];
+                StorageApplicationPermissions.FutureAccessList.Remove(backup_path.Hash); //删除访问token
+
                 BackupPathNames.RemoveAt(BackupPathRecordsSelectedIndex);
-                BackupManager.BackupFolderList.RemoveAt(BackupPathRecordsSelectedIndex);
+                Manager.BackupFolderList.RemoveAt(BackupPathRecordsSelectedIndex);
                 BackupPathRecords.RemoveAt(BackupPathRecordsSelectedIndex); //UI
             }
         }
@@ -275,7 +285,7 @@ namespace Chamberlain_UWP.Backup
         }
         public void DelFromBackupTask()
         {
-            if (BackupTaskSelectedIndex!=-1) BackupTasks.RemoveAt(BackupTaskSelectedIndex);
+            if (BackupTaskSelectedIndex != -1) BackupTasks.RemoveAt(BackupTaskSelectedIndex);
         }
     }
 }

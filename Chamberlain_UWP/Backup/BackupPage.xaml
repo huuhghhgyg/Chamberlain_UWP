@@ -82,11 +82,13 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{x:Bind ViewModel.BackupTitle,Mode=OneWay}" Foreground="{ThemeResource TextFillColorPrimary}"/>
-                                    <TextBlock Text="{x:Bind ViewModel.BackupProgressString,Mode=OneWay}" Grid.Column="1"
+                                    <TextBlock Text="{x:Bind ViewModel.Manager.BackupProgressString,Mode=OneWay}" Grid.Column="1"
                                        Foreground="{ThemeResource TextFillColorPrimary}"/>
                                 </Grid>
-                                <muxc:ProgressBar Value="{x:Bind ViewModel.BackupProgress,Mode=OneWay}" Grid.Row="1" Margin="0,8"/>
-                                <TextBlock Text="{x:Bind ViewModel.BackupDescription,Mode=OneWay}" Grid.Row="2"
+                                <muxc:ProgressBar Value="{x:Bind ViewModel.Manager.BackupedFileCount,Mode=OneWay}"
+                                                  Maximum="{x:Bind ViewModel.Manager.TotalFileCount,Mode=OneWay}"
+                                                  Grid.Row="1" Margin="0,8"/>
+                                <TextBlock Text="{x:Bind ViewModel.Manager.WorkingFilePath,Mode=OneWay}" Grid.Row="2"
                                    Style="{StaticResource CaptionTextBlockStyle}" 
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                             </Grid>

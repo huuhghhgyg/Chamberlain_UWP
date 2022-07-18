@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,16 +13,65 @@ using Windows.Storage.Streams;
 
 namespace Chamberlain_UWP.Backup.Models
 {
-    internal static class BackupManager
+    internal class BackupManager:INotifyPropertyChanged
     {
         // 变量区
-        private static string backup_folder_path = ""; //备份文件夹的路径
-        public static List<PathRecord> BackupFolderList = new List<PathRecord>(); //备份文件夹路径列表
-        public static List<PathRecord> SaveFolderList = new List<PathRecord>(); //目标文件夹路径列表
-        public static List<BackupTask> BackupTaskList = new List<BackupTask>(); //备份任务描述列表
+        private string backup_folder_path = ""; //备份文件夹的路径
+        public List<PathRecord> BackupFolderList = new List<PathRecord>(); //备份文件夹路径列表
+        public List<PathRecord> SaveFolderList = new List<PathRecord>(); //目标文件夹路径列表
+        public List<BackupTask> BackupTaskList = new List<BackupTask>(); //备份任务描述列表
+        int _totalFileCount = 0; //需要备份的文件总数
+        int _backupedFileCount = 0; //已备份文件总数
+        string _workingFilePath = ""; //正在备份的文件
+
+        public int TotalFileCount
+        {
+            get => _totalFileCount;
+            set
+            {
+                _totalFileCount = value;
+                OnPropertyChanged(nameof(TotalFileCount));
+            }
+        }
+        public int BackupedFileCount
+        {
+            get => _backupedFileCount;
+            set
+            {
+                _backupedFileCount = value;
+                OnPropertyChanged(nameof(BackupedFileCount));
+                OnPropertyChanged(nameof(BackupProgressString));
+            }
+        }
+        public string WorkingFilePath
+        {
+            get => _workingFilePath;
+            set
+            {
+                _workingFilePath = value;
+                OnPropertyChanged(nameof(WorkingFilePath));
+            }
+        }
+        public string BackupProgressString //备份卡片进度标志
+        {
+            get
+            {
+                double _backupProgress = 0;
+                if (TotalFileCount != 0) _backupProgress = 100.0 * BackupedFileCount / TotalFileCount;
+                return $"{_backupProgress.ToString("0.0")}%";
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         // 函数区
-        public static async Task<string> GetMD5HashAsync(StorageFile file) //可用
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public async Task<string> GetMD5HashAsync(StorageFile file) //可用
         {
             string algorithmName = HashAlgorithmNames.Md5;
             IBuffer buffer = await FileIO.ReadBufferAsync(file);
@@ -40,22 +90,23 @@ namespace Chamberlain_UWP.Backup.Models
             return hex;
         }
 
-        public static void QueryBackupTask(string backup_path, string save_path)
+        public void QueryBackupTask(string backup_path, string save_path,out PathRecord backup_record,out PathRecord save_record)
         {
             //查询得到数据
             var backup_query = from PathRecord record in BackupFolderList
                                where record.Path == backup_path
                                select record;
-            PathRecord backup_record = backup_query.FirstOrDefault();
+            backup_record = backup_query.FirstOrDefault(); //备份路径记录
             var save_query = from PathRecord record in SaveFolderList
                              where record.Path == save_path
                              select record;
-            PathRecord save_record = save_query.FirstOrDefault();
+            save_record = save_query.FirstOrDefault(); //保存路径记录
+
             if (save_record == null || backup_record == null)
                 throw new Exception("路径不存在"); //需要返回重新选择
         }
 
-        public static async void QuickBackupFolder(string folder_token, string goal_token) // 快速备份
+        public async void QuickBackupFolder(string folder_token, string goal_token) // 快速备份
         {
             StorageFolder rootFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(folder_token);
             if (rootFolder == null)
@@ -76,7 +127,7 @@ namespace Chamberlain_UWP.Backup.Models
              */
         }
 
-        public static async void TotalBackupFolder(string folder_token, string goal_token) // 完整备份
+        public async void TotalBackupFolder(string folder_token, string goal_token) // 完整备份
         {
             StorageFolder rootFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(folder_token);
             StorageFolder goalFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(goal_token);
@@ -91,13 +142,55 @@ namespace Chamberlain_UWP.Backup.Models
 
             // 获取所有文件
             IReadOnlyList<StorageFile> all_files = await rootFolder.GetFilesAsync(Windows.Storage.Search.CommonFileQuery.OrderBySearchRank);
+            TotalFileCount = all_files.Count; //需要备份的文件总数
             List<FileNode> file_node_list = new List<FileNode>();
             foreach(StorageFile file in all_files)
             {
-                string md5 = await GetMD5HashAsync(file);
                 string relative_path = file.Path.Substring(backup_folder_path.Length);
-                file_node_list.Add(new FileNode(file, md5, relative_path));
+                file_node_list.Add(new FileNode(file, relative_path));
             }
+
+            //在保存目录创建文件夹(2022-07-17-1105)
+            string backup_date = DateTime.Now.ToString("yyyy-MM-dd-HHmm");
+
+            StorageFolder versionFolder = await goalFolder.CreateFolderAsync(backup_date);
+
+            foreach (FileNode fileNode in file_node_list)
+            {
+                WorkingFilePath = fileNode.File.Path; //更新正在工作的文件路径
+
+                List<string> subfolders = fileNode.RelativeFolder.Split("\\").ToList(); //切割相对路径
+                subfolders.RemoveAt(0); //第一个值为空，删掉
+
+                StorageFolder relative_folder = await CreateRelativePath(versionFolder, subfolders);
+                await fileNode.File.CopyAsync(relative_folder);
+                BackupedFileCount++; //增加一个完成文件
+            }
+
+            ; // 结束标志
+        }
+
+        async Task<StorageFolder> CreateRelativePath(StorageFolder folder, List<string> paths)
+        {
+            StorageFolder newFolder = await folder.CreateFolderAsync(paths[0], CreationCollisionOption.OpenIfExists); //如果已经存在，则打开
+            paths.RemoveAt(0);
+            if (paths.Count > 0)
+            {
+                return await CreateRelativePath(newFolder, paths);
+            }
+            else return newFolder;
+        }
+
+        public void RunTotalBackup(string backup_path, string save_path)
+        {
+            //清除记录
+            TotalFileCount = 0;
+            BackupedFileCount = 0;
+
+            PathRecord backup_record, save_record;
+            QueryBackupTask(backup_path, save_path, out backup_record, out save_record);
+
+            TotalBackupFolder(backup_record.Hash, save_record.Hash);
         }
     }
 }
