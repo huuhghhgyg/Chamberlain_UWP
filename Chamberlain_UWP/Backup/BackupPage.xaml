@@ -81,13 +81,14 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{x:Bind ViewModel.BackupTitle,Mode=OneWay}" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                                    <TextBlock Text="{x:Bind ViewModel.Manager.BackupTaskStageString,Mode=OneWay}" Foreground="{ThemeResource TextFillColorPrimary}"/>
                                     <TextBlock Text="{x:Bind ViewModel.Manager.BackupProgressString,Mode=OneWay}" Grid.Column="1"
                                        Foreground="{ThemeResource TextFillColorPrimary}"/>
                                 </Grid>
-                                <muxc:ProgressBar Value="{x:Bind ViewModel.Manager.BackupedFileCount,Mode=OneWay}"
+                                <muxc:ProgressBar Value="{x:Bind ViewModel.Manager.ProcessedFileCount,Mode=OneWay}"
                                                   Maximum="{x:Bind ViewModel.Manager.TotalFileCount,Mode=OneWay}"
-                                                  Grid.Row="1" Margin="0,8"/>
+                                                  Grid.Row="1" Margin="0,8"
+                                                  IsIndeterminate="{x:Bind ViewModel.Manager.IsScanning,Mode=OneWay}"/>
                                 <TextBlock Text="{x:Bind ViewModel.Manager.WorkingFilePath,Mode=OneWay}" Grid.Row="2"
                                    Style="{StaticResource CaptionTextBlockStyle}" 
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
@@ -96,11 +97,29 @@
                         <muxc:Expander.Content>
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="取消" Margin="0,0,8,0"/>
-                                <Button Style="{StaticResource AccentButtonStyle}" Content="暂停" Click="{x:Bind ViewModel.Backup_Suspend}"/>
+                                <ToggleButton Content="显示详细信息" IsChecked="{x:Bind ViewModel.Manager.ShowDetail,Mode=TwoWay}"/>
                             </StackPanel>
                         </muxc:Expander.Content>
                     </muxc:Expander>
                     <TextBlock Text="（无任务）" Visibility="{x:Bind ViewModel.IsNoTaskTextVisible,Mode=OneWay}"/>
+                    <StackPanel Visibility="{x:Bind ViewModel.Manager.IsAnyError,Mode=OneWay}">
+                        <!--错误列表-->
+                        <TextBlock Text="错误信息" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <Grid Style="{StaticResource CardGrid}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
+                                <AppBarButton Icon="Clear" Label="清除" Click="{x:Bind ViewModel.Manager.ClearErrorMessages}"/>
+                            </CommandBar>
+                            <ListView BorderThickness="1"
+                                  BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                                  Height="160" Grid.Row="1"
+                                  HorizontalAlignment="Stretch"
+                                  ItemsSource="{x:Bind ViewModel.Manager.ErrorMessages,Mode=OneWay}"/>
+                        </Grid>
+                    </StackPanel>
                 </StackPanel>
 
                 <!--列表Pivot，外面套壳是为了调整间隙-->
@@ -113,8 +132,8 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
-                                    <AppBarButton Icon="Play" Label="快速备份" Click="{x:Bind ViewModel.Backup_Start}"/>
-                                    <AppBarButton Icon="MoveToFolder" Label="完整备份" Click="{x:Bind ViewModel.SwitchTaskState}"/>
+                                    <AppBarButton Icon="Play" Label="快速备份" Click="{x:Bind ViewModel.SwitchTaskState}"/>
+                                    <AppBarButton Icon="MoveToFolder" Label="完整备份" Click="{x:Bind ViewModel.Backup_Start}"/>
                                     <AppBarButton Icon="Add" Label="添加" Click="{x:Bind ViewModel.AddBackupTask}"/>
                                     <AppBarButton Icon="Delete" Label="删除" Click="{x:Bind ViewModel.DelFromBackupTask}"/>
                                 </CommandBar>

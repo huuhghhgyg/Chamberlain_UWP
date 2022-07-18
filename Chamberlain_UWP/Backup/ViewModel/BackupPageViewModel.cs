@@ -44,11 +44,6 @@ namespace Chamberlain_UWP.Backup
         /// <summary>
         /// 内部变量区
         /// </summary>
-        string _backupTitle = "第1项，共3项"; //备份卡片标题
-        string _backupDesc = "正在备份[具体的文件]"; //备份卡片描述（正在备份的文件）
-        double _backupProgress = 20.0; //备份进度（max=100）
-        bool _isAnyBackupTask = false; //是否正在执行备份任务
-
         ObservableCollection<PathRecord> _backupPathRecords = new ObservableCollection<PathRecord>(); //备份页数据
         int _backupRecordComboBoxSelectedIndex = -1;
         ObservableCollection<PathRecord> _savePathRecords = new ObservableCollection<PathRecord>(); //保存页数据
@@ -57,58 +52,25 @@ namespace Chamberlain_UWP.Backup
         ObservableCollection<BackupPathString> _backupPathNames = new ObservableCollection<BackupPathString>();
         ObservableCollection<SavePathString> _savePathNames = new ObservableCollection<SavePathString>();
         internal BackupManager Manager = new BackupManager();
+        bool _isBackupCardVisible = false;
 
         /// <summary>
         /// 属性区
         /// </summary>
-        public string BackupTitle //备份卡片标题
-        {
-            get { return _backupTitle; }
-            set
-            {
-                _backupTitle = value;
-                OnPropertyChanged(nameof(BackupTitle));
-            }
-        }
-        public string BackupDescription //备份卡片描述
-        {
-            get { return _backupDesc; }
-            set
-            {
-                _backupDesc = value;
-                OnPropertyChanged(nameof(BackupDescription));
-            }
-        }
-        public double BackupProgress //备份卡片进度
-        {
-            get { return _backupProgress; }
-            set
-            {
-                _backupProgress = value;
-                OnPropertyChanged(nameof(BackupProgress));
-                //OnPropertyChanged(nameof(BackupProgressString));
-            }
-        }
 
         public bool IsBackupCardVisible //备份卡片是否可见
         {
-            get => _isAnyBackupTask;
+            get => _isBackupCardVisible;
             set
             {
-                _isAnyBackupTask = value;
+                _isBackupCardVisible = value;
                 OnPropertyChanged(nameof(IsBackupCardVisible));
                 OnPropertyChanged(nameof(IsNoTaskTextVisible));
             }
         }
         public bool IsNoTaskTextVisible //无任务提示是否可见
         {
-            get => !_isAnyBackupTask;
-            set
-            {
-                _isAnyBackupTask = value;
-                OnPropertyChanged(nameof(IsBackupCardVisible));
-                OnPropertyChanged(nameof(IsNoTaskTextVisible));
-            }
+            get => !IsBackupCardVisible;
         }
         public ObservableCollection<PathRecord> BackupPathRecords //ObservableCollection备份列表
         {
@@ -174,17 +136,6 @@ namespace Chamberlain_UWP.Backup
         /// <summary>
         /// 方法区
         /// </summary>
-        public void Backup_Suspend() //备份暂停
-        {
-            if (BackupProgress >= 90)
-            {
-                BackupProgress = 10;
-            }
-            else
-            {
-                BackupProgress += 10;
-            }
-        }
 
         public async void Backup_Start()
         {
@@ -200,6 +151,7 @@ namespace Chamberlain_UWP.Backup
 
                 ContentDialogResult result = await selectedTaskDiaglog.ShowAsync();
 
+                IsBackupCardVisible = true;
                 Manager.RunTotalBackup(selectedTask.BackupPath, selectedTask.SavePath);
             }
         }
@@ -211,7 +163,6 @@ namespace Chamberlain_UWP.Backup
 
         public void SwitchTaskState() //更改备份状态
         {
-            IsBackupCardVisible = !IsBackupCardVisible;
         }
 
         async Task<StorageFolder> OpenFolder()
@@ -287,5 +238,6 @@ namespace Chamberlain_UWP.Backup
         {
             if (BackupTaskSelectedIndex != -1) BackupTasks.RemoveAt(BackupTaskSelectedIndex);
         }
+        public void ClearErrorMessages() => Manager.ErrorMessages.Clear();
     }
 }
