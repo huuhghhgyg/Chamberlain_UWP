@@ -16,7 +16,7 @@
     </Page.DataContext>
     <Page.Resources>
         <DataTemplate x:Key="BackupRecordComboBoxData" x:DataType="model:PathRecord">
-            <TextBlock Text="{x:Bind Name}"/>
+            <TextBlock Text="{x:Bind Path}"/>
         </DataTemplate>
         <DataTemplate x:Key="ErrorMessageListViewTemplate" x:DataType="x:String">
             <TextBlock Text="{x:Bind}" TextWrapping="Wrap"/>
@@ -170,7 +170,7 @@
                                     <ComboBox ItemTemplate="{StaticResource BackupRecordComboBoxData}"
                                               ItemsSource="{x:Bind ViewModel.BackupPathRecords,Mode=OneWay}"
                                               SelectedIndex="{x:Bind ViewModel.BackupRecordComboBoxSelectedIndex,Mode=TwoWay}"/>
-                                    <TextBlock Text="{x:Bind ViewModel.BackupRecordPathText,Mode=OneWay}" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    <!--<TextBlock Text="{x:Bind ViewModel.BackupRecordPathText,Mode=OneWay}" VerticalAlignment="Center" Margin="8,0,0,0"/>-->
                                 </StackPanel>
                                 <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                     <Grid.RowDefinitions>
@@ -181,10 +181,18 @@
                                         <AppBarButton Icon="Download" Label="恢复"/>
                                         <AppBarButton Icon="Delete" Label="删除"/>
                                     </CommandBar>
-                                    <ListView BorderThickness="1"
-                                      BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
-                                      Height="380" Grid.Row="1"
-                                      HorizontalAlignment="Stretch"/>
+                                    <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"
+                                                       ItemsSource="{x:Bind ViewModel.BackupVersionRecords,Mode=OneWay}"
+                                                       SelectedIndex="{x:Bind ViewModel.BackupVersionRecordListSelectedIndex,Mode=TwoWay}">
+                                        <controls:DataGrid.Columns>
+                                            <controls:DataGridTextColumn Header="备份时间"
+                                                                     Binding="{Binding BackupTime, Mode=OneWay}"/>
+                                            <controls:DataGridTextColumn Header="保存路径"
+                                                                     Binding="{Binding SaveFolderPath, Mode=OneWay}"/>
+                                            <controls:DataGridTextColumn Header="完整备份"
+                                                                     Binding="{Binding IsFullBackup, Mode=OneWay}"/>
+                                        </controls:DataGrid.Columns>
+                                    </controls:DataGrid>
                                 </Grid>
                             </StackPanel>
                         </PivotItem>
@@ -200,6 +208,7 @@
                                     <AppBarButton Icon="Delete" Label="删除" Click="{x:Bind ViewModel.DelFromBackupPathList}"/>
                                 </CommandBar>
                                 <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"
+                                                   IsReadOnly="True"
                                                    ItemsSource="{x:Bind ViewModel.BackupPathRecords,Mode=OneWay}"
                                                    SelectedIndex="{x:Bind ViewModel.BackupPathRecordsSelectedIndex,Mode=TwoWay}">
                                     <controls:DataGrid.Columns>
@@ -223,6 +232,7 @@
                                     <AppBarButton Icon="Delete" Label="删除" Click="{x:Bind ViewModel.DelFromSavePathList}"/>
                                 </CommandBar>
                                 <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"
+                                                   IsReadOnly="True"
                                                    ItemsSource="{x:Bind ViewModel.SavePathRecords,Mode=OneWay}"
                                                    SelectedIndex="{x:Bind ViewModel.SavePathRecordsSelectedIndex,Mode=TwoWay}">
                                     <controls:DataGrid.Columns>

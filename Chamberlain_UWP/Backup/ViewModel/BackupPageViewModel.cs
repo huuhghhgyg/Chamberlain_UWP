@@ -21,8 +21,10 @@ namespace Chamberlain_UWP.Backup
         public static ObservableCollection<PathRecord> _savePathRecords = new ObservableCollection<PathRecord>(); //保存页数据
         //备份任务DataGrid
         public static ObservableCollection<BackupTaskData> _backupTasks = new ObservableCollection<BackupTaskData>(); //备份任务数据
-        public static ObservableCollection<BackupPathString> _backupPathNames = new ObservableCollection<BackupPathString>();
-        public static ObservableCollection<SavePathString> _savePathNames = new ObservableCollection<SavePathString>();
+        public static ObservableCollection<BackupPathString> _backupPathNames = new ObservableCollection<BackupPathString>(); //备份目录路径
+        public static ObservableCollection<SavePathString> _savePathNames = new ObservableCollection<SavePathString>(); //保存目录路径
+        //备份记录
+        public static ObservableCollection<BackupVersionRecord> _backupVersionRecords = new ObservableCollection<BackupVersionRecord>(); //备份记录列表
     }
     public class BackupTaskData //用于DataGrid的绑定
     {
@@ -115,8 +117,14 @@ namespace Chamberlain_UWP.Backup
             {
                 _backupRecordComboBoxSelectedIndex = value;
                 OnPropertyChanged(nameof(BackupRecordComboBoxSelectedIndex));
-                OnPropertyChanged(nameof(BackupRecordPathText)); //连锁
+                //OnPropertyChanged(nameof(BackupRecordPathText)); //连锁
+                Manager.GetBackupVersionList(BackupRecordComboBoxSelectedPath); //获取列表
+                OnPropertyChanged(nameof(BackupVersionRecords));
             }
+        }
+        public string BackupRecordComboBoxSelectedPath //选中项的值
+        {
+            get => BackupPathRecords[BackupRecordComboBoxSelectedIndex].Path;
         }
         public string BackupRecordPathText //备份记录页ComboBox选择项对应的路径
         {
@@ -155,6 +163,16 @@ namespace Chamberlain_UWP.Backup
                 //Manager.GenerateJsonAsync(Manager.BackupTaskList, Manager.BackupTaskJsonName); //保存备份任务列表
             }
         }
+        public ObservableCollection<BackupVersionRecord> BackupVersionRecords
+        {
+            get => BackupPageData._backupVersionRecords;
+            set
+            {
+                BackupPageData._backupVersionRecords = value;
+                OnPropertyChanged(nameof(BackupVersionRecords));
+            }
+        }
+        public int BackupVersionRecordListSelectedIndex { get; set; } = -1;
 
         /// <summary>
         /// 方法区

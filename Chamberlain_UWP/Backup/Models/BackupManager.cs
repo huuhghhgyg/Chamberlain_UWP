@@ -39,6 +39,7 @@ namespace Chamberlain_UWP.Backup.Models
         ObservableCollection<string> _errorMessages = new ObservableCollection<string>(); //存放错误信息
         bool _isScanning = false;
         bool _showDetail = true;
+        public List<BackupVersionRecord> BackupVersionRecordList = new List<BackupVersionRecord>(); //存放历史备份
 
         public int TotalFileCount
         {
@@ -223,6 +224,9 @@ namespace Chamberlain_UWP.Backup.Models
                 else throw new Exception("无法访问目标文件夹token");
             }
 
+            //添加备份记录
+            await SaveBackupVersionFileAsync(goalFolder, rootFolder.Path, true);
+
             // 获取基本信息
             backup_folder_path = rootFolder.Path; //备份文件夹的路径
 
@@ -324,6 +328,7 @@ namespace Chamberlain_UWP.Backup.Models
         public readonly string BackupJsonName = "BackupFolders.json";
         public readonly string SaveJsonName = "SaveFolders.json";
         public readonly string BackupTaskJsonName = "BackupTasks.json";
+        public readonly string BackupVersionJsonName = "BackupVersion.json";
         internal readonly StorageFolder AppFolder = ApplicationData.Current.LocalFolder;
         public async void GenerateJsonAsync(List<PathRecord> list, string filename)
         {
@@ -350,32 +355,87 @@ namespace Chamberlain_UWP.Backup.Models
         }
         public async Task LoadData() //读取数据
         {
-            //获取文件
-            StorageFile backupFile = await AppFolder.GetFileAsync(BackupJsonName);
-            StorageFile saveFile = await AppFolder.GetFileAsync(SaveJsonName);
-            StorageFile backupTaskFile = await AppFolder.GetFileAsync(BackupTaskJsonName);
+            //确认文件是否存在
+            bool isExistBackupJson = await AppFolder.TryGetItemAsync(BackupJsonName) != null; //备份目录列表Json
+            bool isExistSaveJson = await AppFolder.TryGetItemAsync(SaveJsonName) != null; //保存目录列表Json
+            bool isExistBackupTaskJson = await AppFolder.TryGetItemAsync(BackupTaskJsonName) != null; //备份任务列表Json
 
-            //读取文件
-            BackupFolderList = JsonSerializer.Deserialize<List<PathRecord>>(await DataSettings.LoadFile(backupFile));
-            SaveFolderList = JsonSerializer.Deserialize<List<PathRecord>>(await DataSettings.LoadFile(saveFile));
-            BackupTaskList = JsonSerializer.Deserialize<List<BackupTaskData>>(await DataSettings.LoadFile(backupTaskFile));
-            //恢复folder
-            BackupFolderList.ForEach(async item => item.Folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(item.Hash));
-            SaveFolderList.ForEach(async item => item.Folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(item.Hash));
+            if (isExistBackupJson) //备份目录
+            {
+                StorageFile backupFile = await AppFolder.GetFileAsync(BackupJsonName); //获取文件
+                BackupFolderList = JsonSerializer.Deserialize<List<PathRecord>>(await DataSettings.LoadFile(backupFile)); //从文件中读取列表
+                BackupFolderList.ForEach(async item => item.Folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(item.Hash)); //获取folder
+                //恢复备份文件夹列表
+                BackupPageData._backupPathRecords = new ObservableCollection<PathRecord>(BackupFolderList);
+                List<BackupPathString> BackupFolderNames = (from PathRecord record in BackupFolderList
+                                                            select new BackupPathString(record.Path)).ToList();
+                BackupPageData._backupPathNames = new ObservableCollection<BackupPathString>(BackupFolderNames);
+            }
 
-            //恢复备份文件夹
-            BackupPageData._backupPathRecords = new ObservableCollection<PathRecord>(BackupFolderList);
-            List<BackupPathString> BackupFolderNames = (from PathRecord record in BackupFolderList
-                                                        select new BackupPathString(record.Path)).ToList();
-            BackupPageData._backupPathNames = new ObservableCollection<BackupPathString>(BackupFolderNames);
-            //恢复目标文件夹
-            BackupPageData._savePathRecords = new ObservableCollection<PathRecord>(SaveFolderList);
-            List<SavePathString> SaveFolderNames = (from PathRecord record in SaveFolderList
-                                                    select new SavePathString(record.Path)).ToList();
-            BackupPageData._savePathNames = new ObservableCollection<SavePathString>(SaveFolderNames);
-            //恢复任务列表
-            BackupPageData._backupTasks = new ObservableCollection<BackupTaskData>(BackupTaskList);
+            if (isExistSaveJson) //保存目录
+            {
+                StorageFile saveFile = await AppFolder.GetFileAsync(SaveJsonName); //获取文件
+                SaveFolderList = JsonSerializer.Deserialize<List<PathRecord>>(await DataSettings.LoadFile(saveFile)); //从文件中读取列表
+                SaveFolderList.ForEach(async item => item.Folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(item.Hash)); //获取folder
+                //恢复目标文件夹列表
+                BackupPageData._savePathRecords = new ObservableCollection<PathRecord>(SaveFolderList);
+                List<SavePathString> SaveFolderNames = (from PathRecord record in SaveFolderList
+                                                        select new SavePathString(record.Path)).ToList();
+                BackupPageData._savePathNames = new ObservableCollection<SavePathString>(SaveFolderNames);
+            }
+
+            if (isExistBackupTaskJson) //备份任务
+            {
+                StorageFile backupTaskFile = await AppFolder.GetFileAsync(BackupTaskJsonName);
+                BackupTaskList = JsonSerializer.Deserialize<List<BackupTaskData>>(await DataSettings.LoadFile(backupTaskFile));
+                //恢复任务列表
+                BackupPageData._backupTasks = new ObservableCollection<BackupTaskData>(BackupTaskList);
+            }
+
+            foreach (PathRecord record in SaveFolderList) //读取备份版本列表
+            {
+                if (await record.Folder.TryGetItemAsync(BackupVersionJsonName) != null) //文件存在
+                {
+                    StorageFile file = await record.Folder.GetFileAsync(BackupVersionJsonName);
+                    List<BackupVersionRecord> list = JsonSerializer.Deserialize<List<BackupVersionRecord>>(await DataSettings.LoadFile(file));
+                    BackupVersionRecordList.AddRange(list);
+                }
+            }
         }
 
+        //Query对应数据
+        public void GetBackupVersionList(string backupPath)
+        {
+            var queryResults = (from BackupVersionRecord record in BackupVersionRecordList
+                                where record.BackupFolderPath == backupPath
+                                select record).ToList();
+            BackupPageData._backupVersionRecords = new ObservableCollection<BackupVersionRecord>(queryResults);
+        }
+
+        //保存备份文件版本到对应文件夹
+        public async Task SaveBackupVersionFileAsync(StorageFolder saveFolder, string backupPath, bool isFullBackup) //保存文件夹，备份路径
+        {
+            List<BackupVersionRecord> list = new List<BackupVersionRecord>(); //预先创建列表
+            if (await saveFolder.TryGetItemAsync(BackupVersionJsonName) != null) //判断文件是否存在
+            {
+                //文件存在，读取内容到列表
+                string contents = await DataSettings.LoadFile(await saveFolder.GetFileAsync(BackupVersionJsonName)); //读取数据
+                list = JsonSerializer.Deserialize<List<BackupVersionRecord>>(contents); //从文件中读取列表
+            }
+            BackupVersionRecord record = new BackupVersionRecord(isFullBackup, DateTime.Now, backupPath, saveFolder.Path); //创先新条目
+            BackupVersionRecordList.Add(record); //添加到全局列表中
+            list.Add(record); //往列表添加新条目
+
+            //导出Json文本
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = false,
+                IncludeFields = true,
+            };
+            string jsonContent = JsonSerializer.Serialize(list, options);
+
+            //导出文件
+            await DataSettings.ExportToFile(saveFolder, BackupVersionJsonName, jsonContent);
+        }
     }
 }
