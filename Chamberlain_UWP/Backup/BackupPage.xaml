@@ -18,6 +18,9 @@
         <DataTemplate x:Key="BackupRecordComboBoxData" x:DataType="model:PathRecord">
             <TextBlock Text="{x:Bind Name}"/>
         </DataTemplate>
+        <DataTemplate x:Key="ErrorMessageListViewTemplate" x:DataType="x:String">
+            <TextBlock Text="{x:Bind}" TextWrapping="Wrap"/>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid>
@@ -114,10 +117,11 @@
                                 <AppBarButton Icon="Clear" Label="清除" Click="{x:Bind ViewModel.Manager.ClearErrorMessages}"/>
                             </CommandBar>
                             <ListView BorderThickness="1"
-                                  BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
-                                  Height="160" Grid.Row="1"
-                                  HorizontalAlignment="Stretch"
-                                  ItemsSource="{x:Bind ViewModel.Manager.ErrorMessages,Mode=OneWay}"/>
+                                      BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                                      Height="160" Grid.Row="1"
+                                      HorizontalAlignment="Stretch"
+                                      ItemsSource="{x:Bind ViewModel.Manager.ErrorMessages,Mode=OneWay}"
+                                      ItemTemplate="{StaticResource ErrorMessageListViewTemplate}"/>
                         </Grid>
                     </StackPanel>
                 </StackPanel>

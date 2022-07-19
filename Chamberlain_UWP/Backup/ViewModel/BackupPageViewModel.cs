@@ -1,10 +1,12 @@
 ﻿using Chamberlain_UWP.Backup.Models;
+using Chamberlain_UWP.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
@@ -13,6 +15,15 @@ using Windows.UI.Xaml.Controls;
 
 namespace Chamberlain_UWP.Backup
 {
+    public static class BackupPageData
+    {
+        public static ObservableCollection<PathRecord> _backupPathRecords = new ObservableCollection<PathRecord>(); //备份页数据
+        public static ObservableCollection<PathRecord> _savePathRecords = new ObservableCollection<PathRecord>(); //保存页数据
+        //备份任务DataGrid
+        public static ObservableCollection<BackupTaskData> _backupTasks = new ObservableCollection<BackupTaskData>(); //备份任务数据
+        public static ObservableCollection<BackupPathString> _backupPathNames = new ObservableCollection<BackupPathString>();
+        public static ObservableCollection<SavePathString> _savePathNames = new ObservableCollection<SavePathString>();
+    }
     public class BackupTaskData //用于DataGrid的绑定
     {
         public string BackupPath { get; set; }
@@ -21,6 +32,12 @@ namespace Chamberlain_UWP.Backup
         {
             BackupPath = BackupFolder.Path;
             SavePath = SaveFolder.Path;
+        }
+        [JsonConstructor]
+        public BackupTaskData(string backupPath, string savePath)
+        {
+            BackupPath = backupPath;
+            SavePath = savePath;
         }
     }
     public class BackupPathString
@@ -44,13 +61,8 @@ namespace Chamberlain_UWP.Backup
         /// <summary>
         /// 内部变量区
         /// </summary>
-        ObservableCollection<PathRecord> _backupPathRecords = new ObservableCollection<PathRecord>(); //备份页数据
         int _backupRecordComboBoxSelectedIndex = -1;
-        ObservableCollection<PathRecord> _savePathRecords = new ObservableCollection<PathRecord>(); //保存页数据
-        //备份任务DataGrid
-        ObservableCollection<BackupTaskData> _backupTasks = new ObservableCollection<BackupTaskData>(); //备份任务数据
-        ObservableCollection<BackupPathString> _backupPathNames = new ObservableCollection<BackupPathString>();
-        ObservableCollection<SavePathString> _savePathNames = new ObservableCollection<SavePathString>();
+        int _backupTaskSelectedIndex = -1; //任务列表选中任务项
         internal BackupManager Manager = new BackupManager();
         bool _isBackupCardVisible = false;
 
@@ -74,10 +86,10 @@ namespace Chamberlain_UWP.Backup
         }
         public ObservableCollection<PathRecord> BackupPathRecords //ObservableCollection备份列表
         {
-            get => _backupPathRecords;
+            get => BackupPageData._backupPathRecords;
             set
             {
-                _backupPathRecords = value;
+                BackupPageData._backupPathRecords = value;
 
                 OnPropertyChanged(nameof(BackupPathRecords));
                 OnPropertyChanged(nameof(BackupPathNames));
@@ -86,11 +98,13 @@ namespace Chamberlain_UWP.Backup
         public int BackupPathRecordsSelectedIndex { get; set; } = -1; //选中的Index
         public ObservableCollection<PathRecord> SavePathRecords //ObservableCollection备份列表
         {
-            get => _savePathRecords;
+            get => BackupPageData._savePathRecords;
             set
             {
-                _savePathRecords = value;
+                BackupPageData._savePathRecords = value;
+
                 OnPropertyChanged(nameof(SavePathRecords));
+                OnPropertyChanged(nameof(SavePathNames));
             }
         }
         public int SavePathRecordsSelectedIndex { get; set; } = -1; //选中的Index
@@ -116,22 +130,31 @@ namespace Chamberlain_UWP.Backup
         }
         public ObservableCollection<BackupTaskData> BackupTasks //ObservableCollection备份列表
         {
-            get => _backupTasks;
+            get => BackupPageData._backupTasks;
             set
             {
-                _backupTasks = value;
+                BackupPageData._backupTasks = value;
                 OnPropertyChanged(nameof(BackupTasks));
             }
         }
         public ObservableCollection<BackupPathString> BackupPathNames
         {
-            get => _backupPathNames;
+            get => BackupPageData._backupPathNames;
         }
         public ObservableCollection<SavePathString> SavePathNames
         {
-            get => _savePathNames;
+            get => BackupPageData._savePathNames;
         }
-        public int BackupTaskSelectedIndex { get; set; } = -1; //任务列表选中任务项
+        public int BackupTaskSelectedIndex
+        {
+            get => _backupTaskSelectedIndex;
+            set
+            {
+                _backupTaskSelectedIndex = value;
+                OnPropertyChanged(nameof(BackupTaskSelectedIndex));
+                Manager.GenerateJsonAsync(Manager.BackupTaskList, Manager.BackupTaskJsonName); //保存备份任务列表
+            }
+        }
 
         /// <summary>
         /// 方法区
@@ -181,11 +204,12 @@ namespace Chamberlain_UWP.Backup
             if (folder != null)
             {
                 SavePathRecords.Add(new PathRecord(folder)); //UI
-                _savePathNames.Add(new SavePathString(folder.Path));
+                BackupPageData._savePathNames.Add(new SavePathString(folder.Path));
                 PathRecord save_path = new PathRecord(folder);
                 Manager.SaveFolderList.Add(save_path);
                 //添加访问权限
                 StorageApplicationPermissions.FutureAccessList.AddOrReplace(save_path.Hash, save_path.Folder); //添加访问token
+                Manager.GenerateJsonAsync(Manager.SaveFolderList, Manager.SaveJsonName); //保存目标目录列表
             }
         }
         public void DelFromSavePathList() //从保存路径移除
@@ -196,9 +220,11 @@ namespace Chamberlain_UWP.Backup
                 PathRecord save_path = Manager.SaveFolderList[SavePathRecordsSelectedIndex];
                 StorageApplicationPermissions.FutureAccessList.Remove(save_path.Hash); //删除访问token
 
-                _savePathNames.RemoveAt(SavePathRecordsSelectedIndex);
+                BackupPageData._savePathNames.RemoveAt(SavePathRecordsSelectedIndex);
                 Manager.SaveFolderList.RemoveAt(SavePathRecordsSelectedIndex);
                 SavePathRecords.RemoveAt(SavePathRecordsSelectedIndex); //UI
+
+                Manager.GenerateJsonAsync(Manager.SaveFolderList, Manager.SaveJsonName); //保存目标目录列表
             }
         }
         public async void Add2BackupPathList() //添加到备份路径
@@ -207,11 +233,12 @@ namespace Chamberlain_UWP.Backup
             if (folder != null)
             {
                 BackupPathRecords.Add(new PathRecord(folder)); //UI
-                _backupPathNames.Add(new BackupPathString(folder.Path));
+                BackupPageData._backupPathNames.Add(new BackupPathString(folder.Path));
                 PathRecord backup_path = new PathRecord(folder);
                 Manager.BackupFolderList.Add(backup_path);
                 //添加访问权限
                 StorageApplicationPermissions.FutureAccessList.AddOrReplace(backup_path.Hash, backup_path.Folder); //添加访问token
+                Manager.GenerateJsonAsync(Manager.BackupFolderList, Manager.BackupJsonName); //保存备份文件列表
             }
         }
         public void DelFromBackupPathList() //从删除路径中移除
@@ -222,22 +249,42 @@ namespace Chamberlain_UWP.Backup
                 PathRecord backup_path = Manager.BackupFolderList[BackupPathRecordsSelectedIndex];
                 StorageApplicationPermissions.FutureAccessList.Remove(backup_path.Hash); //删除访问token
 
-                BackupPathNames.RemoveAt(BackupPathRecordsSelectedIndex);
+                BackupPageData._backupPathNames.RemoveAt(BackupPathRecordsSelectedIndex);
                 Manager.BackupFolderList.RemoveAt(BackupPathRecordsSelectedIndex);
                 BackupPathRecords.RemoveAt(BackupPathRecordsSelectedIndex); //UI
+
+                Manager.GenerateJsonAsync(Manager.BackupFolderList, Manager.BackupJsonName); //保存备份文件列表
             }
         }
         public void AddBackupTask()
         {
             if (BackupPathRecords.Count > 0 && SavePathRecords.Count > 0)
             {
-                BackupTasks.Add(new BackupTaskData(BackupPathRecords[0], SavePathRecords[0]));
+                BackupTaskData backupTask = new BackupTaskData(BackupPathRecords[0], SavePathRecords[0]);
+                BackupTasks.Add(backupTask); //添加到ObservableCollection
+                Manager.BackupTaskList.Add(backupTask); //同步到Manager
+                Manager.GenerateJsonAsync(Manager.BackupTaskList, Manager.BackupTaskJsonName); //保存备份任务列表
             }
         }
         public void DelFromBackupTask()
         {
-            if (BackupTaskSelectedIndex != -1) BackupTasks.RemoveAt(BackupTaskSelectedIndex);
+            if (BackupTaskSelectedIndex != -1)
+            {
+                Manager.BackupTaskList.RemoveAt(BackupTaskSelectedIndex); //先删除Manager中的数据
+                BackupTasks.RemoveAt(BackupTaskSelectedIndex); //移除ObservableCollection中的条目
+
+                Manager.GenerateJsonAsync(Manager.BackupTaskList, Manager.BackupTaskJsonName); //保存备份任务列表
+            }
         }
         public void ClearErrorMessages() => Manager.ErrorMessages.Clear();
+
+        public void RefershData()
+        {
+            OnPropertyChanged(nameof(BackupPathRecords));
+            OnPropertyChanged(nameof(BackupPathNames));
+            OnPropertyChanged(nameof(SavePathRecords));
+            OnPropertyChanged(nameof(SavePathNames));
+            OnPropertyChanged(nameof(BackupTasks));
+        }
     }
 }

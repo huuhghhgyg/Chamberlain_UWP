@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -20,7 +21,7 @@ namespace Chamberlain_UWP.Backup.Models
             RelativePath = relative_path;
             RelativeFolder = relative_path.Substring(0, relative_path.Length - file.Name.Length - 1);
         }
-        public FileNode(StorageFile file, string relative_path,string hash)
+        public FileNode(StorageFile file, string relative_path, string hash)
         {
             File = file;
             RelativePath = relative_path;
@@ -31,31 +32,26 @@ namespace Chamberlain_UWP.Backup.Models
     }
     public class PathRecord //路径记录
     {
+        [JsonIgnore]
         public StorageFolder Folder { get; set; }
-        public string Path { get => Folder.Path; }
-        public string Name { get => Folder.Name; }
-        public string Hash { get => Math.Abs(Folder.Path.GetHashCode()).ToString(); } //路径本身的Hash
+        public string Path { get; set; }
+        public string Name { get; set; }
+        public string Hash { get; set; } //路径本身的Hash
 
         public PathRecord(StorageFolder folder)
         {
             Folder = folder;
+            Path = Folder.Path;
+            Name = Folder.Name;
+            Hash = Math.Abs(Folder.Path.GetHashCode()).ToString();
         }
-    }
 
-    public class BackupTask //备份任务描述
-    {
-        public PathRecord BackupFolder { get; set; }
-        public PathRecord SaveFolder { get; set; }
-        public string BackupFolderName { get => BackupFolder.Folder.Name; }
-        public string BackupFolderPath { get => BackupFolder.Path; }
-        public string SaveFolderName { get => SaveFolder.Folder.Name; }
-        public string SaveFolderPath { get => SaveFolder.Path; }
-        public int BackupTaskHash { get => (BackupFolderPath + SaveFolderPath).GetHashCode(); }
-
-        public BackupTask(PathRecord backupFolder, PathRecord goalFolder)
+        [JsonConstructor]
+        public PathRecord(string path, string name, string hash)
         {
-            BackupFolder = backupFolder;
-            SaveFolder = goalFolder;
+            Path = path;
+            Name = name;
+            Hash = hash;
         }
     }
 }

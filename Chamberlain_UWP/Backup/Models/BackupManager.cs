@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Chamberlain_UWP.Settings;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Security.Cryptography;
@@ -29,7 +31,7 @@ namespace Chamberlain_UWP.Backup.Models
         private string backup_folder_path = ""; //备份文件夹的路径
         public List<PathRecord> BackupFolderList = new List<PathRecord>(); //备份文件夹路径列表
         public List<PathRecord> SaveFolderList = new List<PathRecord>(); //目标文件夹路径列表
-        public List<BackupTask> BackupTaskList = new List<BackupTask>(); //备份任务描述列表
+        public List<BackupTaskData> BackupTaskList = new List<BackupTaskData>(); //备份任务描述列表
         int _totalFileCount = 0; //需要备份的文件总数
         int _processedFileCount = 0; //已备份文件总数
         string _workingFilePath = ""; //正在备份的文件
@@ -95,7 +97,7 @@ namespace Chamberlain_UWP.Backup.Models
                     case BackupStage.Spare:
                         WorkingFilePath = "已完成";
                         IsScanning = false;
-                        return "无任务";
+                        return "当前无任务";
                     case BackupStage.Preparing: //BackupStage.Preparing
                         WorkingFilePath = "处理中";
                         IsScanning = true;
@@ -316,5 +318,64 @@ namespace Chamberlain_UWP.Backup.Models
 
             TotalBackupFolder(backup_record.Hash, save_record.Hash);
         }
+
+
+        // 文件保存
+        public readonly string BackupJsonName = "BackupFolders.json";
+        public readonly string SaveJsonName = "SaveFolders.json";
+        public readonly string BackupTaskJsonName = "BackupTasks.json";
+        internal readonly StorageFolder AppFolder = ApplicationData.Current.LocalFolder;
+        public async void GenerateJsonAsync(List<PathRecord> list, string filename)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = false,
+                IncludeFields = true,
+            };
+            string jsonContent = JsonSerializer.Serialize(list, options);
+
+            await DataSettings.ExportToFile(AppFolder, filename, jsonContent);
+        }
+        public async void GenerateJsonAsync(List<BackupTaskData> list, string filename)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = false,
+                IncludeFields = true,
+            };
+            string jsonContent = JsonSerializer.Serialize(list, options);
+
+            StorageFolder rootFolder = ApplicationData.Current.LocalFolder;
+            await DataSettings.ExportToFile(rootFolder, filename, jsonContent);
+        }
+        public async void LoadData() //读取数据
+        {
+            //获取文件
+            StorageFile backupFile = await AppFolder.GetFileAsync(BackupJsonName);
+            StorageFile saveFile = await AppFolder.GetFileAsync(SaveJsonName);
+            StorageFile backupTaskFile = await AppFolder.GetFileAsync(BackupTaskJsonName);
+
+            //读取文件
+            BackupFolderList = JsonSerializer.Deserialize<List<PathRecord>>(await DataSettings.LoadFile(backupFile));
+            SaveFolderList = JsonSerializer.Deserialize<List<PathRecord>>(await DataSettings.LoadFile(saveFile));
+            BackupTaskList = JsonSerializer.Deserialize<List<BackupTaskData>>(await DataSettings.LoadFile(backupTaskFile));
+            //恢复folder
+            BackupFolderList.ForEach(async item => item.Folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(item.Hash));
+            SaveFolderList.ForEach(async item => item.Folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(item.Hash));
+
+            //恢复备份文件夹
+            BackupPageData._backupPathRecords = new ObservableCollection<PathRecord>(BackupFolderList);
+            List<BackupPathString> BackupFolderNames = (from PathRecord record in BackupFolderList
+                                                        select new BackupPathString(record.Path)).ToList();
+            BackupPageData._backupPathNames = new ObservableCollection<BackupPathString>(BackupFolderNames);
+            //恢复目标文件夹
+            BackupPageData._savePathRecords = new ObservableCollection<PathRecord>(SaveFolderList);
+            List<SavePathString> SaveFolderNames = (from PathRecord record in SaveFolderList
+                                                    select new SavePathString(record.Path)).ToList();
+            BackupPageData._savePathNames = new ObservableCollection<SavePathString>(SaveFolderNames);
+            //恢复任务列表
+            BackupPageData._backupTasks = new ObservableCollection<BackupTaskData>(BackupTaskList);
+        }
+
     }
 }
