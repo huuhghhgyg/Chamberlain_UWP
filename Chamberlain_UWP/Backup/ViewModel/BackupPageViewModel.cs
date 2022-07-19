@@ -152,7 +152,7 @@ namespace Chamberlain_UWP.Backup
             {
                 _backupTaskSelectedIndex = value;
                 OnPropertyChanged(nameof(BackupTaskSelectedIndex));
-                Manager.GenerateJsonAsync(Manager.BackupTaskList, Manager.BackupTaskJsonName); //保存备份任务列表
+                //Manager.GenerateJsonAsync(Manager.BackupTaskList, Manager.BackupTaskJsonName); //保存备份任务列表
             }
         }
 
@@ -285,6 +285,12 @@ namespace Chamberlain_UWP.Backup
             OnPropertyChanged(nameof(SavePathRecords));
             OnPropertyChanged(nameof(SavePathNames));
             OnPropertyChanged(nameof(BackupTasks));
+        }
+
+        public void SaveBackupTaskList()
+        {
+            Manager.BackupTaskList = new List<BackupTaskData>(BackupTasks);
+            Manager.GenerateJsonAsync(Manager.BackupTaskList, Manager.BackupTaskJsonName); //保存备份任务列表
         }
     }
 }

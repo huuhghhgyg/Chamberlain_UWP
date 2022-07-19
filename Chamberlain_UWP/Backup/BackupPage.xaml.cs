@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -27,5 +28,12 @@ namespace Chamberlain_UWP.Backup
             this.InitializeComponent();
         }
         public BackupPageViewModel ViewModel { get; } = new BackupPageViewModel();
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            //读取数据
+            Task loadDataFromJson = Task.Run(async () => await ViewModel.Manager.LoadData()); //等待异步方法
+            loadDataFromJson.Wait();
+            ViewModel.RefershData();
+        }
     }
 }

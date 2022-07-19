@@ -348,7 +348,7 @@ namespace Chamberlain_UWP.Backup.Models
             StorageFolder rootFolder = ApplicationData.Current.LocalFolder;
             await DataSettings.ExportToFile(rootFolder, filename, jsonContent);
         }
-        public async void LoadData() //读取数据
+        public async Task LoadData() //读取数据
         {
             //获取文件
             StorageFile backupFile = await AppFolder.GetFileAsync(BackupJsonName);
