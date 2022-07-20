@@ -59,13 +59,15 @@ namespace Chamberlain_UWP.Backup.Models
         public bool IsFullBackup { get; set; } //是否完整备份
         public DateTime BackupTime { get; set; } //备份执行时间
         public string BackupFolderPath { get; set; } //备份文件夹路径
+        public string VersionFolderName { get; set; } //备份版本文件夹名称（完整路径可以通过相加得到）
         public string SaveFolderPath { get; set; } //保存路径
-        public BackupVersionRecord(bool isFullBackup, DateTime backupTime, string backupFolderPath, string saveFolderPath)
+        public BackupVersionRecord(bool isFullBackup, DateTime backupTime, string backupFolderPath, string saveFolderPath, string versionFolderName)
         {
             IsFullBackup = isFullBackup;
             BackupTime = backupTime;
             BackupFolderPath = backupFolderPath;
             SaveFolderPath = saveFolderPath;
+            VersionFolderName = versionFolderName;
         }
     }
 }

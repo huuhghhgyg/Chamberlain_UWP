@@ -224,9 +224,6 @@ namespace Chamberlain_UWP.Backup.Models
                 else throw new Exception("无法访问目标文件夹token");
             }
 
-            //添加备份记录
-            await SaveBackupVersionFileAsync(goalFolder, rootFolder.Path, true);
-
             // 获取基本信息
             backup_folder_path = rootFolder.Path; //备份文件夹的路径
 
@@ -258,8 +255,8 @@ namespace Chamberlain_UWP.Backup.Models
             ProcessedFileCount = 0; //已处理文件数清零
 
             string backup_date = DateTime.Now.ToString("yyyy-MM-dd-HHmm");
-            goalFolder = await goalFolder.CreateFolderAsync(rootFolder.Name, CreationCollisionOption.OpenIfExists); //变换目标文件为保存目录下该文件夹的名称
-            StorageFolder versionFolder = await goalFolder.CreateFolderAsync(backup_date); //存至版本文件夹
+            StorageFolder goalVersionFolder = await goalFolder.CreateFolderAsync(rootFolder.Name, CreationCollisionOption.OpenIfExists); //变换目标文件为保存目录下该文件夹的名称
+            StorageFolder versionFolder = await goalVersionFolder.CreateFolderAsync(backup_date); //存至版本文件夹
 
             foreach (FileNode fileNode in file_node_list)
             {
@@ -289,6 +286,10 @@ namespace Chamberlain_UWP.Backup.Models
                 }
                 ProcessedFileCount++; //增加一个完成文件
             }
+
+            //添加备份记录
+            await SaveBackupVersionFileAsync(goalFolder, rootFolder.Path, backup_date, true);
+
             BackupTaskStage = BackupStage.Spare; //已完成，将状态恢复为空闲
         }
 
@@ -413,7 +414,7 @@ namespace Chamberlain_UWP.Backup.Models
         }
 
         //保存备份文件版本到对应文件夹
-        public async Task SaveBackupVersionFileAsync(StorageFolder saveFolder, string backupPath, bool isFullBackup) //保存文件夹，备份路径
+        public async Task SaveBackupVersionFileAsync(StorageFolder saveFolder, string backupPath, string versionFolderName, bool isFullBackup) //保存文件夹，备份路径
         {
             List<BackupVersionRecord> list = new List<BackupVersionRecord>(); //预先创建列表
             if (await saveFolder.TryGetItemAsync(BackupVersionJsonName) != null) //判断文件是否存在
@@ -422,7 +423,7 @@ namespace Chamberlain_UWP.Backup.Models
                 string contents = await DataSettings.LoadFile(await saveFolder.GetFileAsync(BackupVersionJsonName)); //读取数据
                 list = JsonSerializer.Deserialize<List<BackupVersionRecord>>(contents); //从文件中读取列表
             }
-            BackupVersionRecord record = new BackupVersionRecord(isFullBackup, DateTime.Now, backupPath, saveFolder.Path); //创先新条目
+            BackupVersionRecord record = new BackupVersionRecord(isFullBackup, DateTime.Now, backupPath, saveFolder.Path, versionFolderName); //创先新条目
             BackupVersionRecordList.Add(record); //添加到全局列表中
             list.Add(record); //往列表添加新条目
 
