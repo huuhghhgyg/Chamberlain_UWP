@@ -13,8 +13,8 @@ namespace Chamberlain_UWP.Backup.Models
     {
         public StorageFile File { get; set; } //可供操作的文件对象
         public string Hash { get; set; }  //文件Hash值
-        public string RelativePath { get; set; } //文件相对路径
-        public string RelativeFolder { get; set; } //文件相对文件夹
+        public string RelativePath { get; set; } //文件相对路径(\folder\file1.txt)
+        public string RelativeFolder { get; set; } //文件相对文件夹(\folder)
         public FileNode(StorageFile file, string relative_path)
         {
             File = file;

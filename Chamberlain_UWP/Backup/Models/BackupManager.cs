@@ -249,6 +249,7 @@ namespace Chamberlain_UWP.Backup.Models
                 }
                 ProcessedFileCount++;
             }
+            ;//for debug
 
             //在保存目录创建文件夹(如：2022-07-17-1105)
             BackupTaskStage = BackupStage.Backup; //将状态改为正在备份
@@ -331,29 +332,6 @@ namespace Chamberlain_UWP.Backup.Models
         public readonly string BackupTaskJsonName = "BackupTasks.json";
         public readonly string BackupVersionJsonName = "BackupVersion.json";
         internal readonly StorageFolder AppFolder = ApplicationData.Current.LocalFolder;
-        public async void GenerateJsonAsync(List<PathRecord> list, string filename)
-        {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = false,
-                IncludeFields = true,
-            };
-            string jsonContent = JsonSerializer.Serialize(list, options);
-
-            await DataSettings.ExportToFile(AppFolder, filename, jsonContent);
-        }
-        public async void GenerateJsonAsync(List<BackupTaskData> list, string filename)
-        {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = false,
-                IncludeFields = true,
-            };
-            string jsonContent = JsonSerializer.Serialize(list, options);
-
-            StorageFolder rootFolder = ApplicationData.Current.LocalFolder;
-            await DataSettings.ExportToFile(rootFolder, filename, jsonContent);
-        }
         public async Task LoadData() //读取数据
         {
             //确认文件是否存在
@@ -427,16 +405,7 @@ namespace Chamberlain_UWP.Backup.Models
             BackupVersionRecordList.Add(record); //添加到全局列表中
             list.Add(record); //往列表添加新条目
 
-            //导出Json文本
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = false,
-                IncludeFields = true,
-            };
-            string jsonContent = JsonSerializer.Serialize(list, options);
-
-            //导出文件
-            await DataSettings.ExportToFile(saveFolder, BackupVersionJsonName, jsonContent);
+            DataSettings.GenerateJsonAsync(list, saveFolder, BackupVersionJsonName); //导出json
         }
     }
 }

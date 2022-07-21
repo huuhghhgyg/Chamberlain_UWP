@@ -227,7 +227,7 @@ namespace Chamberlain_UWP.Backup
                 Manager.SaveFolderList.Add(save_path);
                 //添加访问权限
                 StorageApplicationPermissions.FutureAccessList.AddOrReplace(save_path.Hash, save_path.Folder); //添加访问token
-                Manager.GenerateJsonAsync(Manager.SaveFolderList, Manager.SaveJsonName); //保存目标目录列表
+                DataSettings.GenerateJsonAsync(Manager.SaveFolderList, Manager.AppFolder, Manager.SaveJsonName); //保存目标目录列表
             }
         }
         public void DelFromSavePathList() //从保存路径移除
@@ -242,7 +242,7 @@ namespace Chamberlain_UWP.Backup
                 Manager.SaveFolderList.RemoveAt(SavePathRecordsSelectedIndex);
                 SavePathRecords.RemoveAt(SavePathRecordsSelectedIndex); //UI
 
-                Manager.GenerateJsonAsync(Manager.SaveFolderList, Manager.SaveJsonName); //保存目标目录列表
+                DataSettings.GenerateJsonAsync(Manager.SaveFolderList, Manager.AppFolder, Manager.SaveJsonName); //保存目标目录列表
             }
         }
         public async void Add2BackupPathList() //添加到备份路径
@@ -256,7 +256,8 @@ namespace Chamberlain_UWP.Backup
                 Manager.BackupFolderList.Add(backup_path);
                 //添加访问权限
                 StorageApplicationPermissions.FutureAccessList.AddOrReplace(backup_path.Hash, backup_path.Folder); //添加访问token
-                Manager.GenerateJsonAsync(Manager.BackupFolderList, Manager.BackupJsonName); //保存备份文件列表
+                DataSettings.GenerateJsonAsync(Manager.BackupFolderList, Manager.AppFolder, Manager.BackupJsonName); //保存备份文件列表
+
             }
         }
         public void DelFromBackupPathList() //从删除路径中移除
@@ -271,7 +272,7 @@ namespace Chamberlain_UWP.Backup
                 Manager.BackupFolderList.RemoveAt(BackupPathRecordsSelectedIndex);
                 BackupPathRecords.RemoveAt(BackupPathRecordsSelectedIndex); //UI
 
-                Manager.GenerateJsonAsync(Manager.BackupFolderList, Manager.BackupJsonName); //保存备份文件列表
+                DataSettings.GenerateJsonAsync(Manager.BackupFolderList, Manager.AppFolder, Manager.BackupJsonName); //保存备份文件列表
             }
         }
         public void AddBackupTask()
@@ -281,7 +282,7 @@ namespace Chamberlain_UWP.Backup
                 BackupTaskData backupTask = new BackupTaskData(BackupPathRecords[0], SavePathRecords[0]);
                 BackupTasks.Add(backupTask); //添加到ObservableCollection
                 Manager.BackupTaskList.Add(backupTask); //同步到Manager
-                Manager.GenerateJsonAsync(Manager.BackupTaskList, Manager.BackupTaskJsonName); //保存备份任务列表
+                DataSettings.GenerateJsonAsync(Manager.BackupTaskList, Manager.AppFolder, Manager.BackupTaskJsonName); //保存备份任务列表
             }
         }
         public void DelFromBackupTask()
@@ -291,7 +292,7 @@ namespace Chamberlain_UWP.Backup
                 Manager.BackupTaskList.RemoveAt(BackupTaskSelectedIndex); //先删除Manager中的数据
                 BackupTasks.RemoveAt(BackupTaskSelectedIndex); //移除ObservableCollection中的条目
 
-                Manager.GenerateJsonAsync(Manager.BackupTaskList, Manager.BackupTaskJsonName); //保存备份任务列表
+                DataSettings.GenerateJsonAsync(Manager.BackupTaskList, Manager.AppFolder, Manager.BackupTaskJsonName); //保存备份任务列表
             }
         }
         public void ClearErrorMessages() => Manager.ErrorMessages.Clear();
@@ -308,7 +309,7 @@ namespace Chamberlain_UWP.Backup
         public void SaveBackupTaskList()
         {
             Manager.BackupTaskList = new List<BackupTaskData>(BackupTasks);
-            Manager.GenerateJsonAsync(Manager.BackupTaskList, Manager.BackupTaskJsonName); //保存备份任务列表
+            DataSettings.GenerateJsonAsync(Manager.BackupTaskList, Manager.AppFolder, Manager.BackupTaskJsonName); //保存备份任务列表
         }
     }
 }

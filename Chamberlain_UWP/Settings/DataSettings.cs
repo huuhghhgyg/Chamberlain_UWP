@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -16,5 +17,18 @@ namespace Chamberlain_UWP.Settings
             return file.Path; //返回保存路径
         }
         public static async Task<string> LoadFile(StorageFile file) => await FileIO.ReadTextAsync(file); //读取文件内容
+
+        public static async void GenerateJsonAsync<T>(List<T> list,StorageFolder exportFolder ,string filename)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = false,
+                IncludeFields = true,
+            };
+            string jsonContent = JsonSerializer.Serialize(list, options); //序列化
+
+            await ExportToFile(exportFolder, filename, jsonContent); //导出到文件
+        }
+
     }
 }
