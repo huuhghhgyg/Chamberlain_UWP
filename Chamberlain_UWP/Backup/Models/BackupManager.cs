@@ -1,4 +1,4 @@
-﻿using Chamberlain_UWP.Settings;
+using Chamberlain_UWP.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -301,15 +301,27 @@ namespace Chamberlain_UWP.Backup.Models
             OnPropertyChanged(nameof(IsAnyError));
         }
 
-        async Task<StorageFolder> CreateRelativePath(StorageFolder folder, List<string> paths) //创建文件夹目录
+        async Task<StorageFolder> CreateRelativePath(StorageFolder rootFolder, string relativePath) //创建文件夹目录
+        {
+            List<string> subfolders = relativePath.Split("\\").ToList(); //切割相对路径
+            subfolders.RemoveAt(0); //第一个值为空，删掉
+            subfolders.RemoveAt(subfolders.Count - 1); //删除最后一个（文件名）
+
+            if (subfolders.Count > 0)
+                return await CreateRelativePath(rootFolder, subfolders); //是相对路径，执行函数
+            else
+                return rootFolder; //不是相对路径
+        }
+
+        async Task<StorageFolder> CreateRelativePath(StorageFolder folder, List<string> paths) //创建文件夹目录（递归）
         {
             StorageFolder newFolder = await folder.CreateFolderAsync(paths[0], CreationCollisionOption.OpenIfExists); //如果已经存在，则打开
             paths.RemoveAt(0);
-            if (paths.Count > 0)
+            if (paths.Count > 0) //不是最终路径
             {
                 return await CreateRelativePath(newFolder, paths);
             }
-            else return newFolder;
+            else return newFolder; //最终路径
         }
 
         public void RunTotalBackup(string backup_path, string save_path)
