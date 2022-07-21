@@ -11,24 +11,31 @@ namespace Chamberlain_UWP.Backup.Models
 {
     public class FileNode //文件节点
     {
+        [JsonIgnore]
         public StorageFile File { get; set; } //可供操作的文件对象
         public string Hash { get; set; }  //文件Hash值
         public string RelativePath { get; set; } //文件相对路径(\folder\file1.txt)
         public string RelativeFolder { get; set; } //文件相对文件夹(\folder)
-        public FileNode(StorageFile file, string relative_path)
+        public FileNode(StorageFile file, string relativePath)
         {
             File = file;
-            RelativePath = relative_path;
-            RelativeFolder = relative_path.Substring(0, relative_path.Length - file.Name.Length - 1);
+            RelativePath = relativePath;
+            RelativeFolder = relativePath.Substring(0, relativePath.Length - file.Name.Length - 1);
         }
-        public FileNode(StorageFile file, string relative_path, string hash)
+        public FileNode(StorageFile file, string relativePath, string hash)
         {
             File = file;
-            RelativePath = relative_path;
-            RelativeFolder = relative_path.Substring(0, relative_path.Length - file.Name.Length - 1);
+            RelativePath = relativePath;
+            RelativeFolder = relativePath.Substring(0, relativePath.Length - file.Name.Length - 1);
             Hash = hash;
         }
-
+        [JsonConstructor]
+        public FileNode(string relativePath, string relativeFolder, string hash) //需要后期手动添加File
+        {
+            RelativePath = relativePath;
+            RelativeFolder = relativeFolder;
+            Hash = hash;
+        }
     }
     public class PathRecord //路径记录
     {
@@ -59,13 +66,15 @@ namespace Chamberlain_UWP.Backup.Models
         public bool IsFullBackup { get; set; } //是否完整备份
         public DateTime BackupTime { get; set; } //备份执行时间
         public string BackupFolderPath { get; set; } //备份文件夹路径
+        public string BackupFolderName { get; set; } //备份文件夹名称
         public string VersionFolderName { get; set; } //备份版本文件夹名称（完整路径可以通过相加得到）
         public string SaveFolderPath { get; set; } //保存路径
-        public BackupVersionRecord(bool isFullBackup, DateTime backupTime, string backupFolderPath, string saveFolderPath, string versionFolderName)
+        public BackupVersionRecord(bool isFullBackup, DateTime backupTime, string backupFolderPath,string backupFolderName , string saveFolderPath, string versionFolderName)
         {
             IsFullBackup = isFullBackup;
             BackupTime = backupTime;
             BackupFolderPath = backupFolderPath;
+            BackupFolderName = backupFolderName;
             SaveFolderPath = saveFolderPath;
             VersionFolderName = versionFolderName;
         }

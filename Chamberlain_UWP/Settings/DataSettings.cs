@@ -18,7 +18,7 @@ namespace Chamberlain_UWP.Settings
         }
         public static async Task<string> LoadFile(StorageFile file) => await FileIO.ReadTextAsync(file); //读取文件内容
 
-        public static async void GenerateJsonAsync<T>(List<T> list,StorageFolder exportFolder ,string filename)
+        public static async void GenerateJsonAsync<T>(List<T> list, StorageFolder exportFolder, string filename) //根据对象生成Json文本后直接保存到而文件
         {
             var options = new JsonSerializerOptions
             {
@@ -29,6 +29,5 @@ namespace Chamberlain_UWP.Settings
 
             await ExportToFile(exportFolder, filename, jsonContent); //导出到文件
         }
-
     }
 }

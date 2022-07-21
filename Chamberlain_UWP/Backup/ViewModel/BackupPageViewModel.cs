@@ -117,9 +117,8 @@ namespace Chamberlain_UWP.Backup
             {
                 _backupRecordComboBoxSelectedIndex = value;
                 OnPropertyChanged(nameof(BackupRecordComboBoxSelectedIndex));
-                //OnPropertyChanged(nameof(BackupRecordPathText)); //连锁
                 Manager.GetBackupVersionList(BackupRecordComboBoxSelectedPath); //获取列表
-                OnPropertyChanged(nameof(BackupVersionRecords));
+                OnPropertyChanged(nameof(BackupVersionRecords)); //备份版本记录的内容也要随之改变
             }
         }
         public string BackupRecordComboBoxSelectedPath //选中项的值
@@ -310,6 +309,37 @@ namespace Chamberlain_UWP.Backup
         {
             Manager.BackupTaskList = new List<BackupTaskData>(BackupTasks);
             DataSettings.GenerateJsonAsync(Manager.BackupTaskList, Manager.AppFolder, Manager.BackupTaskJsonName); //保存备份任务列表
+        }
+
+        public void RefreshBackupRecordData()
+        {
+            if (BackupRecordComboBoxSelectedIndex != -1) //已有选中项
+            {
+                Task loadDataFromJson = Task.Run(async () => await Manager.LoadData()); //等待读取数据
+                loadDataFromJson.Wait();
+                Manager.GetBackupVersionList(BackupRecordComboBoxSelectedPath); //获取相关列表
+                OnPropertyChanged(nameof(BackupVersionRecords)); //刷新备份版本记录列表
+            }
+        }
+
+        public void RecoverFolder() //恢复文件夹
+        {
+            if (BackupVersionRecordListSelectedIndex != -1)
+            {
+                BackupVersionRecord backupRecord = BackupVersionRecords[BackupVersionRecordListSelectedIndex]; //获取选中的备份记录
+                Manager.RestoreAsync(backupRecord, false);
+                IsBackupCardVisible = true;
+            }
+        }
+
+        public void ExportBackup() //导出备份文件夹到下载目录
+        {
+            if (BackupVersionRecordListSelectedIndex != -1)
+            {
+                BackupVersionRecord backupRecord = BackupVersionRecords[BackupVersionRecordListSelectedIndex]; //获取选中的备份记录
+                Manager.RestoreAsync(backupRecord, true);
+                IsBackupCardVisible = true;
+            }
         }
     }
 }

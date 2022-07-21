@@ -178,7 +178,11 @@
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
-                                        <AppBarButton Icon="Download" Label="恢复"/>
+                                        <AppBarButton Icon="Refresh" Label="刷新" Click="{x:Bind ViewModel.RefreshBackupRecordData}"
+                                                      ToolTipService.ToolTip="重新从所有文件夹中读取数据"/>
+                                        <AppBarButton Icon="SyncFolder" Label="恢复" Click="{x:Bind ViewModel.RecoverFolder}"/>
+                                        <AppBarButton Icon="SaveLocal" Label="导出至下载" Click="{x:Bind ViewModel.ExportBackup}"
+                                                      ToolTipService.ToolTip="将选中的备份导出到库中的下载文件夹" VerticalAlignment="Stretch"/>
                                         <AppBarButton Icon="Delete" Label="删除"/>
                                     </CommandBar>
                                     <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"
