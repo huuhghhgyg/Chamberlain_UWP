@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -285,7 +286,7 @@ namespace Chamberlain_UWP.Backup.Models
             }
 
             //添加备份记录
-            await SaveBackupVersionFileAsync(goalFolder, rootFolder, backup_date, true);
+            await AddBackupVersionFileAsync(goalFolder, rootFolder, backup_date, true);
 
             BackupTaskStage = BackupStage.Spare; //已完成，将状态恢复为空闲
         }
@@ -293,6 +294,11 @@ namespace Chamberlain_UWP.Backup.Models
         public void ClearErrorMessages()
         {
             ErrorMessages.Clear();
+            OnPropertyChanged(nameof(ErrorMessages));
+            OnPropertyChanged(nameof(IsAnyError));
+        }
+        public void UpdateErrorMessageList()
+        {
             OnPropertyChanged(nameof(ErrorMessages));
             OnPropertyChanged(nameof(IsAnyError));
         }
@@ -401,15 +407,9 @@ namespace Chamberlain_UWP.Backup.Models
         }
 
         //保存备份文件版本到对应文件夹
-        public async Task SaveBackupVersionFileAsync(StorageFolder saveFolder, StorageFolder backupFolder, string versionFolderName, bool isFullBackup) //保存文件夹，备份路径
+        public async Task AddBackupVersionFileAsync(StorageFolder saveFolder, StorageFolder backupFolder, string versionFolderName, bool isFullBackup) //保存文件夹，备份路径
         {
-            List<BackupVersionRecord> list = new List<BackupVersionRecord>(); //预先创建列表
-            if (await saveFolder.TryGetItemAsync(BackupVersionJsonName) != null) //判断文件是否存在
-            {
-                //文件存在，读取内容到列表
-                string contents = await DataSettings.LoadFile(await saveFolder.GetFileAsync(BackupVersionJsonName)); //读取数据
-                list = JsonSerializer.Deserialize<List<BackupVersionRecord>>(contents); //从文件中读取列表
-            }
+            List<BackupVersionRecord> list = await LoadBackupVersionFile(saveFolder); //读取列表
             BackupVersionRecord record = new BackupVersionRecord(isFullBackup, DateTime.Now, backupFolder.Path, backupFolder.Name, saveFolder.Path, versionFolderName); //创先新条目
             BackupVersionRecordList.Add(record); //添加到全局列表中
             list.Add(record); //往列表添加新条目
@@ -417,6 +417,58 @@ namespace Chamberlain_UWP.Backup.Models
             DataSettings.GenerateJsonAsync(list, saveFolder, BackupVersionJsonName); //导出json
         }
 
+        public async Task<List<BackupVersionRecord>> LoadBackupVersionFile(StorageFolder saveFolder) //从保存目录中读取备份信息
+        {
+            //读取文件
+            List<BackupVersionRecord> list = new List<BackupVersionRecord>(); //预先创建列表
+            if (await saveFolder.TryGetItemAsync(BackupVersionJsonName) != null) //判断文件是否存在
+            {
+                //文件存在，读取内容到列表
+                string contents = await DataSettings.LoadFile(await saveFolder.GetFileAsync(BackupVersionJsonName)); //读取数据
+                list = JsonSerializer.Deserialize<List<BackupVersionRecord>>(contents); //从文件中读取列表
+            }
+            return list;
+        }
+
+        public async Task DelFromBackupVersionListAsync(BackupVersionRecord backupRecord) //根据备份记录删除
+        {
+            string backupInfoPath = $"{backupRecord.SaveFolderPath}\\{backupRecord.BackupFolderName}\\{backupRecord.VersionFolderName}.json"; //备份信息路径
+            string saveVersionFolderPath = $"{backupRecord.SaveFolderPath}\\{backupRecord.BackupFolderName}\\{backupRecord.VersionFolderName}"; //版本路径
+
+            StorageFolder saveFolder = await StorageFolder.GetFolderFromPathAsync(backupRecord.SaveFolderPath); //读取备份信息Json
+            List<BackupVersionRecord> list = await LoadBackupVersionFile(saveFolder); //读取列表
+            var delList = from BackupVersionRecord record in list
+                          where record.VersionFolderName != backupRecord.VersionFolderName
+                          select record; //选中不同的项
+            list = new List<BackupVersionRecord>(delList.ToList()); //更新列表（删除对应记录）
+            if (list.Count > 0)
+                DataSettings.GenerateJsonAsync(list, saveFolder, BackupVersionJsonName); //保存到目录
+            else
+            {
+                StorageFile saveFolderJsonFile = await saveFolder.GetFileAsync(BackupVersionJsonName);
+                await saveFolderJsonFile.DeleteAsync();
+            }
+
+            try
+            {
+                StorageFolder saveVersionFolder = await StorageFolder.GetFolderFromPathAsync(saveVersionFolderPath);
+                await saveVersionFolder.DeleteAsync(); //删除版本文件夹
+            }
+            catch (Exception ex)
+            {
+                ErrorMessages.Add($"⚠{ex.Message}");
+            }
+
+            try
+            {
+                StorageFile backupInfoJson = await StorageFile.GetFileFromPathAsync(backupInfoPath);
+                await backupInfoJson.DeleteAsync(); //删除记录文件
+            }
+            catch (Exception ex)
+            {
+                ErrorMessages.Add($"⚠{ex.Message}");
+            }
+        }
         public async void RestoreAsync(BackupVersionRecord backupRecord, bool isExport)
         {
             BackupTaskStage = BackupStage.Preparing; //将状态改为准备中

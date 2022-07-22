@@ -173,6 +173,8 @@ namespace Chamberlain_UWP.Backup
         }
         public int BackupVersionRecordListSelectedIndex { get; set; } = -1;
 
+        public bool IsRecordListOnLoading { get; set; } = false;
+
         /// <summary>
         /// 方法区
         /// </summary>
@@ -339,6 +341,20 @@ namespace Chamberlain_UWP.Backup
                 BackupVersionRecord backupRecord = BackupVersionRecords[BackupVersionRecordListSelectedIndex]; //获取选中的备份记录
                 Manager.RestoreAsync(backupRecord, true);
                 IsBackupCardVisible = true;
+            }
+        }
+
+        public void DelBackup() //删除备份
+        {
+            if (BackupVersionRecordListSelectedIndex != -1)
+            {
+                BackupVersionRecord backupRecord = BackupVersionRecords[BackupVersionRecordListSelectedIndex]; //获取选中的备份记录
+                IsRecordListOnLoading = true; //正在删除（设进度条状态为正在处理）
+                Task t = Task.Run(async () => await Manager.DelFromBackupVersionListAsync(backupRecord));
+                t.Wait();
+                Manager.UpdateErrorMessageList();
+                RefreshBackupRecordData();
+                IsRecordListOnLoading = false; //进度条取消处理状态
             }
         }
     }
