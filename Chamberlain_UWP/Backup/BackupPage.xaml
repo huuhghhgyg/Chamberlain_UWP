@@ -170,7 +170,6 @@
                                     <ComboBox ItemTemplate="{StaticResource BackupRecordComboBoxData}"
                                               ItemsSource="{x:Bind ViewModel.BackupPathRecords,Mode=OneWay}"
                                               SelectedIndex="{x:Bind ViewModel.BackupRecordComboBoxSelectedIndex,Mode=TwoWay}"/>
-                                    <!--<TextBlock Text="{x:Bind ViewModel.BackupRecordPathText,Mode=OneWay}" VerticalAlignment="Center" Margin="8,0,0,0"/>-->
                                 </StackPanel>
                                 <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                     <Grid.RowDefinitions>

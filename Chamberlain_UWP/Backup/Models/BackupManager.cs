@@ -1,4 +1,4 @@
-﻿using Chamberlain_UWP.Settings;
+using Chamberlain_UWP.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,6 +29,7 @@ namespace Chamberlain_UWP.Backup.Models
 
     internal class BackupManager : INotifyPropertyChanged
     {
+        #region 私有变量
         // 变量区
         private string backup_folder_path = ""; //备份文件夹的路径
         public List<PathRecord> BackupFolderList = new List<PathRecord>(); //备份文件夹路径列表
@@ -43,6 +44,9 @@ namespace Chamberlain_UWP.Backup.Models
         bool _showDetail = true;
         public List<BackupVersionRecord> BackupVersionRecordList = new List<BackupVersionRecord>(); //存放历史备份
 
+        #endregion
+
+        #region 属性
         public int TotalFileCount //需要处理的文件总数
         {
             get => _totalFileCount;
@@ -156,6 +160,8 @@ namespace Chamberlain_UWP.Backup.Models
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        #endregion
+
         /// 函数区
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -236,6 +242,17 @@ namespace Chamberlain_UWP.Backup.Models
             IReadOnlyList<StorageFile> all_files = await rootFolder.GetFilesAsync(Windows.Storage.Search.CommonFileQuery.OrderBySearchRank);
             TotalFileCount = all_files.Count; //需要备份的文件总数
 
+            //计算Hash
+            List<FileNode> file_node_list = await CalculateFileNodeHash(all_files);
+
+            //文件备份
+            await BackupFolder(rootFolder, goalFolder, file_node_list, true);
+
+            BackupTaskStage = BackupStage.Spare; //已完成，将状态恢复为空闲
+        }
+
+        public async Task<List<FileNode>> CalculateFileNodeHash(IReadOnlyList<StorageFile> all_files)
+        {
             //添加到操作列表，并计算Hash
             BackupTaskStage = BackupStage.ScanningHash; //将状态改为正在计算Hash
             List<FileNode> file_node_list = new List<FileNode>();
@@ -246,7 +263,7 @@ namespace Chamberlain_UWP.Backup.Models
                 {
                     file_node_list.Add(new FileNode(file, relative_path, await GetMD5HashAsync(file)));
                 }
-                catch (System.IO.FileNotFoundException)
+                catch (FileNotFoundException)
                 {
                     ErrorMessages.Add($"❌文件不存在（计算Hash时）：{file.Path}");
                     OnPropertyChanged(nameof(ErrorMessages));
@@ -254,6 +271,11 @@ namespace Chamberlain_UWP.Backup.Models
                 }
                 ProcessedFileCount++;
             }
+            return file_node_list;
+        }
+
+        public async Task BackupFolder(StorageFolder rootFolder, StorageFolder goalFolder, List<FileNode> file_node_list, bool isTotalBackup)
+        {
             //备份版本文件夹名称(如：2022-07-17-110502)
             string backup_date = DateTime.Now.ToString("yyyy-MM-dd-HHmmss");
             StorageFolder versionFolder = await goalFolder.CreateFolderAsync(rootFolder.Name, CreationCollisionOption.OpenIfExists); //存放各种备份版本的文件夹，文件名为备份文件夹的名称
@@ -276,19 +298,16 @@ namespace Chamberlain_UWP.Backup.Models
                 {
                     await fileNode.File.CopyAsync(relative_folder);
                 }
-                catch (System.IO.FileNotFoundException)
+                catch (FileNotFoundException)
                 {
                     ErrorMessages.Add($"❌文件不存在（复制时）：{fileNode.File.Path}");
-                    OnPropertyChanged(nameof(ErrorMessages));
-                    OnPropertyChanged(nameof(IsAnyError));
+                    UpdateErrorMessageList();
                 }
                 ProcessedFileCount++; //增加一个完成文件
             }
 
             //添加备份记录
-            await AddBackupVersionFileAsync(goalFolder, rootFolder, backup_date, true);
-
-            BackupTaskStage = BackupStage.Spare; //已完成，将状态恢复为空闲
+            await AddBackupVersionFileAsync(goalFolder, rootFolder, backup_date, isTotalBackup);
         }
 
         public void ClearErrorMessages()
@@ -339,13 +358,16 @@ namespace Chamberlain_UWP.Backup.Models
             TotalBackupFolder(backup_record.Hash, save_record.Hash);
         }
 
-
+        #region 文件保存配置
         // 文件保存
         public readonly string BackupJsonName = "BackupFolders.json";
         public readonly string SaveJsonName = "SaveFolders.json";
         public readonly string BackupTaskJsonName = "BackupTasks.json";
         public readonly string BackupVersionJsonName = "BackupVersion.json";
         internal readonly StorageFolder AppFolder = ApplicationData.Current.LocalFolder;
+
+        #endregion
+
         public async Task LoadData() //读取数据
         {
             //确认文件是否存在
@@ -406,11 +428,11 @@ namespace Chamberlain_UWP.Backup.Models
             BackupPageData._backupVersionRecords = new ObservableCollection<BackupVersionRecord>(queryResults);
         }
 
-        //保存备份文件版本到对应文件夹
+        //保存备份文件版本信息到对应文件夹中的Json
         public async Task AddBackupVersionFileAsync(StorageFolder saveFolder, StorageFolder backupFolder, string versionFolderName, bool isFullBackup) //保存文件夹，备份路径
         {
             List<BackupVersionRecord> list = await LoadBackupVersionFile(saveFolder); //读取列表
-            BackupVersionRecord record = new BackupVersionRecord(isFullBackup, DateTime.Now, backupFolder.Path, backupFolder.Name, saveFolder.Path, versionFolderName); //创先新条目
+            BackupVersionRecord record = new BackupVersionRecord(isFullBackup, DateTime.Now, backupFolder.Path, backupFolder.Name, saveFolder.Path, versionFolderName); //创建新条目
             BackupVersionRecordList.Add(record); //添加到全局列表中
             list.Add(record); //往列表添加新条目
 
