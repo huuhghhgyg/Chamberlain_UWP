@@ -57,10 +57,10 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <FontIcon x:Name="ItemFontIcon" FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                  Glyph="&#xE133;"/>
+                              Glyph="&#xE133;"/>
                     <StackPanel VerticalAlignment="Center" Grid.Column="1">
                         <TextBlock Text="管理提醒" 
-                                           Style="{ThemeResource BodyTextBlockStyle}"/>
+                                   Style="{ThemeResource BodyTextBlockStyle}"/>
                         <TextBlock Text="添加 / 删除提醒项" 
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>

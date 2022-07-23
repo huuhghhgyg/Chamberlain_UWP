@@ -48,7 +48,12 @@
                 <muxc:NavigationViewItem Icon="Clock" Content="任务" Tag="task"/>
                 <muxc:NavigationViewItem Content="提醒" Tag="reminder">
                     <muxc:NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE0A2;"/>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE0A2;"/>
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
+                <muxc:NavigationViewItem Content="备份" Tag="backup">
+                    <muxc:NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE81C;"/>
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
             </muxc:NavigationView.MenuItems>
