@@ -16,18 +16,15 @@ namespace Chamberlain_UWP.Reminder
         private static List<ReminderItem> ReminderItemList = new List<ReminderItem>(); // 只能通过以下的访问器访问
 
         internal readonly static string DataFilename = "ReminderData.json";
+        internal readonly static string BackupFilename = "ReminderData_Backup.json";
 
         public static bool Loaded = false; //已从文件读取标记（用于阻塞）
 
-        public static int ItemCountOnwork
-        {
-            get { return ReminderItemList.Where(item => item.TaskState != TaskState.Finished).ToList().Count; }
-        }
+        public static int ItemCount => ReminderItemList.Count;
 
-        public static int ItemCountRunning
-        {
-            get { return ReminderItemList.Where(item => item.TaskState == TaskState.Onwork).ToList().Count; }
-        }
+        public static int ItemCountOnwork => ReminderItemList.Where(item => item.TaskState != TaskState.Finished).ToList().Count;
+
+        public static int ItemCountRunning => ReminderItemList.Where(item => item.TaskState == TaskState.Onwork).ToList().Count;
 
         public static void Add(ReminderItem item)
         {
@@ -142,7 +139,7 @@ namespace Chamberlain_UWP.Reminder
         }
 
         static int onwork_count_cache = 0;
-        static int update_timespan_cache = 1000;
+        static double update_timespan_cache = 1000;
         public static int UpdateTimeSpan //计算进度条更新的时间间隔
         {
             get
@@ -158,9 +155,9 @@ namespace Chamberlain_UWP.Reminder
                             if (task_span > item.TaskSpan)
                                 task_span = item.TaskSpan;
                         });// 找到时间间隔最小的项
-                    update_timespan_cache = (int)task_span.TotalMilliseconds / 1000; // 计算时间间隔
+                    update_timespan_cache = task_span.TotalMilliseconds / 1000; // 计算时间间隔
                 }
-                return update_timespan_cache;
+                return (int)update_timespan_cache;
             }
         }
 
@@ -265,28 +262,17 @@ namespace Chamberlain_UWP.Reminder
                     }
                 }
                 else folder = ApplicationData.Current.LocalFolder;
+
+                if (ReminderItemList.Count == 0) //意味着内容即将被清空。如果没有已经存在的备份文件，先在本地做一次备份
+                    await BackupData(folder); //备份，传入当前使用文件的folder
+
                 return await ExportToFile(folder, DataFilename, CreationCollisionOption.ReplaceExisting, true); // 将数据导出到文件（本地路径）
             }
 
             public static async Task<string> Load()
             {
                 string msg = "";
-                StorageFolder folder; // 创建本地目录文件夹对象
-                //检查是否需从指定目录读取
-                if (StorageApplicationPermissions.FutureAccessList.ContainsItem("ReminderFolderToken"))
-                {
-                    try
-                    {
-                        folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
-                    }
-                    catch(System.IO.FileNotFoundException)
-                    {
-                        StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken"); //清除指定项
-                        msg = "指定的文件夹不存在，已清除";
-                        folder = ApplicationData.Current.LocalFolder;
-                    }
-                }
-                else folder = ApplicationData.Current.LocalFolder;
+                StorageFolder folder = await getFolder(); // 创建本地目录文件夹对象
 
                 try
                 {
@@ -334,12 +320,44 @@ namespace Chamberlain_UWP.Reminder
             {
                 StorageFolder folder = ApplicationData.Current.LocalFolder;
                 string path = folder.Path + '\\' + DataFilename;
-                if (System.IO.File.Exists(path))
+                if (System.IO.File.Exists(path)) //判断本地文件是否存在
                 {
                     StorageFile file = await folder.GetFileAsync(DataFilename);
-                    await file.DeleteAsync();
+                    if (await BackupData(folder)) await file.DeleteAsync(); //等待备份完成后再删除
                     ReminderItemList.Clear(); // 清除内存中的list
                 }
+            }
+
+            private static async Task<bool> BackupData(StorageFolder folder)
+            {
+                StorageFolder local_folder = ApplicationData.Current.LocalFolder;
+                if (await local_folder.TryGetItemAsync(BackupFilename) == null
+                    && await folder.TryGetItemAsync(DataFilename) != null) //本地无备份文件，被备份的文件也存在
+                {
+                    StorageFile file = await folder.GetFileAsync(DataFilename);
+                    await file.CopyAsync(local_folder, BackupFilename); //将文件复制为副本，名称为BackupFilename的内容                        
+                }
+                return true;
+            }
+
+            public static async Task<StorageFolder> getFolder()
+            {
+                StorageFolder folder; // 创建本地目录文件夹对象
+                //检查是否需从指定目录读取
+                if (StorageApplicationPermissions.FutureAccessList.ContainsItem("ReminderFolderToken"))
+                {
+                    try
+                    {
+                        folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
+                    }
+                    catch (System.IO.FileNotFoundException)
+                    {
+                        StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken"); //清除指定项
+                        folder = ApplicationData.Current.LocalFolder;
+                    }
+                }
+                else folder = ApplicationData.Current.LocalFolder;
+                return folder;
             }
         }
 

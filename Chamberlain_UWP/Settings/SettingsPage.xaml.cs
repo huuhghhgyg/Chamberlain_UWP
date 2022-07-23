@@ -333,9 +333,12 @@ namespace Chamberlain_UWP
 
         private void DeleteSelectedFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken");
-            DeleteSelectedFolderButton.IsEnabled = false;
-            SelectedFolderPathText.Text = "未指定任何文件夹";
+            if (StorageApplicationPermissions.FutureAccessList.ContainsItem("ReminderFolderToken")) //判断是否包含项，包含才删除
+            {
+                StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken");
+                DeleteSelectedFolderButton.IsEnabled = false;
+                SelectedFolderPathText.Text = "未指定任何文件夹";
+            }
         }
     }
 }
