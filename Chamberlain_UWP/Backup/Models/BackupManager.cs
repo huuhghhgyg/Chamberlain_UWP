@@ -221,10 +221,13 @@ namespace Chamberlain_UWP.Backup.Models
             PathRecord backupRecord, saveRecord;
             QueryBackupTask(backupPath, savePath, out backupRecord, out saveRecord); //查询路径记录
 
-            if (saveRecord == null || backupRecord == null) //如果记录不存在
+            if (saveRecord.Folder == null || backupRecord.Folder == null) //如果记录不存在
             {
-                if (saveRecord == null) AddErrorMessage(0, "无法获取保存文件夹");
-                else AddErrorMessage(0, "无法获取备份文件夹");
+                if (saveRecord == null) AddErrorMessage(0, $"无法获取保存文件夹 {savePath}");
+                else AddErrorMessage(0, $"无法获取备份文件夹 {backupPath}");
+                //恢复显示
+                BackupTaskStage = BackupStage.Spare;
+                WorkingFilePath = "错误";
             }
             else
             {
@@ -280,9 +283,7 @@ namespace Chamberlain_UWP.Backup.Models
                 }
                 catch (FileNotFoundException)
                 {
-                    ErrorMessages.Add($"❌文件不存在（计算Hash时）：{file.Path}");
-                    OnPropertyChanged(nameof(ErrorMessages));
-                    OnPropertyChanged(nameof(IsAnyError));
+                    AddErrorMessage(0, $"计算Hash时文件不存在：{file.Path}");
                 }
                 ProcessedFileCount++;
             }
@@ -464,7 +465,7 @@ namespace Chamberlain_UWP.Backup.Models
         }
 
         //通过备份文件夹的路径查询已有记录中最后一个完整备份
-        BackupVersionRecord QueryLastTotalBackupVersion(string backupPath)
+        public BackupVersionRecord QueryLastTotalBackupVersion(string backupPath)
         {
             var queryResults = (from BackupVersionRecord record in BackupVersionRecordList
                                 where record.BackupFolderPath == backupPath
@@ -557,7 +558,8 @@ namespace Chamberlain_UWP.Backup.Models
             {
                 StorageFile backupFile = await AppFolder.GetFileAsync(BackupJsonName); //获取文件
                 BackupFolderList = JsonSerializer.Deserialize<List<PathRecord>>(await DataSettings.LoadFile(backupFile)); //从文件中读取列表
-                BackupFolderList.ForEach(async item => item.Folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(item.Hash)); //获取folder
+                await GetPathRecordFolderAsync(BackupFolderList);
+
                 //恢复备份文件夹列表
                 BackupPageData._backupPathRecords = new ObservableCollection<PathRecord>(BackupFolderList);
                 List<BackupPathString> BackupFolderNames = (from PathRecord record in BackupFolderList
@@ -569,7 +571,8 @@ namespace Chamberlain_UWP.Backup.Models
             {
                 StorageFile saveFile = await AppFolder.GetFileAsync(SaveJsonName); //获取文件
                 SaveFolderList = JsonSerializer.Deserialize<List<PathRecord>>(await DataSettings.LoadFile(saveFile)); //从文件中读取列表
-                SaveFolderList.ForEach(async item => item.Folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(item.Hash)); //获取folder
+                await GetPathRecordFolderAsync(SaveFolderList);
+
                 //恢复目标文件夹列表
                 BackupPageData._savePathRecords = new ObservableCollection<PathRecord>(SaveFolderList);
                 List<SavePathString> SaveFolderNames = (from PathRecord record in SaveFolderList
@@ -588,6 +591,7 @@ namespace Chamberlain_UWP.Backup.Models
             BackupVersionRecordList.Clear();
             foreach (PathRecord record in SaveFolderList) //读取备份版本列表（可能散落在各个文件夹）
             {
+                if (record.Folder == null) continue;
                 if (await record.Folder.TryGetItemAsync(BackupVersionJsonName) != null) //文件存在
                 {
                     StorageFile file = await record.Folder.GetFileAsync(BackupVersionJsonName);
@@ -597,11 +601,27 @@ namespace Chamberlain_UWP.Backup.Models
             }
         }
 
+        async Task GetPathRecordFolderAsync(List<PathRecord> list)
+        {
+            foreach (PathRecord record in list)
+            {
+                try
+                {
+                    record.Folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(record.Hash);
+                }
+                catch (FileNotFoundException)
+                {
+                    AddErrorMessage(1, $"未能读取文件夹 {record.Path}");
+                }
+            }
+        }
+
         //Query备份路径对应的备份记录列表到备份页的ObservableCollection
         public void GetBackupVersionList(string backupPath)
         {
             var queryResults = (from BackupVersionRecord record in BackupVersionRecordList
                                 where record.BackupFolderPath == backupPath
+                                orderby record.BackupTime descending //倒叙排列备份时间（后来的在上面）
                                 select record).ToList();
             BackupPageData._backupVersionRecords = new ObservableCollection<BackupVersionRecord>(queryResults);
         }

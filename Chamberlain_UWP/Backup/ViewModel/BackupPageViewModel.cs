@@ -159,7 +159,8 @@ namespace Chamberlain_UWP.Backup
             {
                 _backupTaskSelectedIndex = value;
                 OnPropertyChanged(nameof(BackupTaskSelectedIndex));
-                //Manager.GenerateJsonAsync(Manager.BackupTaskList, Manager.BackupTaskJsonName); //保存备份任务列表
+                OnPropertyChanged(nameof(SelectedTask));
+                OnPropertyChanged(nameof(IsQuickBackupAllowed));
             }
         }
         public ObservableCollection<BackupVersionRecord> BackupVersionRecords
@@ -174,6 +175,35 @@ namespace Chamberlain_UWP.Backup
         public int BackupVersionRecordListSelectedIndex { get; set; } = -1;
 
         public bool IsRecordListOnLoading { get; set; } = false;
+
+        BackupTaskData SelectedTask
+        {
+            get
+            {
+                if (BackupTaskSelectedIndex != -1)
+                    return BackupTasks[BackupTaskSelectedIndex];
+                else
+                    return null;
+            }
+        }
+
+        public bool IsQuickBackupAllowed //是否允许快速备份
+        {
+            get
+            {
+                if (BackupTaskSelectedIndex == -1) //是否选中
+                    return false;
+                else
+                {
+                    if (SelectedTask != null)
+                    {
+                        bool result = Manager.QueryLastTotalBackupVersion(SelectedTask.BackupPath) != null;
+                        return result;
+                    }
+                    else return false;
+                }
+            }
+        }
 
         /// <summary>
         /// 方法区
@@ -194,7 +224,7 @@ namespace Chamberlain_UWP.Backup
 
                 ContentDialogResult result = await selectedTaskDiaglog.ShowAsync();
 
-                if(result == ContentDialogResult.Primary) //如果确认开始备份
+                if (result == ContentDialogResult.Primary) //如果确认开始备份
                 {
                     IsBackupCardVisible = true;
                     Manager.RunBackup(selectedTask.BackupPath, selectedTask.SavePath, true);
@@ -300,7 +330,6 @@ namespace Chamberlain_UWP.Backup
                 //添加访问权限
                 StorageApplicationPermissions.FutureAccessList.AddOrReplace(backup_path.Hash, backup_path.Folder); //添加访问token
                 DataSettings.GenerateJsonAsync(Manager.BackupFolderList, Manager.AppFolder, Manager.BackupJsonName); //保存备份文件列表
-
             }
         }
         public void DelFromBackupPathList() //从删除路径中移除
@@ -339,6 +368,33 @@ namespace Chamberlain_UWP.Backup
             }
         }
         public void ClearErrorMessages() => Manager.ErrorMessages.Clear();
+        public async void SaveErrorMessages()
+        {
+            var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+            savePicker.SuggestedStartLocation =
+                Windows.Storage.Pickers.PickerLocationId.Desktop;
+            // Dropdown of file types the user can save the file as
+            savePicker.FileTypeChoices.Add("纯文本", new List<string>() { ".txt" });
+            // Default file name if the user does not type one in or select a file to replace
+            savePicker.SuggestedFileName = $"log{DateTime.Now.ToString("MMddHHmm")}";
+
+            StorageFile file = await savePicker.PickSaveFileAsync();
+            if (file != null)
+            {
+                //写入完成后才会通知
+                CachedFileManager.DeferUpdates(file);
+
+                StringBuilder sb = new StringBuilder();
+                Manager.ErrorMessages.ToList().ForEach(item => sb.AppendLine($"{item}\n"));
+
+                await FileIO.WriteTextAsync(file, sb.ToString());
+
+                Windows.Storage.Provider.FileUpdateStatus status =
+                    await CachedFileManager.CompleteUpdatesAsync(file);
+                if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
+                    Manager.AddErrorMessage(0, $"无法保存到 {file.Name}");
+            }
+        }
 
         public void RefershData()
         {
