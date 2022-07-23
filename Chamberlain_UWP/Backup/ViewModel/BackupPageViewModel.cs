@@ -393,7 +393,6 @@ namespace Chamberlain_UWP.Backup
                 BackupVersionRecord backupRecord = BackupVersionRecords[BackupVersionRecordListSelectedIndex]; //获取选中的备份记录
                 IsRecordListOnLoading = true; //正在删除（设进度条状态为正在处理）
                 await Manager.DelFromBackupVersionListAsync(backupRecord);
-                Manager.UpdateErrorMessageList();
                 RefreshBackupRecordData();
                 IsRecordListOnLoading = false; //进度条取消处理状态
             }

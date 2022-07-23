@@ -207,11 +207,8 @@ namespace Chamberlain_UWP.Backup.Models
                              where record.Path == savePath
                              select record;
             saveRecord = save_query.FirstOrDefault(); //保存路径记录
-
-            if (saveRecord == null || backupRecord == null)
-                throw new Exception("路径不存在"); //需要返回重新选择
         }
-        
+
         //启动备份
         public void RunBackup(string backupPath, string savePath, bool isTotalBackup)
         {
@@ -224,10 +221,18 @@ namespace Chamberlain_UWP.Backup.Models
             PathRecord backupRecord, saveRecord;
             QueryBackupTask(backupPath, savePath, out backupRecord, out saveRecord); //查询路径记录
 
-            if (isTotalBackup)
-                TotalBackup(backupRecord.Hash, saveRecord.Hash);
+            if (saveRecord == null || backupRecord == null) //如果记录不存在
+            {
+                if (saveRecord == null) AddErrorMessage(0, "无法获取保存文件夹");
+                else AddErrorMessage(0, "无法获取备份文件夹");
+            }
             else
-                QuickBackup(backupRecord.Hash, saveRecord.Hash);
+            {
+                if (isTotalBackup)
+                    TotalBackup(backupRecord.Hash, saveRecord.Hash);
+                else
+                    QuickBackup(backupRecord.Hash, saveRecord.Hash);
+            }
         }
 
         //完整备份（流程）
@@ -314,8 +319,7 @@ namespace Chamberlain_UWP.Backup.Models
                 }
                 catch (FileNotFoundException)
                 {
-                    ErrorMessages.Add($"❌文件不存在（复制时）：{fileNode.File.Path}");
-                    UpdateErrorMessageList();
+                    AddErrorMessage(0, $"复制时文件不存在：{fileNode.File.Path}");
                 }
                 ProcessedFileCount++; //增加一个完成文件
             }
@@ -339,8 +343,31 @@ namespace Chamberlain_UWP.Backup.Models
             OnPropertyChanged(nameof(IsAnyError));
         }
 
+        //提交错误信息
+        public void AddErrorMessage(int level, string msg) //0错误；1警告；2提示
+        {
+            string levelString;
+            switch (level)
+            {
+                case 0:
+                    levelString = "错误❌：";
+                    break;
+                case 1:
+                    levelString = "警告⚠：";
+                    break;
+                case 2:
+                    levelString = "提示ℹ：";
+                    break;
+                default:
+                    levelString = "提示ℹ：";
+                    break;
+            }
+            ErrorMessages.Add($"{levelString}{msg}");
+            UpdateErrorMessageList();
+        }
+
         //创建文件夹相对路径（主方法）
-        async Task<StorageFolder> CreateRelativePath(StorageFolder rootFolder, string relativePath) 
+        async Task<StorageFolder> CreateRelativePath(StorageFolder rootFolder, string relativePath)
         {
             List<string> subfolders = relativePath.Split("\\").ToList(); //切割相对路径
             subfolders.RemoveAt(0); //第一个值为空，删掉
@@ -353,7 +380,7 @@ namespace Chamberlain_UWP.Backup.Models
         }
 
         //创建文件夹相对路径（递归）
-        async Task<StorageFolder> CreateRelativePath(StorageFolder folder, List<string> paths) 
+        async Task<StorageFolder> CreateRelativePath(StorageFolder folder, List<string> paths)
         {
             StorageFolder newFolder = await folder.CreateFolderAsync(paths[0], CreationCollisionOption.OpenIfExists); //如果已经存在，则打开
             paths.RemoveAt(0);
@@ -409,9 +436,9 @@ namespace Chamberlain_UWP.Backup.Models
                 List<string> fileNodeRelativePath = (from FileNode node in fileNodeList
                                                      select node.RelativePath).ToList();
                 lastFileNodes = (from FileNode node in lastFileNodes
-                                    where !fileNodeRelativePath.Contains(node.RelativePath) //删除旧版本的文件（hash不同，无法使用Except）
-                                       && !deletedFileNodeString.Contains(node.RelativePath) //排除标记已删除的文件
-                                    select node).ToList();
+                                 where !fileNodeRelativePath.Contains(node.RelativePath) //删除旧版本的文件（hash不同，无法使用Except）
+                                    && !deletedFileNodeString.Contains(node.RelativePath) //排除标记已删除的文件
+                                 select node).ToList();
 
                 //读取对应版本的文件夹
                 GetFileNodesHandle(lastTotalBackup, lastFileNodes);
@@ -631,7 +658,7 @@ namespace Chamberlain_UWP.Backup.Models
             }
             catch (Exception ex)
             {
-                ErrorMessages.Add($"⚠{ex.Message}");
+                AddErrorMessage(1, $"{ex.Message}");
             }
 
             try
@@ -641,12 +668,12 @@ namespace Chamberlain_UWP.Backup.Models
             }
             catch (Exception ex)
             {
-                ErrorMessages.Add($"⚠{ex.Message}");
+                AddErrorMessage(1, $"{ex.Message}");
             }
         }
 
         //加载备份信息（保存列表，删除列表）
-        async Task<BackupInfoList> LoadBackupInfoListAsync(BackupVersionRecord backupRecord) 
+        async Task<BackupInfoList> LoadBackupInfoListAsync(BackupVersionRecord backupRecord)
         {
             string backupInfoPath = $"{backupRecord.SaveFolderPath}\\{backupRecord.BackupFolderName}\\{backupRecord.VersionFolderName}.json"; //备份信息路径
 
