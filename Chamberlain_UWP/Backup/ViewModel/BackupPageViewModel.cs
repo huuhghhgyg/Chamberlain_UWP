@@ -111,7 +111,7 @@ namespace Chamberlain_UWP.Backup
             }
         }
 
-        public int BackupPathRecordsSelectedIndex //备份页选中的Index
+        public int BackupPathRecordsSelectedIndex //备份路径页选中的Index
         {
             get => _backupPathRecordsSelectedIndex;
             set
@@ -121,12 +121,13 @@ namespace Chamberlain_UWP.Backup
                 OnPropertyChanged(nameof(IsBackupDeleteButtonEnabled));
             }
         }
-        public bool IsBackupDeleteButtonEnabled
+
+        public bool IsBackupDeleteButtonEnabled //备份路径页删除按钮是否启用
         {
             get => BackupPathRecordsSelectedIndex != -1 && BackupPathRecords.Count > 0;
         }
 
-        public int SavePathRecordsSelectedIndex //保存页选中的Index
+        public int SavePathRecordsSelectedIndex //保存路径页选中的Index
         {
             get => _savePathRecordsSelectedIndex;
             set
@@ -137,7 +138,7 @@ namespace Chamberlain_UWP.Backup
             }
         }
 
-        public bool IsSaveDeleteButtonEnabled
+        public bool IsSaveDeleteButtonEnabled //保存路径页的删除按钮是否启用
         {
             get => SavePathRecordsSelectedIndex != -1 && SavePathRecords.Count > 0;
         }
@@ -158,7 +159,7 @@ namespace Chamberlain_UWP.Backup
         {
             get => BackupPathRecords[BackupRecordComboBoxSelectedIndex].Path;
         }
-        public string BackupRecordPathText //备份记录页ComboBox选择项对应的路径
+        public string BackupRecordPathText //备份路径页ComboBox选择项对应的路径
         {
             get
             {
@@ -205,11 +206,13 @@ namespace Chamberlain_UWP.Backup
                 OnPropertyChanged(nameof(BackupVersionRecords));
             }
         }
+
+        //备份记录DataGrid选中index
         public int BackupVersionRecordListSelectedIndex { get; set; } = -1;
 
-        public bool IsRecordListOnLoading { get; set; } = false;
+        public bool IsRecordListOnLoading { get; set; } = false; //记录页是否正在加载
 
-        BackupTaskData SelectedTask
+        BackupTaskData SelectedTask //选中的备份任务
         {
             get
             {
