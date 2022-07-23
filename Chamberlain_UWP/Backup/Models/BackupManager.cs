@@ -403,6 +403,11 @@ namespace Chamberlain_UWP.Backup.Models
         public async void RestoreAsync(BackupVersionRecord backupRecord, bool isExport)
         {
             BackupTaskStage = BackupStage.Preparing; //将状态改为准备中
+            
+            //清除记录
+            TotalFileCount = 0;
+            ProcessedFileCount = 0;
+
 
             BackupInfoList backupInfo = await LoadBackupInfoListAsync(backupRecord); //读取备份信息
             List<FileNode> fileNodeList = backupInfo.SaveList; //获取保存信息
@@ -601,6 +606,7 @@ namespace Chamberlain_UWP.Backup.Models
             }
         }
 
+        //读取路径列表中指定的文件夹
         async Task GetPathRecordFolderAsync(List<PathRecord> list)
         {
             foreach (PathRecord record in list)

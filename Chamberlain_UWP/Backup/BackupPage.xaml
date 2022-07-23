@@ -99,7 +99,7 @@
                         </muxc:Expander.Header>
                         <muxc:Expander.Content>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="取消" Margin="0,0,8,0"/>
+                                <!--<Button Content="取消" Margin="0,0,8,0"/>-->
                                 <ToggleButton Content="显示详细信息" IsChecked="{x:Bind ViewModel.Manager.ShowDetail,Mode=TwoWay}"/>
                             </StackPanel>
                         </muxc:Expander.Content>
@@ -134,7 +134,7 @@
                             <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
-                                    <RowDefinition/>
+                                    <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
                                 <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
                                     <AppBarButton Icon="Save" Label="保存列表" Click="{x:Bind ViewModel.SaveBackupTaskList}"/>
@@ -144,10 +144,6 @@
                                     <AppBarButton Icon="Add" Label="添加" Click="{x:Bind ViewModel.AddBackupTask}"/>
                                     <AppBarButton Icon="Delete" Label="删除" Click="{x:Bind ViewModel.DelFromBackupTask}"/>
                                 </CommandBar>
-                                <ListView BorderThickness="1"
-                                      BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
-                                      Height="380" Grid.Row="1"
-                                      HorizontalAlignment="Stretch"/>
                                 <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"
                                                    ItemsSource="{x:Bind ViewModel.BackupTasks,Mode=TwoWay}"
                                                    SelectedIndex="{x:Bind ViewModel.BackupTaskSelectedIndex,Mode=TwoWay}">
@@ -176,7 +172,7 @@
                                 <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto"/>
-                                        <RowDefinition/>
+                                        <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
                                     <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
                                         <AppBarButton Icon="Refresh" Label="刷新" Click="{x:Bind ViewModel.RefreshBackupRecordData}"
@@ -189,7 +185,7 @@
                                         <AppBarButton Icon="Delete" Label="删除" Click="{x:Bind ViewModel.DelBackup}"
                                                       IsEnabled="{x:Bind ViewModel.IsRecoveryButtonEnabled, Mode=OneWay}"/>
                                     </CommandBar>
-                                    <muxc:ProgressBar IsIndeterminate="{x:Bind ViewModel.IsRecordListOnLoading, Mode=TwoWay}" Grid.Row="1" VerticalAlignment="Top"/>
+                                    <muxc:ProgressBar IsIndeterminate="{x:Bind ViewModel.IsRecordListOnLoading, Mode=OneWay}" Grid.Row="1" VerticalAlignment="Top"/>
                                     <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"
                                                        ItemsSource="{x:Bind ViewModel.BackupVersionRecords,Mode=OneWay}"
                                                        SelectedIndex="{x:Bind ViewModel.BackupVersionRecordListSelectedIndex,Mode=TwoWay}">
@@ -210,7 +206,7 @@
                             <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
-                                    <RowDefinition/>
+                                    <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
                                 <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
                                     <AppBarButton Icon="Add" Label="添加" Click="{x:Bind ViewModel.Add2BackupPathList}"/>
@@ -235,7 +231,7 @@
                             <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
-                                    <RowDefinition/>
+                                    <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
                                 <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
                                     <AppBarButton Icon="Add" Label="添加" Click="{x:Bind ViewModel.Add2SavePathList}"/>
