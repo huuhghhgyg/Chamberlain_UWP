@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -36,7 +37,44 @@ namespace Chamberlain_UWP.Backup.Models
             RelativeFolder = relativeFolder;
             Hash = hash;
         }
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType()) return false;
+            FileNode nodeObj = (FileNode)obj;
+            return RelativePath == nodeObj.RelativePath && Hash == nodeObj.Hash;
+        }
+        public override int GetHashCode()
+        {
+            return (RelativePath + Hash).GetHashCode();
+        }
+        public static bool operator ==(FileNode a, FileNode b)
+        {
+            if (ReferenceEquals(a, b)) //都为null或者都指向同一个实例
+            {
+                return true;
+            }
+
+            if (((object)a == null) || ((object)b == null)) //其中一个为null
+            {
+                return false;
+            }
+
+            return a.RelativePath == b.RelativePath && a.Hash == b.Hash;
+        }
+        public static bool operator !=(FileNode a, FileNode b) => !(a == b);
     }
+
+    public class BackupInfoList //保存更新、添加、删除的文件节点列表
+    {
+        public List<FileNode> SaveList { get; set; } //更新、添加的文件节点列表
+        public List<FileNode> DeleteList { get; set; } //删除的文件节点列表
+        public BackupInfoList(List<FileNode> saveList, List<FileNode> deleteList)
+        {
+            SaveList = saveList;
+            DeleteList = deleteList;
+        }
+    }
+
     public class PathRecord //路径记录
     {
         [JsonIgnore]
@@ -69,7 +107,7 @@ namespace Chamberlain_UWP.Backup.Models
         public string BackupFolderName { get; set; } //备份文件夹名称
         public string VersionFolderName { get; set; } //备份版本文件夹名称（完整路径可以通过相加得到）
         public string SaveFolderPath { get; set; } //保存路径
-        public BackupVersionRecord(bool isFullBackup, DateTime backupTime, string backupFolderPath,string backupFolderName , string saveFolderPath, string versionFolderName)
+        public BackupVersionRecord(bool isFullBackup, DateTime backupTime, string backupFolderPath, string backupFolderName, string saveFolderPath, string versionFolderName)
         {
             IsFullBackup = isFullBackup;
             BackupTime = backupTime;

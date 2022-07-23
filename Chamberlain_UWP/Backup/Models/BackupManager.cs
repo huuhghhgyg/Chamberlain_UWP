@@ -22,6 +22,7 @@ namespace Chamberlain_UWP.Backup.Models
     {
         Spare, //空闲
         Preparing, //正在准备
+        Comparing, //正在比对
         ScanningHash, //正在计算Hash
         Backup, //正在备份
         Restore //正在恢复
@@ -31,7 +32,7 @@ namespace Chamberlain_UWP.Backup.Models
     {
         #region 私有变量
         // 变量区
-        private string backup_folder_path = ""; //备份文件夹的路径
+        private string backupFolderPath = ""; //备份文件夹的路径
         public List<PathRecord> BackupFolderList = new List<PathRecord>(); //备份文件夹路径列表
         public List<PathRecord> SaveFolderList = new List<PathRecord>(); //目标文件夹路径列表
         public List<BackupTaskData> BackupTaskList = new List<BackupTaskData>(); //备份任务描述列表
@@ -109,6 +110,10 @@ namespace Chamberlain_UWP.Backup.Models
                         WorkingFilePath = "处理中";
                         IsScanning = true;
                         return "正在扫描路径";
+                    case BackupStage.Comparing:
+                        WorkingFilePath = "处理中";
+                        IsScanning = true;
+                        return "正在比对信息";
                     case BackupStage.ScanningHash:
                         IsScanning = false;
                         return "正在计算文件Hash";
@@ -207,22 +212,72 @@ namespace Chamberlain_UWP.Backup.Models
         public async void QuickBackupFolder(string folder_token, string goal_token) // 快速备份
         {
             StorageFolder rootFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(folder_token);
-            if (rootFolder == null)
+            StorageFolder goalFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(goal_token);
+            if (rootFolder == null || goalFolder == null)
             {
-                throw new Exception("无法访问token");
+                if (rootFolder == null) throw new Exception("无法访问源文件夹token");
+                else throw new Exception("无法访问目标文件夹token");
             }
+
+            // 获取基本信息
+            backupFolderPath = rootFolder.Path; //备份文件夹的路径
+
             // 获取所有文件
             IReadOnlyList<StorageFile> all_files = await rootFolder.GetFilesAsync(Windows.Storage.Search.CommonFileQuery.OrderBySearchRank);
+            TotalFileCount = all_files.Count; //需要备份的文件总数
 
-            /* 1.计算所有的hash并保存到列表，方便与备份的目录进行比对
-             * 2.快速备份时也创建列表，与旧列表中比对：
-             *   a.文件存在于旧列表，hash相同 => 跳过
-             *   b.文件存在于旧列表，hash不同 => 备份
-             *   c.文件不存在于旧列表（新增） => 备份
-             * 3.反向比对（旧列表与新列表比对）:
-             *   a. 如果文件不存在于新列表 => 添加删除标记
-             * 4.输出结果到json
-             */
+            //读取最后一个完整备份
+            BackupVersionRecord lastTotalBackup = QueryLastTotalBackupVersion(backupFolderPath);
+
+            //计算Hash（步骤显示计算Hash）
+            List<FileNode> fileNodeList = await GetFileNodes(all_files);
+
+            //将状态改为正在比对信息
+            BackupTaskStage = BackupStage.Comparing;
+
+            //最后一个完整备份的备份信息路径
+            string backupInfoPath = $"{lastTotalBackup.SaveFolderPath}\\{lastTotalBackup.BackupFolderName}\\{lastTotalBackup.VersionFolderName}.json"; //备份信息路径
+            string saveVersionFolderPath = $"{lastTotalBackup.SaveFolderPath}\\{lastTotalBackup.BackupFolderName}\\{lastTotalBackup.VersionFolderName}"; //版本路径
+
+            //读取备份信息Json
+            StorageFile backupInfoJson = await StorageFile.GetFileFromPathAsync(backupInfoPath);
+            string contents = await DataSettings.LoadFile(backupInfoJson); //读取数据
+            List<BackupInfoList> lastTotalBackupInfo = JsonSerializer.Deserialize<List<BackupInfoList>>(contents); //从文件中读取备份信息
+            List<FileNode> lastTotalFileNodeList = lastTotalBackupInfo[0].SaveList; //从备份信息中读取保存文件列表
+
+            //文件比对
+            //找到当前列表中不存在于旧列表中的项（新增&更改）list1
+            List<FileNode> list1 = fileNodeList.Except(lastTotalFileNodeList).ToList();
+
+            //找到旧列表中不存在于当前列表中的项（删除&更改）list2
+            List<FileNode> list2 = lastTotalFileNodeList.Except(fileNodeList).ToList();
+
+            //list2删除与list1中相同的部分，得到删除的列表（仅删除）list2
+            List<string> pathList = (from FileNode node in list1
+                                     select node.RelativePath).ToList();
+            list2 = (from FileNode node in list2
+                     where !pathList.Contains(node.RelativePath)
+                     select node).ToList();
+            //Summary:
+            //list1：新增项&更改项
+            //list2：删除项
+            BackupInfoList backupInfo = new BackupInfoList(list1, list2);
+
+            //文件备份
+            await BackupFolder(rootFolder, goalFolder, backupInfo, false);
+
+            BackupTaskStage = BackupStage.Spare; //已完成，将状态恢复为空闲
+        }
+
+        //通过备份文件夹的路径查询已有记录中最后一个完整备份
+        public BackupVersionRecord QueryLastTotalBackupVersion(string backupPath)
+        {
+            var queryResults = (from BackupVersionRecord record in BackupVersionRecordList
+                                where record.BackupFolderPath == backupPath
+                                where record.IsFullBackup == true
+                                orderby record.BackupTime descending
+                                select record).ToList();
+            return queryResults.FirstOrDefault(); //返回第一个结果
         }
 
         public async void TotalBackupFolder(string folder_token, string goal_token) // 完整备份
@@ -236,32 +291,34 @@ namespace Chamberlain_UWP.Backup.Models
             }
 
             // 获取基本信息
-            backup_folder_path = rootFolder.Path; //备份文件夹的路径
+            backupFolderPath = rootFolder.Path; //备份文件夹的路径
 
             // 获取所有文件
             IReadOnlyList<StorageFile> all_files = await rootFolder.GetFilesAsync(Windows.Storage.Search.CommonFileQuery.OrderBySearchRank);
             TotalFileCount = all_files.Count; //需要备份的文件总数
 
-            //计算Hash
-            List<FileNode> file_node_list = await CalculateFileNodeHash(all_files);
+            //获取列表条目完整内容，计算Hash
+            List<FileNode> fileNodeList = await GetFileNodes(all_files);
+
+            BackupInfoList backupInfo = new BackupInfoList(fileNodeList, null);
 
             //文件备份
-            await BackupFolder(rootFolder, goalFolder, file_node_list, true);
+            await BackupFolder(rootFolder, goalFolder, backupInfo, true);
 
             BackupTaskStage = BackupStage.Spare; //已完成，将状态恢复为空闲
         }
 
-        public async Task<List<FileNode>> CalculateFileNodeHash(IReadOnlyList<StorageFile> all_files)
+        public async Task<List<FileNode>> GetFileNodes(IReadOnlyList<StorageFile> all_files)
         {
             //添加到操作列表，并计算Hash
             BackupTaskStage = BackupStage.ScanningHash; //将状态改为正在计算Hash
-            List<FileNode> file_node_list = new List<FileNode>();
+            List<FileNode> fileNodeList = new List<FileNode>();
             foreach (StorageFile file in all_files)
             {
-                string relative_path = file.Path.Substring(backup_folder_path.Length);
+                string relative_path = file.Path.Substring(backupFolderPath.Length);
                 try
                 {
-                    file_node_list.Add(new FileNode(file, relative_path, await GetMD5HashAsync(file)));
+                    fileNodeList.Add(new FileNode(file, relative_path, await GetMD5HashAsync(file)));
                 }
                 catch (FileNotFoundException)
                 {
@@ -271,32 +328,34 @@ namespace Chamberlain_UWP.Backup.Models
                 }
                 ProcessedFileCount++;
             }
-            return file_node_list;
+            return fileNodeList;
         }
 
-        public async Task BackupFolder(StorageFolder rootFolder, StorageFolder goalFolder, List<FileNode> file_node_list, bool isTotalBackup)
+        public async Task BackupFolder(StorageFolder rootFolder, StorageFolder goalFolder, BackupInfoList list, bool isTotalBackup)
         {
             //备份版本文件夹名称(如：2022-07-17-110502)
             string backup_date = DateTime.Now.ToString("yyyy-MM-dd-HHmmss");
             StorageFolder versionFolder = await goalFolder.CreateFolderAsync(rootFolder.Name, CreationCollisionOption.OpenIfExists); //存放各种备份版本的文件夹，文件名为备份文件夹的名称
             StorageFolder goalVersionFolder = await versionFolder.CreateFolderAsync(backup_date); //存至版本文件夹
 
-            DataSettings.GenerateJsonAsync(file_node_list, versionFolder, $"{backup_date}.json"); //导出文件信息至备份文件夹
+            List<FileNode> fileNodeList = list.SaveList; //获取新增、更新的文件
+            DataSettings.GenerateJsonAsync(new List<BackupInfoList>() { list }, versionFolder, $"{backup_date}.json"); //导出文件信息至备份文件夹
 
             BackupTaskStage = BackupStage.Backup; //将状态改为正在备份
+            TotalFileCount = fileNodeList.Count; //更新备份文件总数
             ProcessedFileCount = 0; //已处理文件数清零
 
-            foreach (FileNode fileNode in file_node_list)
+            foreach (FileNode fileNode in fileNodeList)
             {
                 if (ShowDetail) WorkingFilePath = fileNode.File.Path; //更新正在工作的文件路径
                 else WorkingFilePath = "正在备份";
 
                 //获取相对路径
-                StorageFolder relative_folder = await CreateRelativePath(goalVersionFolder, fileNode.RelativePath);
+                StorageFolder relativeFolder = await CreateRelativePath(goalVersionFolder, fileNode.RelativePath);
 
                 try //尝试复制
                 {
-                    await fileNode.File.CopyAsync(relative_folder);
+                    await fileNode.File.CopyAsync(relativeFolder);
                 }
                 catch (FileNotFoundException)
                 {
@@ -345,7 +404,7 @@ namespace Chamberlain_UWP.Backup.Models
             else return newFolder; //最终路径
         }
 
-        public void RunTotalBackup(string backup_path, string save_path)
+        public void RunBackup(string backup_path, string save_path, bool isTotalBackup)
         {
             BackupTaskStage = BackupStage.Preparing; //准备阶段
             //清除记录
@@ -355,7 +414,10 @@ namespace Chamberlain_UWP.Backup.Models
             PathRecord backup_record, save_record;
             QueryBackupTask(backup_path, save_path, out backup_record, out save_record); //查询路径记录
 
-            TotalBackupFolder(backup_record.Hash, save_record.Hash);
+            if (isTotalBackup)
+                TotalBackupFolder(backup_record.Hash, save_record.Hash);
+            else
+                QuickBackupFolder(backup_record.Hash, save_record.Hash);
         }
 
         #region 文件保存配置
@@ -419,7 +481,7 @@ namespace Chamberlain_UWP.Backup.Models
             }
         }
 
-        //Query对应数据
+        //Query备份路径对应的备份记录列表到备份页的ObservableCollection
         public void GetBackupVersionList(string backupPath)
         {
             var queryResults = (from BackupVersionRecord record in BackupVersionRecordList
@@ -491,18 +553,38 @@ namespace Chamberlain_UWP.Backup.Models
                 ErrorMessages.Add($"⚠{ex.Message}");
             }
         }
-        public async void RestoreAsync(BackupVersionRecord backupRecord, bool isExport)
-        {
-            BackupTaskStage = BackupStage.Preparing; //将状态改为准备中
 
+        async Task<BackupInfoList> LoadBackupInfoListAsync(BackupVersionRecord backupRecord) //加载备份信息（保存列表，删除列表）
+        {
             string backupInfoPath = $"{backupRecord.SaveFolderPath}\\{backupRecord.BackupFolderName}\\{backupRecord.VersionFolderName}.json"; //备份信息路径
-            string saveVersionFolderPath = $"{backupRecord.SaveFolderPath}\\{backupRecord.BackupFolderName}\\{backupRecord.VersionFolderName}"; //版本路径
+            //string saveVersionFolderPath = $"{backupRecord.SaveFolderPath}\\{backupRecord.BackupFolderName}\\{backupRecord.VersionFolderName}"; //版本路径
 
             //读取备份信息Json
             StorageFile backupInfoJson = await StorageFile.GetFileFromPathAsync(backupInfoPath);
             string contents = await DataSettings.LoadFile(backupInfoJson); //读取数据
-            List<FileNode> file_node_list = JsonSerializer.Deserialize<List<FileNode>>(contents); //从文件中读取列表
-            file_node_list.ForEach(async item => item.File = await StorageFile.GetFileFromPathAsync($"{saveVersionFolderPath}{item.RelativePath}")); //读取对应版本的文件夹
+            List<BackupInfoList> backupInfoList = JsonSerializer.Deserialize<List<BackupInfoList>>(contents); //从文件中读取列表
+            return backupInfoList[0];
+        }
+
+        //读取所有FileNode中的StorageFile
+        public void GetFileNodeListHandle(BackupVersionRecord backupRecord, List<FileNode> fileNodeList)
+        {
+            string saveVersionFolderPath = $"{backupRecord.SaveFolderPath}\\{backupRecord.BackupFolderName}\\{backupRecord.VersionFolderName}"; //版本路径
+            fileNodeList.ForEach(async item => item.File = await StorageFile.GetFileFromPathAsync($"{saveVersionFolderPath}{item.RelativePath}"));
+        }
+
+        public async void RestoreAsync(BackupVersionRecord backupRecord, bool isExport)
+        {
+            BackupTaskStage = BackupStage.Preparing; //将状态改为准备中
+
+            BackupInfoList backupInfo = await LoadBackupInfoListAsync(backupRecord); //读取备份信息
+
+            List<FileNode> fileNodeList = backupInfo.SaveList; //获取保存信息
+
+            //版本文件夹路径
+            string saveVersionFolderPath = $"{backupRecord.SaveFolderPath}\\{backupRecord.BackupFolderName}\\{backupRecord.VersionFolderName}";
+            //读取对应版本的文件夹
+            GetFileNodeListHandle(backupRecord, fileNodeList);
 
             StorageFolder rootFolder; //声明rootFolder
             if (isExport) //判断是否要求导出到库中的下载文件夹
@@ -515,12 +597,39 @@ namespace Chamberlain_UWP.Backup.Models
             else
                 rootFolder = await StorageFolder.GetFolderFromPathAsync(backupRecord.BackupFolderPath);
 
+            if (!backupRecord.IsFullBackup) //判断是否完整备份
+            {
+                List<string> deletedFileNodeString =
+                    new List<string>(from FileNode node in backupInfo.DeleteList select node.RelativePath); //获取当前版本标记的删除项
+
+                GetFileNodeListHandle(backupRecord, fileNodeList);
+
+                //如果非完整备份，要计算需要恢复的fileNodeList
+                BackupVersionRecord lastTotalBackup = QueryLastTotalBackupVersion(backupRecord.BackupFolderPath);
+                BackupInfoList lastBackupInfo = await LoadBackupInfoListAsync(lastTotalBackup); //读取备份信息
+                List<FileNode> lastFileNodeList = lastBackupInfo.SaveList; //获取保存信息
+
+                //获取快速备份的文件路径列表
+                List<string> fileNodeRelativePath = (from FileNode node in fileNodeList
+                                                     select node.RelativePath).ToList();
+                lastFileNodeList = (from FileNode node in lastFileNodeList
+                                    where !fileNodeRelativePath.Contains(node.RelativePath) //删除旧版本的文件（hash不同，无法使用Except）
+                                       && !deletedFileNodeString.Contains(node.RelativePath) //排除标记已删除的文件
+                                    select node).ToList();
+
+                //读取对应版本的文件夹
+                GetFileNodeListHandle(lastTotalBackup, lastFileNodeList);
+
+                //添加没有变更的文件
+                fileNodeList.AddRange(lastFileNodeList);
+            }
+
             BackupTaskStage = BackupStage.Restore; //将状态改为恢复中
             //更新信息
-            TotalFileCount = file_node_list.Count; //需要处理的文件总数
+            TotalFileCount = fileNodeList.Count; //需要处理的文件总数
             ProcessedFileCount = 0; //清零
 
-            foreach (FileNode file in file_node_list)
+            foreach (FileNode file in fileNodeList)
             {
                 StorageFolder relativeFolder = await CreateRelativePath(rootFolder, file.RelativePath);
                 await file.File.CopyAsync(relativeFolder, file.File.Name, NameCollisionOption.ReplaceExisting);

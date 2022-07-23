@@ -137,8 +137,8 @@
                                 </Grid.RowDefinitions>
                                 <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
                                     <AppBarButton Icon="Save" Label="保存列表" Click="{x:Bind ViewModel.SaveBackupTaskList}"/>
-                                    <AppBarButton Icon="Play" Label="快速备份" Click="{x:Bind ViewModel.SwitchTaskState}"/>
-                                    <AppBarButton Icon="MoveToFolder" Label="完整备份" Click="{x:Bind ViewModel.Backup_Start}"/>
+                                    <AppBarButton Icon="Play" Label="快速备份" Click="{x:Bind ViewModel.QuickBackupStart}"/>
+                                    <AppBarButton Icon="MoveToFolder" Label="完整备份" Click="{x:Bind ViewModel.TotalBackupStart}"/>
                                     <AppBarButton Icon="Add" Label="添加" Click="{x:Bind ViewModel.AddBackupTask}"/>
                                     <AppBarButton Icon="Delete" Label="删除" Click="{x:Bind ViewModel.DelFromBackupTask}"/>
                                 </CommandBar>

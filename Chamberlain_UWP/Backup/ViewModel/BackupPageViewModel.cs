@@ -117,7 +117,7 @@ namespace Chamberlain_UWP.Backup
             {
                 _backupRecordComboBoxSelectedIndex = value;
                 OnPropertyChanged(nameof(BackupRecordComboBoxSelectedIndex));
-                Manager.GetBackupVersionList(BackupRecordComboBoxSelectedPath); //获取列表
+                Manager.GetBackupVersionList(BackupRecordComboBoxSelectedPath); //获取选中路径的备份列表
                 OnPropertyChanged(nameof(BackupVersionRecords)); //备份版本记录的内容也要随之改变
             }
         }
@@ -179,32 +179,74 @@ namespace Chamberlain_UWP.Backup
         /// 方法区
         /// </summary>
 
-        public async void Backup_Start()
+        public async void TotalBackupStart()
         {
             if (BackupTaskSelectedIndex != -1)
             {
                 BackupTaskData selectedTask = BackupTasks[BackupTaskSelectedIndex];
                 ContentDialog selectedTaskDiaglog = new ContentDialog
                 {
-                    Title = "选中的任务如下",
-                    Content = $"\"{selectedTask.BackupPath}\" -> \"{selectedTask.SavePath}\"",
-                    CloseButtonText = "Ok"
+                    Title = "完整备份",
+                    Content = $"选中的任务如下\n\"{selectedTask.BackupPath}\" -> \"{selectedTask.SavePath}\"",
+                    PrimaryButtonText = "开始备份",
+                    CloseButtonText = "取消"
                 };
 
                 ContentDialogResult result = await selectedTaskDiaglog.ShowAsync();
 
-                IsBackupCardVisible = true;
-                Manager.RunTotalBackup(selectedTask.BackupPath, selectedTask.SavePath);
+                if(result == ContentDialogResult.Primary) //如果确认开始备份
+                {
+                    IsBackupCardVisible = true;
+                    Manager.RunBackup(selectedTask.BackupPath, selectedTask.SavePath, true);
+                }
             }
         }
 
-        public void Backup_Cancel() //备份取消
+        public async void QuickBackupStart()
         {
+            if (BackupTaskSelectedIndex != -1)
+            {
+                BackupTaskData selectedTask = BackupTasks[BackupTaskSelectedIndex];
+                ContentDialog selectedTaskDiaglog = new ContentDialog
+                {
+                    Title = "快速备份",
+                    Content = $"选中的任务如下\n\"{selectedTask.BackupPath}\" -> \"{selectedTask.SavePath}\"",
+                    PrimaryButtonText = "开始备份",
+                    CloseButtonText = "取消"
+                };
+
+                ContentDialogResult result = await selectedTaskDiaglog.ShowAsync();
+
+                if (result == ContentDialogResult.Primary) //如果确认开始备份
+                {
+                    IsBackupCardVisible = true;
+                    Manager.RunBackup(selectedTask.BackupPath, selectedTask.SavePath, false);
+                }
+            }
 
         }
 
-        public void SwitchTaskState() //更改备份状态
+        public async void Backup_Cancel() //备份取消
         {
+            if (BackupTaskSelectedIndex != -1)
+            {
+                BackupTaskData selectedTask = BackupTasks[BackupTaskSelectedIndex];
+                ContentDialog selectedTaskDiaglog = new ContentDialog
+                {
+                    Title = "完整备份",
+                    Content = $"选中的任务如下\n\"{selectedTask.BackupPath}\" -> \"{selectedTask.SavePath}\"",
+                    PrimaryButtonText = "开始备份",
+                    CloseButtonText = "取消"
+                };
+
+                ContentDialogResult result = await selectedTaskDiaglog.ShowAsync();
+
+                if (result == ContentDialogResult.Primary) //如果确认开始备份
+                {
+                    IsBackupCardVisible = true;
+                    Manager.RunBackup(selectedTask.BackupPath, selectedTask.SavePath, false);
+                }
+            }
         }
 
         async Task<StorageFolder> OpenFolder()
