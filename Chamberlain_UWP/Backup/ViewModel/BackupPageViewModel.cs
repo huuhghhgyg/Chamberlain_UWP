@@ -65,6 +65,8 @@ namespace Chamberlain_UWP.Backup
         /// </summary>
         int _backupRecordComboBoxSelectedIndex = -1;
         int _backupTaskSelectedIndex = -1; //任务列表选中任务项
+        int _backupPathRecordsSelectedIndex = -1;
+        int _savePathRecordsSelectedIndex = -1;
         internal BackupManager Manager = new BackupManager();
         bool _isBackupCardVisible = false;
 
@@ -97,7 +99,6 @@ namespace Chamberlain_UWP.Backup
                 OnPropertyChanged(nameof(BackupPathNames));
             }
         }
-        public int BackupPathRecordsSelectedIndex { get; set; } = -1; //选中的Index
         public ObservableCollection<PathRecord> SavePathRecords //ObservableCollection备份列表
         {
             get => BackupPageData._savePathRecords;
@@ -109,7 +110,38 @@ namespace Chamberlain_UWP.Backup
                 OnPropertyChanged(nameof(SavePathNames));
             }
         }
-        public int SavePathRecordsSelectedIndex { get; set; } = -1; //选中的Index
+
+        public int BackupPathRecordsSelectedIndex //备份页选中的Index
+        {
+            get => _backupPathRecordsSelectedIndex;
+            set
+            {
+                _backupPathRecordsSelectedIndex = value;
+                OnPropertyChanged(nameof(BackupPathRecordsSelectedIndex));
+                OnPropertyChanged(nameof(IsBackupDeleteButtonEnabled));
+            }
+        }
+        public bool IsBackupDeleteButtonEnabled
+        {
+            get => BackupPathRecordsSelectedIndex != -1 && BackupPathRecords.Count > 0;
+        }
+
+        public int SavePathRecordsSelectedIndex //保存页选中的Index
+        {
+            get => _savePathRecordsSelectedIndex;
+            set
+            {
+                _savePathRecordsSelectedIndex = value;
+                OnPropertyChanged(nameof(SavePathRecordsSelectedIndex));
+                OnPropertyChanged(nameof(IsSaveDeleteButtonEnabled));
+            }
+        }
+
+        public bool IsSaveDeleteButtonEnabled
+        {
+            get => SavePathRecordsSelectedIndex != -1 && SavePathRecords.Count > 0;
+        }
+
         public int BackupRecordComboBoxSelectedIndex //备份记录页的ComboBox选择项
         {
             get => _backupRecordComboBoxSelectedIndex;
@@ -119,6 +151,7 @@ namespace Chamberlain_UWP.Backup
                 OnPropertyChanged(nameof(BackupRecordComboBoxSelectedIndex));
                 Manager.GetBackupVersionList(BackupRecordComboBoxSelectedPath); //获取选中路径的备份列表
                 OnPropertyChanged(nameof(BackupVersionRecords)); //备份版本记录的内容也要随之改变
+                OnPropertyChanged(nameof(IsRecoveryButtonEnabled)); //启用按钮
             }
         }
         public string BackupRecordComboBoxSelectedPath //选中项的值
@@ -203,6 +236,11 @@ namespace Chamberlain_UWP.Backup
                     else return false;
                 }
             }
+        }
+
+        public bool IsRecoveryButtonEnabled //恢复页面的操作按钮是否启用
+        {
+            get => BackupRecordComboBoxSelectedIndex != -1 && BackupVersionRecords.Count > 0;
         }
 
         /// <summary>
