@@ -321,6 +321,7 @@ namespace Chamberlain_UWP.Backup
                 {
                     IsBackupCardVisible = true;
                     await Manager.RunBackupAsync(selectedTask.BackupPath, selectedTask.SavePath, true);
+                    OnPropertyChanged(nameof(IsQuickBackupAllowed)); //允许快速备份
                 }
             }
             else

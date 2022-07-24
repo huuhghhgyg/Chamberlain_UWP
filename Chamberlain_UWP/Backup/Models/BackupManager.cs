@@ -447,7 +447,13 @@ namespace Chamberlain_UWP.Backup.Models
                 rootFolder = await DownloadsFolder.CreateFolderAsync(folderName, CreationCollisionOption.GenerateUniqueName);
             }
             else
+            {
                 rootFolder = await StorageFolder.GetFolderFromPathAsync(backupRecord.BackupFolderPath);
+
+                //删除文件夹下所有文件
+                IReadOnlyList<StorageFolder> folderList = await rootFolder.GetFoldersAsync();
+                foreach (StorageFolder subfolder in folderList) await subfolder.DeleteAsync();
+            }
 
             if (!backupRecord.IsFullBackup) //判断是否完整备份
             {
@@ -459,7 +465,7 @@ namespace Chamberlain_UWP.Backup.Models
                 await GetFileNodesHandleAsync(backupRecord, fileNodeList);
 
                 //如果非完整备份，要计算需要恢复的fileNodeList
-                BackupVersionRecord lastTotalBackup = QueryLastTotalBackupVersion(backupRecord.BackupFolderPath);
+                BackupVersionRecord lastTotalBackup = QueryLastTotalBackupVersion(backupRecord.BackupFolderPath, backupRecord.BackupTime);
                 BackupInfoList lastBackupInfo = await LoadBackupInfoListAsync(lastTotalBackup); //读取备份信息
                 List<FileNode> lastFileNodes = lastBackupInfo.SaveList; //获取保存信息
 
@@ -505,6 +511,19 @@ namespace Chamberlain_UWP.Backup.Models
                                 select record).ToList();
             return queryResults.FirstOrDefault(); //返回第一个结果
         }
+        
+        //根据快速备份时间查询最近一个完整备份
+        public BackupVersionRecord QueryLastTotalBackupVersion(string backupPath, DateTime quickBackupDateTime)
+        {
+            var queryResults = (from BackupVersionRecord record in BackupVersionRecordList
+                                where record.BackupFolderPath == backupPath
+                                where record.IsFullBackup == true
+                                where record.BackupTime < quickBackupDateTime
+                                orderby record.BackupTime descending
+                                select record).ToList();
+            return queryResults.FirstOrDefault(); //返回第一个结果
+        }
+
 
         //快速备份（流程）
         async Task QuickBackup(string folderToken, string goalToken)
