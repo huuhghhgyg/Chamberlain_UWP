@@ -321,7 +321,6 @@ namespace Chamberlain_UWP.Backup
                 {
                     IsBackupCardVisible = true;
                     await Manager.RunBackupAsync(selectedTask.BackupPath, selectedTask.SavePath, true);
-                    await Manager.LoadData();
                 }
             }
             else
@@ -352,7 +351,6 @@ namespace Chamberlain_UWP.Backup
                 {
                     IsBackupCardVisible = true;
                     await Manager.RunBackupAsync(selectedTask.BackupPath, selectedTask.SavePath, false);
-                    await Manager.LoadData();
                 }
             }
 
@@ -376,7 +374,7 @@ namespace Chamberlain_UWP.Backup
                 if (result == ContentDialogResult.Primary) //如果确认开始备份
                 {
                     IsBackupCardVisible = true;
-                    Manager.RunBackupAsync(selectedTask.BackupPath, selectedTask.SavePath, false);
+                    await Manager.RunBackupAsync(selectedTask.BackupPath, selectedTask.SavePath, false);
                 }
             }
         }
