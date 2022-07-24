@@ -69,6 +69,7 @@ namespace Chamberlain_UWP.Backup
         int _savePathRecordsSelectedIndex = -1;
         internal BackupManager Manager = new BackupManager();
         bool _isBackupCardVisible = false;
+        int _backupVersionRecordListSelectedIndex = -1;
 
         /// <summary>
         /// 属性区
@@ -153,6 +154,7 @@ namespace Chamberlain_UWP.Backup
                 Manager.GetBackupVersionList(BackupRecordComboBoxSelectedPath); //获取选中路径的备份列表
                 OnPropertyChanged(nameof(BackupVersionRecords)); //备份版本记录的内容也要随之改变
                 OnPropertyChanged(nameof(IsRecoveryButtonEnabled)); //启用按钮
+                OnPropertyChanged(nameof(IsRecoveryDeleteButtionEnabled)); //启用删除按钮
             }
         }
         public string BackupRecordComboBoxSelectedPath //选中项的值
@@ -208,7 +210,16 @@ namespace Chamberlain_UWP.Backup
         }
 
         //备份记录DataGrid选中index
-        public int BackupVersionRecordListSelectedIndex { get; set; } = -1;
+        public int BackupVersionRecordListSelectedIndex
+        {
+            get => _backupVersionRecordListSelectedIndex;
+            set
+            {
+                _backupVersionRecordListSelectedIndex = value;
+                OnPropertyChanged(nameof(BackupVersionRecordListSelectedIndex));
+                OnPropertyChanged(nameof(IsRecoveryDeleteButtionEnabled));
+            }
+        }
 
         public bool IsRecordListOnLoading { get; set; } = false; //记录页是否正在加载
 
@@ -244,6 +255,31 @@ namespace Chamberlain_UWP.Backup
         public bool IsRecoveryButtonEnabled //恢复页面的操作按钮是否启用
         {
             get => BackupRecordComboBoxSelectedIndex != -1 && BackupVersionRecords.Count > 0;
+        }
+
+        public bool IsRecoveryDeleteButtionEnabled //恢复页面的删除按钮是否启用
+        {
+            get
+            {
+                if (IsRecoveryButtonEnabled) //备份页面的Button是否开启
+                {
+                    List<BackupVersionRecord> records = new List<BackupVersionRecord>(BackupVersionRecords);
+                    var lastFullBackupRecords = from BackupVersionRecord record in records
+                                                where record.IsFullBackup
+                                                orderby record.BackupTime descending
+                                                select record;
+                    DateTime lastFullBackupTime = lastFullBackupRecords.ToList()[0].BackupTime;
+                    var quickBackupRecords = from BackupVersionRecord record in records
+                                             where record.BackupTime > lastFullBackupTime
+                                             select record;
+                    if (BackupVersionRecordListSelectedIndex == -1 ||
+                        lastFullBackupTime == BackupVersionRecords[BackupVersionRecordListSelectedIndex].BackupTime &&
+                        quickBackupRecords.ToList().Count > 0) //列表未选中，或如果最后一个完整备份前有快速备份
+                        return false; //不允许删除
+                    else return true;
+                }
+                else return false;
+            }
         }
 
         /// <summary>
@@ -467,9 +503,9 @@ namespace Chamberlain_UWP.Backup
         {
             if (BackupVersionRecordListSelectedIndex != -1)
             {
+                IsBackupCardVisible = true;
                 BackupVersionRecord backupRecord = BackupVersionRecords[BackupVersionRecordListSelectedIndex]; //获取选中的备份记录
                 Manager.RestoreAsync(backupRecord, false);
-                IsBackupCardVisible = true;
             }
         }
 
@@ -477,9 +513,9 @@ namespace Chamberlain_UWP.Backup
         {
             if (BackupVersionRecordListSelectedIndex != -1)
             {
+                IsBackupCardVisible = true;
                 BackupVersionRecord backupRecord = BackupVersionRecords[BackupVersionRecordListSelectedIndex]; //获取选中的备份记录
                 Manager.RestoreAsync(backupRecord, true);
-                IsBackupCardVisible = true;
             }
         }
 
