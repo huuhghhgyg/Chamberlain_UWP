@@ -44,6 +44,7 @@ namespace Chamberlain_UWP.Backup.Models
         bool _isScanning = false;
         bool _showDetail = true;
         public List<BackupVersionRecord> BackupVersionRecordList = new List<BackupVersionRecord>(); //存放历史备份
+        string _backupTaskStageString = "当前无任务";
 
         #endregion
 
@@ -91,6 +92,44 @@ namespace Chamberlain_UWP.Backup.Models
             set
             {
                 _stage = value;
+
+                //更新备份内容
+                switch (_stage)
+                {
+                    case BackupStage.Spare:
+                        WorkingFilePath = "已完成";
+                        IsScanning = false;
+                        BackupTaskStageString = "当前无任务";
+                        break;
+                    case BackupStage.Preparing: //BackupStage.Preparing
+                        WorkingFilePath = "处理中";
+                        IsScanning = true;
+                        BackupTaskStageString = "正在扫描路径";
+                        break;
+                    case BackupStage.Comparing:
+                        WorkingFilePath = "处理中";
+                        IsScanning = true;
+                        BackupTaskStageString = "正在比对信息";
+                        break;
+                    case BackupStage.ScanningHash:
+                        IsScanning = false;
+                        BackupTaskStageString = "正在计算文件Hash";
+                        break;
+                    case BackupStage.Backup:
+                        IsScanning = false;
+                        BackupTaskStageString = "正在备份文件";
+                        break;
+                    case BackupStage.Restore:
+                        IsScanning = false;
+                        BackupTaskStageString = "正在恢复文件";
+                        break;
+                    default:
+                        IsScanning = true;
+                        BackupTaskStageString = "状态未知";
+                        break;
+                }
+
+                //更新属性
                 OnPropertyChanged(nameof(BackupTaskStage));
                 OnPropertyChanged(nameof(BackupTaskStageString));
                 OnPropertyChanged(nameof(IsWorking));
@@ -98,35 +137,11 @@ namespace Chamberlain_UWP.Backup.Models
         }
         public string BackupTaskStageString
         {
-            get
+            get => _backupTaskStageString;
+            set
             {
-                switch (_stage)
-                {
-                    case BackupStage.Spare:
-                        WorkingFilePath = "已完成";
-                        IsScanning = false;
-                        return "当前无任务";
-                    case BackupStage.Preparing: //BackupStage.Preparing
-                        WorkingFilePath = "处理中";
-                        IsScanning = true;
-                        return "正在扫描路径";
-                    case BackupStage.Comparing:
-                        WorkingFilePath = "处理中";
-                        IsScanning = true;
-                        return "正在比对信息";
-                    case BackupStage.ScanningHash:
-                        IsScanning = false;
-                        return "正在计算文件Hash";
-                    case BackupStage.Backup:
-                        IsScanning = false;
-                        return "正在备份文件";
-                    case BackupStage.Restore:
-                        IsScanning = false;
-                        return "正在恢复文件";
-                    default:
-                        IsScanning = true;
-                        return "状态未知";
-                }
+                _backupTaskStageString = value;
+                OnPropertyChanged(nameof(BackupTaskStageString));
             }
         }
         public bool IsWorking
@@ -210,7 +225,7 @@ namespace Chamberlain_UWP.Backup.Models
         }
 
         //启动备份
-        public void RunBackup(string backupPath, string savePath, bool isTotalBackup)
+        public async Task RunBackupAsync(string backupPath, string savePath, bool isTotalBackup)
         {
             BackupTaskStage = BackupStage.Preparing; //标记为准备阶段
 
@@ -232,14 +247,14 @@ namespace Chamberlain_UWP.Backup.Models
             else
             {
                 if (isTotalBackup)
-                    TotalBackup(backupRecord.Hash, saveRecord.Hash);
+                    await TotalBackup(backupRecord.Hash, saveRecord.Hash);
                 else
-                    QuickBackup(backupRecord.Hash, saveRecord.Hash);
+                    await QuickBackup(backupRecord.Hash, saveRecord.Hash);
             }
         }
 
         //完整备份（流程）
-        async void TotalBackup(string folderToken, string goalToken)
+        async Task TotalBackup(string folderToken, string goalToken)
         {
             StorageFolder rootFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(folderToken);
             StorageFolder goalFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(goalToken);
@@ -308,8 +323,7 @@ namespace Chamberlain_UWP.Backup.Models
 
             foreach (FileNode fileNode in fileNodeList)
             {
-                if (ShowDetail) WorkingFilePath = fileNode.File.Path; //更新正在工作的文件路径
-                else WorkingFilePath = "正在备份";
+                WorkingFilePath = ShowDetail ? fileNode.File.Path : "正在备份"; //更新正在工作的文件路径
 
                 //获取相对路径
                 StorageFolder relativeFolder = await CreateRelativePath(goalVersionFolder, fileNode.RelativePath);
@@ -327,6 +341,12 @@ namespace Chamberlain_UWP.Backup.Models
 
             //添加备份记录
             await ExportBackupVersionJsonAsync(goalFolder, rootFolder, backupDateString, isTotalBackup);
+            if(TotalFileCount == 0)
+            {
+                AddErrorMessage(2, "没有检测到文件变更");
+                TotalFileCount = 1;
+                ProcessedFileCount = 1;
+            }
         }
 
         //清除错误信息列表
@@ -393,10 +413,13 @@ namespace Chamberlain_UWP.Backup.Models
         }
 
         //读取所有FileNode中的StorageFile
-        void GetFileNodesHandle(BackupVersionRecord backupRecord, List<FileNode> fileNodeList)
+        async Task GetFileNodesHandleAsync(BackupVersionRecord backupRecord, List<FileNode> fileNodeList)
         {
             string saveVersionFolderPath = $"{backupRecord.SaveFolderPath}\\{backupRecord.BackupFolderName}\\{backupRecord.VersionFolderName}"; //版本路径
-            fileNodeList.ForEach(async item => item.File = await StorageFile.GetFileFromPathAsync($"{saveVersionFolderPath}{item.RelativePath}"));
+            foreach (FileNode node in fileNodeList)
+            {
+                node.File = await StorageFile.GetFileFromPathAsync($"{saveVersionFolderPath}{node.RelativePath}");
+            }
         }
 
         //从备份恢复
@@ -404,11 +427,16 @@ namespace Chamberlain_UWP.Backup.Models
         {
             BackupTaskStage = BackupStage.Preparing; //将状态改为准备中
 
+            //清除记录
+            TotalFileCount = 0;
+            ProcessedFileCount = 0;
+
             BackupInfoList backupInfo = await LoadBackupInfoListAsync(backupRecord); //读取备份信息
             List<FileNode> fileNodeList = backupInfo.SaveList; //获取保存信息
 
-            //读取对应版本的文件夹
-            GetFileNodesHandle(backupRecord, fileNodeList);
+            //读取对应版本文件夹中的文件
+            WorkingFilePath = "正在读取备份文件";
+            await GetFileNodesHandleAsync(backupRecord, fileNodeList);
 
             StorageFolder rootFolder; //声明rootFolder
             if (isExport) //判断是否要求导出到库中的下载文件夹
@@ -423,10 +451,12 @@ namespace Chamberlain_UWP.Backup.Models
 
             if (!backupRecord.IsFullBackup) //判断是否完整备份
             {
+                WorkingFilePath = "正在与完整备份进行比对"; //更新信息
+
                 List<string> deletedFileNodeString =
                     new List<string>(from FileNode node in backupInfo.DeleteList select node.RelativePath); //获取当前版本标记的删除项
 
-                GetFileNodesHandle(backupRecord, fileNodeList);
+                await GetFileNodesHandleAsync(backupRecord, fileNodeList);
 
                 //如果非完整备份，要计算需要恢复的fileNodeList
                 BackupVersionRecord lastTotalBackup = QueryLastTotalBackupVersion(backupRecord.BackupFolderPath);
@@ -442,7 +472,7 @@ namespace Chamberlain_UWP.Backup.Models
                                  select node).ToList();
 
                 //读取对应版本的文件夹
-                GetFileNodesHandle(lastTotalBackup, lastFileNodes);
+                await GetFileNodesHandleAsync(lastTotalBackup, lastFileNodes);
 
                 //添加没有变更的文件
                 fileNodeList.AddRange(lastFileNodes);
@@ -455,6 +485,7 @@ namespace Chamberlain_UWP.Backup.Models
 
             foreach (FileNode file in fileNodeList)
             {
+                WorkingFilePath = ShowDetail ? file.RelativePath : "正在恢复"; //显示正在处理的文件
                 StorageFolder relativeFolder = await CreateRelativePath(rootFolder, file.RelativePath);
                 await file.File.CopyAsync(relativeFolder, file.File.Name, NameCollisionOption.ReplaceExisting);
                 ProcessedFileCount++;
@@ -476,7 +507,7 @@ namespace Chamberlain_UWP.Backup.Models
         }
 
         //快速备份（流程）
-        async void QuickBackup(string folderToken, string goalToken)
+        async Task QuickBackup(string folderToken, string goalToken)
         {
             StorageFolder rootFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(folderToken);
             StorageFolder goalFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(goalToken);
@@ -538,12 +569,27 @@ namespace Chamberlain_UWP.Backup.Models
 
 
         #region 文件保存配置
-        // 文件保存
-        public readonly string BackupJsonName = "BackupFolders.json";
-        public readonly string SaveJsonName = "SaveFolders.json";
-        public readonly string BackupTaskJsonName = "BackupTasks.json";
-        public readonly string BackupVersionJsonName = "BackupVersion.json";
-        internal readonly StorageFolder AppFolder = ApplicationData.Current.LocalFolder;
+        // 文件名称访问器
+        public string BackupJsonName
+        {
+            get => DataSettings.BackupJsonName;
+        }
+        public string SaveJsonName
+        {
+            get => DataSettings.SaveJsonName;
+        }
+        public string BackupTaskJsonName
+        {
+            get => DataSettings.BackupTaskJsonName;
+        }
+        public string BackupVersionJsonName
+        {
+            get => DataSettings.BackupVersionJsonName;
+        }
+        internal StorageFolder AppFolder
+        {
+            get => DataSettings.AppFolder;
+        }
 
         #endregion
 
@@ -601,6 +647,7 @@ namespace Chamberlain_UWP.Backup.Models
             }
         }
 
+        //读取路径列表中指定的文件夹
         async Task GetPathRecordFolderAsync(List<PathRecord> list)
         {
             foreach (PathRecord record in list)
