@@ -340,5 +340,28 @@ namespace Chamberlain_UWP
                 SelectedFolderPathText.Text = "未指定任何文件夹";
             }
         }
+        private StorageFolder AppFolder
+        {
+            get => DataSettings.AppFolder;
+        }
+        async void ClearBackupListData()
+        {
+            ContentDialog clearBackupDataDialog = new ContentDialog()
+            {
+                Title = "确认",
+                Content = "是否要清除备份模块的数据？保存于备份文件夹中的数据将不会被清除",
+                PrimaryButtonText = "确定",
+                CloseButtonText = "取消"
+            };
+
+            var result = await clearBackupDataDialog.ShowAsync();
+
+            if(result == ContentDialogResult.Primary) //确认清除
+            {
+                await DataSettings.DeleteFile(AppFolder, DataSettings.BackupJsonName);
+                await DataSettings.DeleteFile(AppFolder, DataSettings.SaveJsonName);
+                await DataSettings.DeleteFile(AppFolder, DataSettings.BackupTaskJsonName);
+            }
+        }
     }
 }

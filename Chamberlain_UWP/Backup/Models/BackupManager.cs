@@ -225,7 +225,7 @@ namespace Chamberlain_UWP.Backup.Models
         }
 
         //启动备份
-        public void RunBackup(string backupPath, string savePath, bool isTotalBackup)
+        public async Task RunBackupAsync(string backupPath, string savePath, bool isTotalBackup)
         {
             BackupTaskStage = BackupStage.Preparing; //标记为准备阶段
 
@@ -247,14 +247,14 @@ namespace Chamberlain_UWP.Backup.Models
             else
             {
                 if (isTotalBackup)
-                    TotalBackup(backupRecord.Hash, saveRecord.Hash);
+                    await TotalBackup(backupRecord.Hash, saveRecord.Hash);
                 else
-                    QuickBackup(backupRecord.Hash, saveRecord.Hash);
+                    await QuickBackup(backupRecord.Hash, saveRecord.Hash);
             }
         }
 
         //完整备份（流程）
-        async void TotalBackup(string folderToken, string goalToken)
+        async Task TotalBackup(string folderToken, string goalToken)
         {
             StorageFolder rootFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(folderToken);
             StorageFolder goalFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(goalToken);
@@ -341,6 +341,12 @@ namespace Chamberlain_UWP.Backup.Models
 
             //添加备份记录
             await ExportBackupVersionJsonAsync(goalFolder, rootFolder, backupDateString, isTotalBackup);
+            if(TotalFileCount == 0)
+            {
+                AddErrorMessage(2, "没有检测到文件变更");
+                TotalFileCount = 1;
+                ProcessedFileCount = 1;
+            }
         }
 
         //清除错误信息列表
@@ -501,7 +507,7 @@ namespace Chamberlain_UWP.Backup.Models
         }
 
         //快速备份（流程）
-        async void QuickBackup(string folderToken, string goalToken)
+        async Task QuickBackup(string folderToken, string goalToken)
         {
             StorageFolder rootFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(folderToken);
             StorageFolder goalFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(goalToken);
@@ -563,12 +569,27 @@ namespace Chamberlain_UWP.Backup.Models
 
 
         #region 文件保存配置
-        // 文件保存
-        public readonly string BackupJsonName = "BackupFolders.json";
-        public readonly string SaveJsonName = "SaveFolders.json";
-        public readonly string BackupTaskJsonName = "BackupTasks.json";
-        public readonly string BackupVersionJsonName = "BackupVersion.json";
-        internal readonly StorageFolder AppFolder = ApplicationData.Current.LocalFolder;
+        // 文件名称访问器
+        public string BackupJsonName
+        {
+            get => DataSettings.BackupJsonName;
+        }
+        public string SaveJsonName
+        {
+            get => DataSettings.SaveJsonName;
+        }
+        public string BackupTaskJsonName
+        {
+            get => DataSettings.BackupTaskJsonName;
+        }
+        public string BackupVersionJsonName
+        {
+            get => DataSettings.BackupVersionJsonName;
+        }
+        internal StorageFolder AppFolder
+        {
+            get => DataSettings.AppFolder;
+        }
 
         #endregion
 

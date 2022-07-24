@@ -10,6 +10,13 @@ namespace Chamberlain_UWP.Settings
 {
     internal static class DataSettings //帮助管理应用数据存取
     {
+        #region 文件名
+        public static readonly string BackupJsonName = "BackupFolders.json"; //存放于应用文件夹
+        public static readonly string SaveJsonName = "SaveFolders.json"; //存放于应用文件夹
+        public static readonly string BackupTaskJsonName = "BackupTasks.json"; //存放于应用文件夹
+        public static readonly string BackupVersionJsonName = "BackupVersion.json"; //存放于备份目录文件夹
+        internal static readonly StorageFolder AppFolder = ApplicationData.Current.LocalFolder;
+        #endregion
         public static async Task<string> ExportToFile(StorageFolder folder, string file_name, string contents) //返回保存路径，默认覆盖重名文件
         {
             StorageFile file = await folder.CreateFileAsync(file_name, CreationCollisionOption.ReplaceExisting);
@@ -28,6 +35,15 @@ namespace Chamberlain_UWP.Settings
             string jsonContent = JsonSerializer.Serialize(list, options); //序列化
 
             await ExportToFile(exportFolder, filename, jsonContent); //导出到文件
+        }
+
+        public static async Task DeleteFile(StorageFolder folder, string fileName) //删除文件
+        {
+            if (await folder.TryGetItemAsync(fileName) != null)
+            {
+                StorageFile file = await AppFolder.GetFileAsync(fileName);
+                await file.DeleteAsync();
+            }
         }
     }
 }

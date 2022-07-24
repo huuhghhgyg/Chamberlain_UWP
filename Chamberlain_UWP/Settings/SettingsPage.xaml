@@ -165,7 +165,7 @@
                         </Grid>
                     </muxc:Expander.Content>
                 </muxc:Expander>
-                
+
                 <TextBlock Text="同步" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <Grid Margin="0,4,0,0" Padding="16,12" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
@@ -259,6 +259,29 @@
                             </Button.Flyout>
                         </Button>
                     </StackPanel>
+                </muxc:Expander>
+
+                <muxc:Expander Name="BackupExpander" Margin="0,4,0,0"
+                               IsExpanded="True" ExpandDirection="Down"
+                               VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                               HorizontalContentAlignment="Stretch"
+                               Background="{ThemeResource CardBackgroundFillColorDefault}">
+                    <muxc:Expander.Header>
+                        <StackPanel Orientation="Horizontal" Height="64">
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE81C;" />
+                            <TextBlock Text="备份" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </muxc:Expander.Header>
+                    <StackPanel>
+                        <TextBlock Text="清除所有列表数据"
+                                   Margin="0,0,0,8"
+                                   Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <StackPanel>
+                            <TextBlock Text="这可能有助于修复崩溃问题" Margin="0,0,0,8"/>
+                            <Button Content="清除" Click="{x:Bind ClearBackupListData}"/>
+                        </StackPanel>
+                    </StackPanel>
+
                 </muxc:Expander>
 
                 <muxc:Expander Name="DebugOptionExpander"

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Chamberlain_UWP.Backup
@@ -70,6 +71,7 @@ namespace Chamberlain_UWP.Backup
         internal BackupManager Manager = new BackupManager();
         bool _isBackupCardVisible = false;
         int _backupVersionRecordListSelectedIndex = -1;
+        bool _isRecordListOnLoading = false;
 
         /// <summary>
         /// 属性区
@@ -221,7 +223,21 @@ namespace Chamberlain_UWP.Backup
             }
         }
 
-        public bool IsRecordListOnLoading { get; set; } = false; //记录页是否正在加载
+        public bool IsRecordListOnLoading //记录页是否正在加载
+        {
+            get => _isRecordListOnLoading;
+            set
+            {
+                _isRecordListOnLoading = value;
+                OnPropertyChanged(nameof(IsRecordListOnLoading));
+                OnPropertyChanged(nameof(IsRecordListProgressVisible)); //修改可见性
+            }
+        }
+
+        public Visibility IsRecordListProgressVisible
+        {
+            get => IsRecordListOnLoading ? Visibility.Visible : Visibility.Collapsed;
+        }
 
         BackupTaskData SelectedTask //选中的备份任务
         {
@@ -304,8 +320,16 @@ namespace Chamberlain_UWP.Backup
                 if (result == ContentDialogResult.Primary) //如果确认开始备份
                 {
                     IsBackupCardVisible = true;
-                    Manager.RunBackup(selectedTask.BackupPath, selectedTask.SavePath, true);
+                    await Manager.RunBackupAsync(selectedTask.BackupPath, selectedTask.SavePath, true);
+                    await Manager.LoadData();
                 }
+            }
+            else
+            {
+                if (BackupTasks.Count > 0)
+                    DisplayDialog("没有选中备份任务","请先选中备份任务再进行备份");
+                else
+                    DisplayDialog("没有备份任务", "请先添加备份任务");
             }
         }
 
@@ -327,7 +351,8 @@ namespace Chamberlain_UWP.Backup
                 if (result == ContentDialogResult.Primary) //如果确认开始备份
                 {
                     IsBackupCardVisible = true;
-                    Manager.RunBackup(selectedTask.BackupPath, selectedTask.SavePath, false);
+                    await Manager.RunBackupAsync(selectedTask.BackupPath, selectedTask.SavePath, false);
+                    await Manager.LoadData();
                 }
             }
 
@@ -351,7 +376,7 @@ namespace Chamberlain_UWP.Backup
                 if (result == ContentDialogResult.Primary) //如果确认开始备份
                 {
                     IsBackupCardVisible = true;
-                    Manager.RunBackup(selectedTask.BackupPath, selectedTask.SavePath, false);
+                    Manager.RunBackupAsync(selectedTask.BackupPath, selectedTask.SavePath, false);
                 }
             }
         }
@@ -371,13 +396,21 @@ namespace Chamberlain_UWP.Backup
             StorageFolder folder = await OpenFolder();
             if (folder != null)
             {
-                SavePathRecords.Add(new PathRecord(folder)); //UI
-                BackupPageData._savePathNames.Add(new SavePathString(folder.Path));
-                PathRecord save_path = new PathRecord(folder);
-                Manager.SaveFolderList.Add(save_path);
-                //添加访问权限
-                StorageApplicationPermissions.FutureAccessList.AddOrReplace(save_path.Hash, save_path.Folder); //添加访问token
-                DataSettings.GenerateJsonAsync(Manager.SaveFolderList, Manager.AppFolder, Manager.SaveJsonName); //保存目标目录列表
+                List<string> list = (from PathRecord record in Manager.SaveFolderList
+                                     select record.Path).ToList();
+                if (list.Contains(folder.Path))
+                    DisplayDialog("提示", "检测到路径已经存在，路径将不会被添加");
+                else
+                {
+                    SavePathRecords.Add(new PathRecord(folder)); //UI
+                    BackupPageData._savePathNames.Add(new SavePathString(folder.Path));
+                    PathRecord save_path = new PathRecord(folder);
+                    Manager.SaveFolderList.Add(save_path);
+                    //添加访问权限
+                    StorageApplicationPermissions.FutureAccessList.AddOrReplace(save_path.Hash, save_path.Folder); //添加访问token
+                    DataSettings.GenerateJsonAsync(Manager.SaveFolderList, Manager.AppFolder, Manager.SaveJsonName); //保存目标目录列表
+                    OnPropertyChanged(nameof(SavePathRecords));
+                }
             }
         }
         public void DelFromSavePathList() //从保存路径移除
@@ -400,13 +433,21 @@ namespace Chamberlain_UWP.Backup
             StorageFolder folder = await OpenFolder();
             if (folder != null)
             {
-                BackupPathRecords.Add(new PathRecord(folder)); //UI
-                BackupPageData._backupPathNames.Add(new BackupPathString(folder.Path));
-                PathRecord backup_path = new PathRecord(folder);
-                Manager.BackupFolderList.Add(backup_path);
-                //添加访问权限
-                StorageApplicationPermissions.FutureAccessList.AddOrReplace(backup_path.Hash, backup_path.Folder); //添加访问token
-                DataSettings.GenerateJsonAsync(Manager.BackupFolderList, Manager.AppFolder, Manager.BackupJsonName); //保存备份文件列表
+                List<string> list = (from PathRecord record in Manager.BackupFolderList
+                                     select record.Path).ToList();
+                if (list.Contains(folder.Path))
+                    DisplayDialog("提示", "检测到路径已经存在，路径将不会被添加");
+                else
+                {
+                    BackupPathRecords.Add(new PathRecord(folder)); //UI
+                    BackupPageData._backupPathNames.Add(new BackupPathString(folder.Path));
+                    PathRecord backup_path = new PathRecord(folder);
+                    Manager.BackupFolderList.Add(backup_path);
+                    //添加访问权限
+                    StorageApplicationPermissions.FutureAccessList.AddOrReplace(backup_path.Hash, backup_path.Folder); //添加访问token
+                    DataSettings.GenerateJsonAsync(Manager.BackupFolderList, Manager.AppFolder, Manager.BackupJsonName); //保存备份文件列表
+                    OnPropertyChanged(nameof(BackupPathRecords));
+                }
             }
         }
         public void DelFromBackupPathList() //从删除路径中移除
@@ -529,6 +570,18 @@ namespace Chamberlain_UWP.Backup
                 RefreshBackupRecordData();
                 IsRecordListOnLoading = false; //进度条取消处理状态
             }
+        }
+
+        private async void DisplayDialog(string title, string content)
+        {
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = title,
+                Content = content,
+                CloseButtonText = "确定"
+            };
+
+            ContentDialogResult result = await dialog.ShowAsync();
         }
     }
 }
