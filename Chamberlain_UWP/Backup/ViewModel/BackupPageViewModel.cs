@@ -1,4 +1,4 @@
-﻿using Chamberlain_UWP.Backup.Models;
+using Chamberlain_UWP.Backup.Models;
 using Chamberlain_UWP.Settings;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Chamberlain_UWP.Backup
 {
-    public static class BackupPageData
+    internal static class BackupPageData
     {
         public static ObservableCollection<PathRecord> _backupPathRecords = new ObservableCollection<PathRecord>(); //备份页数据
         public static ObservableCollection<PathRecord> _savePathRecords = new ObservableCollection<PathRecord>(); //保存页数据
@@ -177,7 +177,7 @@ namespace Chamberlain_UWP.Backup
         }
         public string BackupRecordComboBoxSelectedPath //选中项的值
         {
-            get => BackupPathRecords[BackupRecordComboBoxSelectedIndex].Path;
+            get => BackupRecordComboBoxSelectedIndex == -1 ? null : BackupPathRecords[BackupRecordComboBoxSelectedIndex].Path;
         }
         public string BackupRecordPathText //备份路径页ComboBox选择项对应的路径
         {
@@ -320,8 +320,7 @@ namespace Chamberlain_UWP.Backup
             set
             {
                 BackupTaskSequence = value;
-                OnPropertyChanged(nameof(BackupTaskSequence));
-                OnPropertyChanged(nameof(IsBackupTaskSequenceVisible));
+                RefreshBackupTaskSequenceData();
             }
         }
 
@@ -331,6 +330,11 @@ namespace Chamberlain_UWP.Backup
         }
 
         public int BackupTaskSequenceSelectedIndex { get; set; } = -1;
+
+        public string BackupTaskSequenceDescription //剩余任务显示
+        {
+            get => $"剩余{BackupTaskSequence.Count}条任务"; //正在处理的也算
+        }
 
         /// <summary>
         /// 方法区
@@ -358,8 +362,7 @@ namespace Chamberlain_UWP.Backup
                 //    //OnPropertyChanged(nameof(IsQuickBackupAllowed)); //允许快速备份
                 //}
                 BackupTaskSequence.Add(new BackupTaskSequenceItem(selectedTask, true)); //将完整备份任务添加至任务序列
-                OnPropertyChanged(nameof(BackupTaskSequence));
-                OnPropertyChanged(nameof(IsBackupTaskSequenceVisible));
+                RefreshBackupTaskSequenceData();
             }
             else
             {
@@ -391,8 +394,7 @@ namespace Chamberlain_UWP.Backup
                 //    await Manager.RunBackupAsync(selectedTask.BackupPath, selectedTask.SavePath, false);
                 //}
                 BackupTaskSequence.Add(new BackupTaskSequenceItem(selectedTask, false)); //将快速备份任务添加至任务序列
-                OnPropertyChanged(nameof(BackupTaskSequence));
-                OnPropertyChanged(nameof(IsBackupTaskSequenceVisible));
+                RefreshBackupTaskSequenceData();
             }
         }
 
@@ -404,8 +406,7 @@ namespace Chamberlain_UWP.Backup
                 BackupTaskSequenceItem item = BackupTaskSequence[0];
                 BackupTaskSequence.RemoveAt(0); //从任务序列中删除即将执行的任务
 
-                OnPropertyChanged(nameof(BackupTaskSequence));
-                OnPropertyChanged(nameof(IsBackupTaskSequenceVisible));
+                RefreshBackupTaskSequenceData();
 
                 await Manager.RunBackupAsync(item.BackupPath, item.SavePath, item.IsFullBackup);
                 OnPropertyChanged(nameof(IsQuickBackupAllowed));
@@ -424,11 +425,10 @@ namespace Chamberlain_UWP.Backup
 
         public void DelBackupTaskSequenceItem() //删除选中的任务序列项
         {
-            BackupTaskSequence.RemoveAt(BackupTaskSequenceSelectedIndex);
+            if(BackupTaskSelectedIndex != -1)
+                BackupTaskSequence.RemoveAt(BackupTaskSequenceSelectedIndex);
 
-            OnPropertyChanged(nameof(BackupTaskSequence)); //更新列表
-            OnPropertyChanged(nameof(BackupTaskSequenceSelectedIndex)); //更新选中index
-            OnPropertyChanged(nameof(IsBackupTaskSequenceVisible));
+            RefreshBackupTaskSequenceData();
         }
 
         public async void Add2SavePathList() //添加到保存路径
@@ -622,6 +622,13 @@ namespace Chamberlain_UWP.Backup
             };
 
             await dialog.ShowAsync();
+        }
+
+        private void RefreshBackupTaskSequenceData() //刷新备份任务序列的属性
+        {
+            OnPropertyChanged(nameof(BackupTaskSequence));
+            OnPropertyChanged(nameof(IsBackupTaskSequenceVisible));
+            OnPropertyChanged(nameof(BackupTaskSequenceDescription));
         }
     }
 }

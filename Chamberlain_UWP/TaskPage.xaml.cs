@@ -1,3 +1,4 @@
+using Chamberlain_UWP.Backup;
 using Chamberlain_UWP.Reminder;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,11 @@ namespace Chamberlain_UWP
     public sealed partial class TaskPage : Page
     {
         ObservableCollection<ReminderItem> ReminderListOnwork = new ObservableCollection<ReminderItem>(); // 正在处理
+
+        BackupPageViewModel BackupViewModel //备份页的ViewModel
+        {
+            get => BackupData.ViewModel;
+        }
 
         bool IsPageAlive = true; // 确认页面是否被Unload
 

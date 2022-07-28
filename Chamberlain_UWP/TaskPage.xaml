@@ -51,10 +51,60 @@
         <ScrollViewer Grid.Row="1">
             <!--面板-->
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48">
-                <TextBlock Name="NoTaskTextBlock" Text="所有任务已完成☕" Padding="0,4,0,0" Style="{ThemeResource SubtitleTextBlockStyle}"/>
-                <Reminder:ReminderCardListView ReminderList="{x:Bind ReminderListOnwork,Mode=OneWay}" ListViewItemChecked="ReminderCardListView_ListViewItemChecked"/>
+                <!--待办-->
+                <StackPanel>
+                    <TextBlock Text="待办事项" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,8"/>
+                    <TextBlock Name="NoTaskTextBlock" Text="所有任务已完成☕" Margin="0,4,0,0"/>
+                    <Reminder:ReminderCardListView ReminderList="{x:Bind ReminderListOnwork,Mode=OneWay}" ListViewItemChecked="ReminderCardListView_ListViewItemChecked"/>
+                </StackPanel>
+                <!--备份-->
+                <StackPanel Visibility="{x:Bind BackupViewModel.IsBackupCardVisible, Mode=OneWay}">
+                    <TextBlock Text="备份状态" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <TextBlock Text="{x:Bind BackupViewModel.BackupTaskSequenceDescription, Mode=OneWay}"
+                               Visibility="{x:Bind BackupViewModel.IsBackupTaskSequenceVisible,Mode=OneWay}"
+                               Margin="0,0,0,4"/>
+                    <muxc:Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                        <muxc:Expander.Header>
+                            <Grid Padding="0,12">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{x:Bind BackupViewModel.Manager.BackupTaskStageString,Mode=OneWay}" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                                    <TextBlock Text="{x:Bind BackupViewModel.Manager.BackupProgressString,Mode=OneWay}" Grid.Column="1"
+                                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+                                </Grid>
+                                <muxc:ProgressBar Value="{x:Bind BackupViewModel.Manager.ProcessedFileCount,Mode=OneWay}"
+                                                  Maximum="{x:Bind BackupViewModel.Manager.TotalFileCount,Mode=OneWay}"
+                                                  Grid.Row="1" Margin="0,8"
+                                                  IsIndeterminate="{x:Bind BackupViewModel.Manager.IsScanning,Mode=OneWay}"/>
+                                <TextBlock Text="{x:Bind BackupViewModel.Manager.WorkingFilePath,Mode=OneWay}" Grid.Row="2"
+                                   Style="{StaticResource CaptionTextBlockStyle}" 
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            </Grid>
+                        </muxc:Expander.Header>
+                        <muxc:Expander.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <!--<Button Content="取消" Margin="0,0,8,0"/>-->
+                                <ToggleButton Content="显示详细信息" IsChecked="{x:Bind BackupViewModel.Manager.ShowDetail,Mode=TwoWay}"/>
+                            </StackPanel>
+                        </muxc:Expander.Content>
+                    </muxc:Expander>
+                    <TextBlock Visibility="{x:Bind BackupViewModel.Manager.IsAnyError,Mode=OneWay}"
+                               Text="* 备份错误列表中有信息,请转到备份页查看"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
-
     </Grid>
 </Page>

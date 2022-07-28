@@ -66,44 +66,48 @@
                 <!--备份StackPanel-->
                 <StackPanel>
                     <TextBlock Text="备份状态" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
-                    <muxc:Expander Visibility="{x:Bind ViewModel.IsBackupCardVisible, Mode=OneWay}"
-                                   HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
-                        <muxc:Expander.Header>
-                            <Grid Padding="0,12">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid>
+                    <StackPanel Visibility="{x:Bind ViewModel.IsBackupCardVisible, Mode=OneWay}">
+                        <TextBlock Text="{x:Bind ViewModel.BackupTaskSequenceDescription, Mode=OneWay}"
+                                   Visibility="{x:Bind ViewModel.IsBackupTaskSequenceVisible,Mode=OneWay}"
+                                   Margin="0,0,0,4"/>
+                        <muxc:Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <muxc:Expander.Header>
+                                <Grid Padding="0,12">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{x:Bind ViewModel.Manager.BackupTaskStageString,Mode=OneWay}" Foreground="{ThemeResource TextFillColorPrimary}"/>
-                                    <TextBlock Text="{x:Bind ViewModel.Manager.BackupProgressString,Mode=OneWay}" Grid.Column="1"
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{x:Bind ViewModel.Manager.BackupTaskStageString,Mode=OneWay}" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                                        <TextBlock Text="{x:Bind ViewModel.Manager.BackupProgressString,Mode=OneWay}" Grid.Column="1"
                                        Foreground="{ThemeResource TextFillColorPrimary}"/>
-                                </Grid>
-                                <muxc:ProgressBar Value="{x:Bind ViewModel.Manager.ProcessedFileCount,Mode=OneWay}"
+                                    </Grid>
+                                    <muxc:ProgressBar Value="{x:Bind ViewModel.Manager.ProcessedFileCount,Mode=OneWay}"
                                                   Maximum="{x:Bind ViewModel.Manager.TotalFileCount,Mode=OneWay}"
                                                   Grid.Row="1" Margin="0,8"
                                                   IsIndeterminate="{x:Bind ViewModel.Manager.IsScanning,Mode=OneWay}"/>
-                                <TextBlock Text="{x:Bind ViewModel.Manager.WorkingFilePath,Mode=OneWay}" Grid.Row="2"
+                                    <TextBlock Text="{x:Bind ViewModel.Manager.WorkingFilePath,Mode=OneWay}" Grid.Row="2"
                                    Style="{StaticResource CaptionTextBlockStyle}" 
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                            </Grid>
-                        </muxc:Expander.Header>
-                        <muxc:Expander.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <!--<Button Content="取消" Margin="0,0,8,0"/>-->
-                                <ToggleButton Content="显示详细信息" IsChecked="{x:Bind ViewModel.Manager.ShowDetail,Mode=TwoWay}"/>
-                            </StackPanel>
-                        </muxc:Expander.Content>
-                    </muxc:Expander>
+                                </Grid>
+                            </muxc:Expander.Header>
+                            <muxc:Expander.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <!--<Button Content="取消" Margin="0,0,8,0"/>-->
+                                    <ToggleButton Content="显示详细信息" IsChecked="{x:Bind ViewModel.Manager.ShowDetail,Mode=TwoWay}"/>
+                                </StackPanel>
+                            </muxc:Expander.Content>
+                        </muxc:Expander>
+                    </StackPanel>
                     <TextBlock Text="（无任务）" Visibility="{x:Bind ViewModel.IsNoTaskTextVisible,Mode=OneWay}"/>
 
                     <StackPanel Visibility="{x:Bind ViewModel.IsBackupTaskSequenceVisible, Mode=OneWay}">

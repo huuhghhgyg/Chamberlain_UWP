@@ -199,7 +199,7 @@
                                    Margin="0,0,0,8"
                                    Style="{ThemeResource BaseTextBlockStyle}"/>
                         <StackPanel>
-                            <TextBlock Name="SelectedFolderPathText" VerticalAlignment="Center"/>
+                            <TextBlock Name="SelectedFolderPathText" VerticalAlignment="Center" TextWrapping="Wrap"/>
                             <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                                 <Button Name="SetReminderFolderButton" Content="打开文件夹"
                                         Click="SetReminderFolderButton_Click"/>
@@ -300,20 +300,29 @@
                         </StackPanel>
                     </muxc:Expander.Header>
                     <StackPanel>
-                        <TextBlock Text="Reminder" Style="{ThemeResource BaseTextBlockStyle}"/>
-                        <TextBlock Text="JSON（仅输出）"
+                        <TextBlock Text="应用" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <StackPanel>
+                            <TextBlock Text="应用程序文件夹" Margin="0,8,0,8"/>
+                            <TextBox Text="{x:Bind AppFolder.Path}"/>
+                        </StackPanel>
+
+                        <TextBlock Text="Reminder" Style="{ThemeResource BaseTextBlockStyle}"
+                                   Margin="0,12,0,0"/>
+                        <StackPanel>
+                            <TextBlock Text="JSON（仅输出）"
                                    Margin="0,8,0,8"
                                    Style="{ThemeResource BodyTextBlockStyle}"/>
-                        <TextBox Name="ReminderJsonTextBox"
+                            <TextBox Name="ReminderJsonTextBox"
                                  MaxHeight="200"
                                  TextWrapping="Wrap"/>
 
-                        <TextBlock Text="保存数据"
-                                   Margin="0,12,0,0"
+                            <TextBlock Text="保存数据"
+                                   Margin="0,8,0,0"
                                    Style="{ThemeResource BodyTextBlockStyle}"/>
-                        <StackPanel Margin="0,8,0,0">
-                            <Button Name="ReminderSave" Content="保存Reminder" Click="ReminderSave_Click"/>
-                            <TextBox Name="ReminderSaveTextBox" Margin="0,8,0,0" PlaceholderText="文件保存路径（仅输出）"/>
+                            <StackPanel Margin="0,8,0,0">
+                                <Button Name="ReminderSave" Content="保存Reminder" Click="ReminderSave_Click"/>
+                                <TextBox Name="ReminderSaveTextBox" Margin="0,8,0,0" PlaceholderText="文件保存路径（仅输出）"/>
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </muxc:Expander>

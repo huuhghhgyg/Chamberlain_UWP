@@ -32,10 +32,10 @@ namespace Chamberlain_UWP.Backup.Models
     {
         #region 私有变量
         // 变量区
-        private string backupFolderPath = ""; //备份文件夹的路径
         public List<PathRecord> BackupFolderList = new List<PathRecord>(); //备份文件夹路径列表
         public List<PathRecord> SaveFolderList = new List<PathRecord>(); //目标文件夹路径列表
         public List<BackupTaskData> BackupTaskList = new List<BackupTaskData>(); //备份任务描述列表
+        string backupFolderPath = ""; //备份文件夹的路径
         int _totalFileCount = 0; //需要备份的文件总数
         int _processedFileCount = 0; //已备份文件总数
         string _workingFilePath = ""; //正在备份的文件
@@ -159,7 +159,7 @@ namespace Chamberlain_UWP.Backup.Models
             }
         }
         public bool IsAnyError { get => ErrorMessages.Count > 0; } //如果存在条目则存在错误
-        public bool IsScanning
+        public bool IsScanning //备份页卡片进度条状态是否正在扫描
         {
             get => _isScanning;
             set
@@ -685,11 +685,14 @@ namespace Chamberlain_UWP.Backup.Models
         //Query备份路径对应的备份记录列表到备份页的ObservableCollection
         public void GetBackupVersionList(string backupPath)
         {
-            var queryResults = (from BackupVersionRecord record in BackupVersionRecordList
-                                where record.BackupFolderPath == backupPath
-                                orderby record.BackupTime descending //倒叙排列备份时间（后来的在上面）
-                                select record).ToList();
-            BackupPageData._backupVersionRecords = new ObservableCollection<BackupVersionRecord>(queryResults);
+            if (!string.IsNullOrEmpty(backupPath)) //检测非空
+            {
+                var queryResults = (from BackupVersionRecord record in BackupVersionRecordList
+                                    where record.BackupFolderPath == backupPath
+                                    orderby record.BackupTime descending //倒叙排列备份时间（后来的在上面）
+                                    select record).ToList();
+                BackupPageData._backupVersionRecords = new ObservableCollection<BackupVersionRecord>(queryResults);
+            }
         }
 
         //保存备份文件版本信息到对应文件夹中的Json

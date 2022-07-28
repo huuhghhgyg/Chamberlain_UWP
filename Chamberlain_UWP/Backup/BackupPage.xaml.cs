@@ -27,13 +27,22 @@ namespace Chamberlain_UWP.Backup
         {
             this.InitializeComponent();
         }
-        public BackupPageViewModel ViewModel { get; } = new BackupPageViewModel();
+        public BackupPageViewModel ViewModel { get => BackupData.ViewModel; }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //读取数据
-            Task loadDataFromJson = Task.Run(async () => await ViewModel.Manager.LoadData()); //等待异步方法
-            loadDataFromJson.Wait();
-            ViewModel.RefershData();
+            if (!BackupData.Loaded)
+            {
+                //读取数据
+                Task loadDataFromJson = Task.Run(async () => await ViewModel.Manager.LoadData()); //等待异步方法
+                loadDataFromJson.Wait();
+                ViewModel.RefershData();
+            }
         }
+    }
+
+    public static class BackupData
+    {
+        public static bool Loaded = false;
+        public static BackupPageViewModel ViewModel = new BackupPageViewModel();
     }
 }
