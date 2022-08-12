@@ -32,8 +32,9 @@ namespace Chamberlain_UWP.Reminder
         /// 访问器区域：修改私有属性，顺便做其它操作。
         /// 辅助prop区域：基本上是get类型的访问器，用于辅助xaml的x:bind
         /// </summary>
-        
-        //属性区域
+
+        #region 属性
+
         private string _title;
         private string _description;
         private List<string> _tags;
@@ -47,38 +48,53 @@ namespace Chamberlain_UWP.Reminder
         [JsonIgnore]
         public Priority _priority;
 
-        //访问器区域
+        #endregion
+
+        #region 访问器
         [JsonInclude]
         public string Title
         {
-            get { return _title; }
-            set { _title = value; NotifyPropertyChanged("Title"); }
+            get => _title;
+            set
+            {
+                _title = value;
+                NotifyPropertyChanged(nameof(Title));
+            }
         }
 
         [JsonInclude]
         public string Description
         {
-            get { return _description; }
-            set { _description = value; NotifyPropertyChanged("Description"); }
+            get => _description;
+            set
+            {
+                _description = value;
+                NotifyPropertyChanged(nameof(Description));
+            }
         }
 
         [JsonInclude]
         public List<string> Tags
         {
-            get { return _tags; }
-            set { _tags = value; NotifyPropertyChanged("Tags"); }
+            get => _tags;
+            set
+            {
+                _tags = value;
+                NotifyPropertyChanged(nameof(Tags));
+            }
         }
 
         [JsonInclude]
         public DateTime Deadline
         {
-            get { return _deadline; }
-            set { 
-                _deadline = value; 
+            get => _deadline;
+            set
+            {
+                _deadline = value;
                 TaskSpan = _deadline - CreatedTime; //更改deadline时会影响到taskspan的长度
-                NotifyPropertyChanged("DeadlineString"); //注意控件里面绑定的是DeadlineString，所以Notify要填DeadlineString
-                NotifyPropertyChanged("ProgressValue");
-                NotifyPropertyChanged("ProgressString");
+                NotifyPropertyChanged(nameof(DeadlineString)); //注意控件里面绑定的是DeadlineString，所以Notify要填DeadlineString
+                NotifyPropertyChanged(nameof(ProgressValue));
+                NotifyPropertyChanged(nameof(ProgressString));
             }
         }
 
@@ -92,7 +108,7 @@ namespace Chamberlain_UWP.Reminder
             set
             {
                 _priority = value;
-                NotifyPropertyChanged("PriorityString");
+                NotifyPropertyChanged(nameof(PriorityString));
             }
         }
 
@@ -138,7 +154,7 @@ namespace Chamberlain_UWP.Reminder
         {
             get
             {
-                if(TaskState > 0) // 判断任务是否过期
+                if (TaskState > 0) // 判断任务是否过期
                 {
                     // 没过期
                     if (TaskState == TaskState.Onwork) return ProgressValue.ToString("#0.0%"); // 正在进行
@@ -173,16 +189,17 @@ namespace Chamberlain_UWP.Reminder
                     TaskState = TaskState.OutOfDate;
                 }
 
-                NotifyPropertyChanged("TaskState");
-                NotifyPropertyChanged("ProgressValue");
-                NotifyPropertyChanged("ProgressString");
+                NotifyPropertyChanged(nameof(TaskState));
+                NotifyPropertyChanged(nameof(ProgressValue));
+                NotifyPropertyChanged(nameof(ProgressString));
+                NotifyPropertyChanged(nameof(IsReminderDone));
             }
         }
 
         [JsonIgnore]
         public string TagsString
         {
-            get { return "标签：" + string.Join(", ", _tags); }
+            get => "标签：" + string.Join(", ", _tags);
         }
 
         [JsonIgnore]
@@ -192,8 +209,6 @@ namespace Chamberlain_UWP.Reminder
             {
                 switch (Priority)
                 {
-                    //case Priority.Middle: return "（中优先级）";
-                    //case Priority.High: return "（高优先级）";
                     case Priority.Middle: return "🟡(优先)";
                     case Priority.High: return "🔴(紧急)";
                     default: return "";
@@ -201,18 +216,7 @@ namespace Chamberlain_UWP.Reminder
             }
         }
 
-        //public ReminderItem(string title, string desc, List<string> tags, DateTime ddl, TaskState taskstate)
-        //{
-        //    Title = title;
-        //    Description = desc;
-        //    Tags = new List<string>();
-        //    Tags.AddRange(tags);
-        //    CreatedTime = DateTime.Now;
-        //    Deadline = ddl;
-        //    TaskState = taskstate;
-        //    Priority = Priority.Default; // 0
-        //    TaskSpan = Deadline - CreatedTime; // 计算得到任务时长
-        //}
+        #endregion
 
         public ReminderItem(string title, string desc, List<string> tags, DateTime ddl, TaskState taskstate, Priority pri)
         {
@@ -261,9 +265,9 @@ namespace Chamberlain_UWP.Reminder
 
         public void RefreshProgress()
         {
-            NotifyPropertyChanged("TaskState");
-            NotifyPropertyChanged("ProgressValue");
-            NotifyPropertyChanged("ProgressString");
+            NotifyPropertyChanged(nameof(TaskState));
+            NotifyPropertyChanged(nameof(ProgressValue));
+            NotifyPropertyChanged(nameof(ProgressString));
         }
     }
 }
