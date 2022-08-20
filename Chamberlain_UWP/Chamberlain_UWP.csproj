@@ -27,7 +27,7 @@
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <PackageCertificateKeyFile>Chamberlain_UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-    <AppInstallerUri>https://launcher3-1251886115.cos.ap-shanghai.myqcloud.com/Chamberlain</AppInstallerUri>
+    <AppInstallerUri>https://launcher3-1251886115.cos.ap-shanghai.myqcloud.com/Chamberlain/Chamberlain_UWP.appinstaller</AppInstallerUri>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
