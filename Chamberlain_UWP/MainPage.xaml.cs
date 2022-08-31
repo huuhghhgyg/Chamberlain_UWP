@@ -40,6 +40,8 @@ namespace Chamberlain_UWP
             SettingsConfig.InitialLoad();
 
             InitializeData(initializeNavigate); // 使用回调（Action），先data后navigate
+
+            CheckUpdate();
         }
 
         private void SetTitleBar()
@@ -160,6 +162,36 @@ namespace Chamberlain_UWP
                     await backupfile.DeleteAsync(); //删除备份文件
                 }
             }
+        }
+
+        async void CheckUpdate() //检查更新
+        {
+            Release release;
+            ReleaseManager manager = new ReleaseManager();
+            try
+            {
+                release = await manager.GetLastest();
+                if (!manager.VersionCompare(release))
+                {
+                    //有更新版本，弹窗提示
+                    ContentDialog updateDialog = new ContentDialog
+                    {
+                        Title = $"检测到新版本:{release.Name}",
+                        Content = manager.RemoveMdSymbol(release.Message),
+                        PrimaryButtonText = "前往下载",
+                        CloseButtonText = "关闭"
+                    };
+                    ContentDialogResult result = await updateDialog.ShowAsync();
+
+                    if (result == ContentDialogResult.Primary)
+                    {
+                        //访问release页
+                        var releaseUri = new Uri(@"https://github.com/huuhghhgyg/Chamberlain_UWP/releases");
+                        await Windows.System.Launcher.LaunchUriAsync(releaseUri);
+                    }
+                }
+            }
+            catch { } //忽略网络报错
         }
 
         private void initializeNavigate()

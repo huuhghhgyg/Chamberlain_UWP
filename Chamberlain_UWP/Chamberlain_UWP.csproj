@@ -165,6 +165,7 @@
       <DependentUpon>ReminderPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\DataSettings.cs" />
+    <Compile Include="Settings\Release.cs" />
     <Compile Include="Settings\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
