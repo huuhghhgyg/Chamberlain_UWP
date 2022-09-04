@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chamberlain_UWP.Backup;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,6 +39,9 @@ namespace Chamberlain_UWP.Settings
 
             cache = roaming_settings ? roamingSettings.Values["RemindTime"] : localSettings.Values["RemindTime"];
             RemindTime = (cache == null) ? new TimeSpan(17,0,0) : (TimeSpan)cache; //每日定时通知时间，默认17：00
+
+            cache = roaming_settings ? roamingSettings.Values["CheckUpdate"] : localSettings.Values["CheckUpdate"];
+            CheckUpdate = (cache == null) ? "auto" : (string)cache; //检测更新的状态
         }
 
         /// <summary>
@@ -55,6 +59,7 @@ namespace Chamberlain_UWP.Settings
         private static int _timepickerInterval;
         private static bool _isRemindOnTimeEnabled;
         private static TimeSpan _RemindTime;
+        private static string _checkUpdate;
 
         public static bool IsSettingsRoamingEnabled //是否允许设置漫游，不允许添加到漫游设置中！
         {
@@ -97,6 +102,11 @@ namespace Chamberlain_UWP.Settings
             get { return _RemindTime; }
             set { _RemindTime = value; SaveSetting(value, "RemindTime", true); }
         }
+        public static string CheckUpdate //检测更新的状态：auto（开启时自动检查更新）、false（关闭自动检查更新）、1.0.3（版本号，跳过此版本）
+        {
+            get { return _checkUpdate; }
+            set { _checkUpdate = value; SaveSetting(value, "CheckUpdate", true); }
+        }
 
 
         /// <summary>
@@ -120,6 +130,7 @@ namespace Chamberlain_UWP.Settings
             SaveSetting(IsNotificationEnabled, "IsNotificationEnabled", true);
             SaveSetting(IsRemindOnTimeEnabled, "IsRemindOnTimeEnabled", true);
             SaveSetting(RemindTime, "RemindTime", true);
+            SaveSetting(RemindTime, "CheckUpdate", true);
         }
         //取消漫游时不需要额外执行，取消后做的更改不会再漫游
     }

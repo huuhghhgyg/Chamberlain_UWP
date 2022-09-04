@@ -49,6 +49,8 @@ namespace Chamberlain_UWP
             ProgramInstalledDate.Text = Package.Current.InstalledDate.ToString("D");
 
             Settings_LoadText();
+
+            GetUpdateStatus(); //设置更新状态（存在改进空间，MVVM）
         }
 
         private async void Settings_LoadText() //读取提示文字
@@ -67,7 +69,7 @@ namespace Chamberlain_UWP
                 {
                     StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken"); //指定文件夹不存在，清除指定项
                     SelectedFolderPathText.Text = "指定文件夹不存在，已被清除";
-                    DeleteSelectedFolderButton.IsEnabled= false;
+                    DeleteSelectedFolderButton.IsEnabled = false;
                 }
             }
             else
@@ -249,6 +251,17 @@ namespace Chamberlain_UWP
             get { return SettingsConfig.RemindTime; }
             set { SettingsConfig.RemindTime = value; }
         }
+        private string CheckUpdate
+        {
+            get { return SettingsConfig.CheckUpdate; }
+            set { SettingsConfig.CheckUpdate = value; }
+        }
+        private bool IsCheckUpdateEnabled //CheckUpdate的附属类
+        {
+            get { return CheckUpdate == "auto"; }
+            set { CheckUpdate = value ? "auto" : "false"; }
+
+        }
 
         //数据漫游
         private bool IsSettingsRoamingEnabled
@@ -356,11 +369,33 @@ namespace Chamberlain_UWP
 
             var result = await clearBackupDataDialog.ShowAsync();
 
-            if(result == ContentDialogResult.Primary) //确认清除
+            if (result == ContentDialogResult.Primary) //确认清除
             {
                 await DataSettings.DeleteFile(AppFolder, DataSettings.BackupJsonName);
                 await DataSettings.DeleteFile(AppFolder, DataSettings.SaveJsonName);
                 await DataSettings.DeleteFile(AppFolder, DataSettings.BackupTaskJsonName);
+            }
+        }
+
+        void ResetUpdateState()
+        {
+            CheckUpdate = "auto";
+            GetUpdateStatus(); //获取更新状态
+        }
+
+        void GetUpdateStatus() //获取更新器状态
+        {
+            switch (CheckUpdate)
+            {
+                case "auto":
+                    UpdateStatusText.Text = "开启应用时自动检查更新";
+                    break;
+                case "false":
+                    UpdateStatusText.Text = "不检查更新";
+                    break;
+                default:
+                    UpdateStatusText.Text = $"不提示版本{CheckUpdate}的更新";
+                    break;
             }
         }
     }

@@ -9,6 +9,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Media.Protection.PlayReady;
+using Windows.UI.Xaml.Controls;
 
 namespace Chamberlain_UWP.Settings
 {
@@ -52,7 +53,7 @@ namespace Chamberlain_UWP.Settings
             PackageVersion packageVersion = Package.Current.Id.Version;
             int[] local = { packageVersion.Major, packageVersion.Minor, packageVersion.Build, packageVersion.Revision }; //本地版本序列
 
-            string version = release.Tag.Trim('v'); //改为版本号(去除标签前的v)
+            string version = release.Tag.Trim('v'); //将release的tag改为可识别的版本号(去除标签前的v)
 
             int len = version.Split('.').Count(); //版本号长度
             if (len < 4) for (int i = 0; i < 4 - len; i++) version += ".0"; //补齐版本号
@@ -61,10 +62,11 @@ namespace Chamberlain_UWP.Settings
 
             for (int i = 0; i < 4; i++)
             {
-                if (local[0] < int.Parse(online[0]))
+                if (local[i] < int.Parse(online[i])) //本地版本小
                 {
                     return false; //检测到在线版本更新，立即返回
                 }
+                else if (local[i] > int.Parse(online[i])) return true; //本地版本更高，直接返回true
             }
 
             return true; //本地为最新版本

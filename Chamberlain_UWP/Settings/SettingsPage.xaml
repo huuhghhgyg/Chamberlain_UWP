@@ -327,6 +327,56 @@
                     </StackPanel>
                 </muxc:Expander>
 
+                <TextBlock Text="更新" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <muxc:Expander 
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch"
+                    Margin="0,4,0,0"
+                    IsExpanded="{x:Bind CheckUpdateSwitch.IsOn, Mode=OneWay}"
+                    Background="{ThemeResource CardBackgroundFillColorDefault}">
+                    <muxc:Expander.Header>
+                        <Grid Margin="0,12" ColumnSpacing="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="42"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE117;"/>
+                            <TextBlock Text="自动检测更新" Grid.Column="1" VerticalAlignment="Center"/>
+                            <ToggleSwitch Name="CheckUpdateSwitch" 
+                                          Grid.Column="2" HorizontalAlignment="Right"
+                                          IsOn="{x:Bind IsCheckUpdateEnabled, Mode=TwoWay}" 
+                                          IsEnabled="{Binding IsOn, ElementName=NotificationSwitch}"
+                                          Width="20" MinWidth="80"/>
+                        </Grid>
+                    </muxc:Expander.Header>
+                    <muxc:Expander.Content>
+                        <Grid Margin="0,-4" ColumnSpacing="16" HorizontalAlignment="Stretch">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="42"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE121;"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
+                                <TextBlock Text="检测更新状态："/>
+                                <TextBlock Name="UpdateStatusText" Text=""/>
+                            </StackPanel>
+                            <Button Content="重置" Grid.Column="2" HorizontalAlignment="Right"
+                                    IsEnabled="{x:Bind CheckUpdateSwitch.IsOn, Mode=OneWay}"
+                                    Click="{x:Bind ResetUpdateState}"/>
+                        </Grid>
+                    </muxc:Expander.Content>
+                </muxc:Expander>
+
 
                 <TextBlock Text="关于" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <muxc:Expander Name="ProgramInfoExpander"
