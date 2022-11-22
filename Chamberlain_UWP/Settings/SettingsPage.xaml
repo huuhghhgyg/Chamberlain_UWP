@@ -349,8 +349,7 @@
                             <TextBlock Text="自动检测更新" Grid.Column="1" VerticalAlignment="Center"/>
                             <ToggleSwitch Name="CheckUpdateSwitch" 
                                           Grid.Column="2" HorizontalAlignment="Right"
-                                          IsOn="{x:Bind IsCheckUpdateEnabled, Mode=TwoWay}" 
-                                          IsEnabled="{Binding IsOn, ElementName=NotificationSwitch}"
+                                          IsOn="{x:Bind IsCheckUpdateEnabled, Mode=TwoWay}"
                                           Width="20" MinWidth="80"/>
                         </Grid>
                     </muxc:Expander.Header>
