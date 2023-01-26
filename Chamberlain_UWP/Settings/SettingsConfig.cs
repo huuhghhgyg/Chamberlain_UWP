@@ -61,12 +61,19 @@ namespace Chamberlain_UWP.Settings
         private static TimeSpan _RemindTime;
         private static string _checkUpdate;
 
-        public static bool IsSettingsRoamingEnabled //是否允许设置漫游，不允许添加到漫游设置中！
+        /// <summary>
+        /// 是否允许设置漫游
+        /// 此项不允许添加到漫游设置中！
+        /// </summary>
+        public static bool IsSettingsRoamingEnabled
         {
             get { return _isSettingsRoamingEnabled; }
             set { _isSettingsRoamingEnabled = value; SaveSetting(value, "IsSettingsRoamingEnabled", false); }
         } 
-        public static int UpdateTriggerInterval //后台更新时间间隔（分钟）
+        /// <summary>
+        /// 后台更新时间间隔（分钟）
+        /// </summary>
+        public static int UpdateTriggerInterval
         {
             get { return _updateTriggerInterval; }
             set
@@ -77,12 +84,18 @@ namespace Chamberlain_UWP.Settings
                 SaveSetting(value, "UpdateTriggerInterval",true); //保存数据
             }
         }
-        public static bool IsNotificationEnabled //是否允许使用通知
+        /// <summary>
+        /// 是否允许使用通知
+        /// </summary>
+        public static bool IsNotificationEnabled
         {
             get { return _isNotificationEnabled; }
             set { _isNotificationEnabled = value; SaveSetting(value, "IsNotificationEnabled", true); }
         }
-        public static bool IsNotificationBlockingVisible //是否显示线程阻塞信息
+        /// <summary>
+        /// 是否显示线程阻塞信息
+        /// </summary>
+        public static bool IsNotificationBlockingVisible
         {
             get { return _isNotificationBlockingVisible; }
             set { _isNotificationBlockingVisible = value; SaveSetting(value, "IsNotificationBlockingVisible", true); }
@@ -92,17 +105,27 @@ namespace Chamberlain_UWP.Settings
             get { return _timepickerInterval; }
             set { _timepickerInterval = value; SaveSetting(value, "TimepickerInterval", false); }
         }
-        public static bool IsRemindOnTimeEnabled //是否允许每日定时通知
+        /// <summary>
+        /// 是否允许每日定时通知
+        /// </summary>
+        public static bool IsRemindOnTimeEnabled
         {
             get { return _isRemindOnTimeEnabled; }
             set { _isRemindOnTimeEnabled = value; SaveSetting(value, "IsRemindOnTimeEnabled", true); }
         }
-        public static TimeSpan RemindTime //每日定时通知时间
+        /// <summary>
+        /// 每日定时通知时间
+        /// </summary>
+        public static TimeSpan RemindTime
         {
             get { return _RemindTime; }
             set { _RemindTime = value; SaveSetting(value, "RemindTime", true); }
         }
-        public static string CheckUpdate //检测更新的状态：auto（开启时自动检查更新）、false（关闭自动检查更新）、1.0.3（版本号，跳过此版本）
+        /// <summary>
+        /// 检测更新的状态：
+        /// auto（开启时自动检查更新）、false（关闭自动检查更新）、1.0.3（版本号，跳过此版本）
+        /// </summary>
+        public static string CheckUpdate
         {
             get { return _checkUpdate; }
             set { _checkUpdate = value; SaveSetting(value, "CheckUpdate", true); }
@@ -130,7 +153,7 @@ namespace Chamberlain_UWP.Settings
             SaveSetting(IsNotificationEnabled, "IsNotificationEnabled", true);
             SaveSetting(IsRemindOnTimeEnabled, "IsRemindOnTimeEnabled", true);
             SaveSetting(RemindTime, "RemindTime", true);
-            SaveSetting(RemindTime, "CheckUpdate", true);
+            SaveSetting(CheckUpdate, "CheckUpdate", true);
         }
         //取消漫游时不需要额外执行，取消后做的更改不会再漫游
     }
