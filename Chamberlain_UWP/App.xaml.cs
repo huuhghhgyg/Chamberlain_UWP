@@ -13,6 +13,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.Notifications;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -46,6 +47,8 @@ namespace Chamberlain_UWP
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             OnLaunchedOrActivated(e);
+            //设置窗口最小大小
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(420, 640));
         }
 
         protected override void OnActivated(IActivatedEventArgs e)

@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:settings="using:Chamberlain_UWP.Settings"
     mc:Ignorable="d"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
 
@@ -43,7 +44,9 @@
                              IsBackEnabled="{x:Bind contentFrame.CanGoBack, Mode=OneWay}"
                              BackRequested="navControl_BackRequested"
                              DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
-                             Canvas.ZIndex="0">
+                             Canvas.ZIndex="0"
+                             OpenPaneLength="280"
+                             IsPaneOpen="{x:Bind settings:SettingsConfig.IsPaneOpen, Mode=OneTime}">
             <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem Icon="Clock" Content="任务" Tag="task"/>
                 <muxc:NavigationViewItem Content="提醒" Tag="reminder">

@@ -69,6 +69,11 @@ namespace Chamberlain_UWP.Settings
             get { return CheckUpdate == "auto"; }
             set { CheckUpdate = value ? "auto" : "false"; }
         }
+        internal bool IsPaneOpen
+        {
+            get => SettingsConfig.IsPaneOpen;
+            set { SettingsConfig.IsPaneOpen = value; OnPropertyChanged(nameof(IsPaneOpen)); }
+        }
         string _selectedFolderPath = "";
         internal string SelectedFolderPath
         {

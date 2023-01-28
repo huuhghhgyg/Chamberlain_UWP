@@ -74,19 +74,33 @@
 
                 <TextBlock Text="搜索" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
 
-                <StackPanel Orientation="Horizontal">
-                    <AutoSuggestBox PlaceholderText="搜索未完成的任务"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MaxWidth="320"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <AutoSuggestBox PlaceholderText="搜索未完成的任务"
                                         QueryIcon="Find"
                                         Name="OnworkItemSuggestBox"
-                                        Width="264"
+                                        HorizontalAlignment="Stretch"
                                         TextChanged="OnworkItemSuggestBox_TextChanged"/>
-                    <TextBlock Text="搜索排序："
-                            VerticalAlignment="Center" Margin="12,0,0,0"/>
-                    <ComboBox Name="ItemsSortComboBox" SelectedIndex="0" SelectionChanged="ItemsSortComboBox_SelectionChanged">
-                        <ComboBoxItem Content="按照标签"/>
-                        <ComboBoxItem Content="按照名称"/>
-                    </ComboBox>
-                </StackPanel>
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <TextBlock Text="搜索排序："
+                                VerticalAlignment="Center" Margin="14,0,0,0"/>
+                        <ComboBox Name="ItemsSortComboBox" 
+                                  SelectedIndex="0" Margin="0,0,1,0"
+                                  SelectionChanged="ItemsSortComboBox_SelectionChanged">
+                            <ComboBoxItem Content="按照标签"/>
+                            <ComboBoxItem Content="按照名称"/>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
 
                 <TextBlock Text="待处理" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <TextBlock Visibility="{x:Bind ReminderListOnwork.Count, Mode=OneWay, Converter={StaticResource VisibilityConverter}}"

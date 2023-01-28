@@ -50,36 +50,52 @@
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48" Grid.Row="1">
                 <!--应用设置-->
                 <TextBlock Text="易用性设置" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <!--时间选择器-->
                 <Grid Margin="0,4,0,0" Padding="16" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE169;"/>
                     <TextBlock Text="时间选择器选项间隔（分钟）" 
+                               TextWrapping="Wrap"
                                VerticalAlignment="Center" Grid.Column="1"/>
                     <muxc:NumberBox Name="TimepickerIntervalComboBox"
                                     SpinButtonPlacementMode="Inline"
                                     SmallChange="1" LargeChange="5" Minimum="1" Maximum="30"
-                                    Width="180"
-                                    Grid.Column="2" HorizontalAlignment="Right"
+                                    Width="160" Grid.Column="2"
                                     Text="{x:Bind vm.TimepickerInterval, Mode=TwoWay}"/>
                 </Grid>
-
-                <TextBlock Text="后台任务" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
-                <Grid Margin="0,4,0,0" Padding="16" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                <!--侧边栏默认开启状态-->
+                <Grid Margin="0,4,0,0" Padding="16,12" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
+                    <SymbolIcon Symbol="GlobalNavigationButton" />
+                    <TextBlock Text="侧边栏默认开启状态" Grid.Column="1" VerticalAlignment="Center"/>
+                    <ToggleSwitch MinWidth="80" Grid.Column="2" HorizontalAlignment="Right"
+                                  IsOn="{x:Bind vm.IsPaneOpen, Mode=TwoWay}"/>
+                </Grid>
+
+                <!--后台任务-->
+                <TextBlock Text="后台任务" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <Grid Margin="0,4,0,0" Padding="16" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
                     <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE7C4;"/>
-                    <TextBlock Text="后台唤醒间隔（分钟）" Grid.Column="1" VerticalAlignment="Center"/>
+                    <TextBlock Text="后台唤醒间隔（分钟）"
+                               Grid.Column="1" VerticalAlignment="Center"
+                               TextWrapping="Wrap"/>
                     <muxc:NumberBox Name="TriggerSpanComboBox"
                                     SpinButtonPlacementMode="Inline"
                                     SmallChange="10" LargeChange="100" Minimum="15"
-                                    Width="180" Grid.Column="2" HorizontalAlignment="Right"
+                                    Grid.Column="2" Width="160"
                                     Text="{x:Bind vm.UpdateTriggerInterval, Mode=TwoWay}"/>
                 </Grid>
 
@@ -153,13 +169,15 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
                             <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE121;"/>
-                            <TextBlock Text="定时提醒时间" Grid.Column="1" VerticalAlignment="Center"/>
-                            <TimePicker Grid.Column="2" HorizontalAlignment="Right"
+                            <TextBlock Text="定时提醒时间"
+                                       Grid.Column="1" VerticalAlignment="Center"
+                                       TextWrapping="Wrap"/>
+                            <TimePicker Grid.Column="2"
                                         SelectedTime="{x:Bind vm.RemindTime,Mode=TwoWay}"/>
                         </Grid>
                     </muxc:Expander.Content>
@@ -366,15 +384,14 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
                             <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE121;"/>
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
-                                <TextBlock Text="{x:Bind vm.UpdateStatusString,Mode=OneWay}"/>
-                                <TextBlock Name="UpdateStatusText" Text=""/>
-                            </StackPanel>
+                            <TextBlock Text="{x:Bind vm.UpdateStatusString,Mode=OneWay}"
+                                       Grid.Column="1" VerticalAlignment="Center"
+                                       TextWrapping="Wrap"/>
                             <Button Content="重置" Grid.Column="2" HorizontalAlignment="Right"
                                     IsEnabled="{x:Bind CheckUpdateSwitch.IsOn, Mode=OneWay}"
                                     Click="{x:Bind vm.ResetUpdateState}"/>

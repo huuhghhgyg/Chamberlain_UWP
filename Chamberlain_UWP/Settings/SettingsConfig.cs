@@ -38,10 +38,14 @@ namespace Chamberlain_UWP.Settings
             IsRemindOnTimeEnabled = (cache == null) ? true : (bool)cache; //是否开启每日定时通知，默认开启
 
             cache = roaming_settings ? roamingSettings.Values["RemindTime"] : localSettings.Values["RemindTime"];
-            RemindTime = (cache == null) ? new TimeSpan(17,0,0) : (TimeSpan)cache; //每日定时通知时间，默认17：00
+            RemindTime = (cache == null) ? new TimeSpan(17, 0, 0) : (TimeSpan)cache; //每日定时通知时间，默认17：00
 
             cache = roaming_settings ? roamingSettings.Values["CheckUpdate"] : localSettings.Values["CheckUpdate"];
             CheckUpdate = (cache == null) ? "auto" : (string)cache; //检测更新的状态
+
+            cache = roaming_settings ? roamingSettings.Values["IsPaneOpen"] : localSettings.Values["IsPaneOpen"];
+            IsPaneOpen = (cache == null) ? false : (bool)cache; //检测更新的状态
+
         }
 
         /// <summary>
@@ -60,6 +64,7 @@ namespace Chamberlain_UWP.Settings
         private static bool _isRemindOnTimeEnabled;
         private static TimeSpan _RemindTime;
         private static string _checkUpdate;
+        private static bool _isPaneOpen;
 
         /// <summary>
         /// 是否允许设置漫游
@@ -69,7 +74,7 @@ namespace Chamberlain_UWP.Settings
         {
             get { return _isSettingsRoamingEnabled; }
             set { _isSettingsRoamingEnabled = value; SaveSetting(value, "IsSettingsRoamingEnabled", false); }
-        } 
+        }
         /// <summary>
         /// 后台更新时间间隔（分钟）
         /// </summary>
@@ -81,7 +86,7 @@ namespace Chamberlain_UWP.Settings
                 //先存到程序内部
                 _updateTriggerInterval = value < 15 ? 15 : value; //不允许小于15
                 //再存到设置中
-                SaveSetting(value, "UpdateTriggerInterval",true); //保存数据
+                SaveSetting(value, "UpdateTriggerInterval", true); //保存数据
             }
         }
         /// <summary>
@@ -131,17 +136,24 @@ namespace Chamberlain_UWP.Settings
             set { _checkUpdate = value; SaveSetting(value, "CheckUpdate", true); }
         }
 
+        public static bool IsPaneOpen
+        {
+            get => _isPaneOpen;
+            set { _isPaneOpen = value; SaveSetting(value, "IsPaneOpen", true); }
+        }
 
-        /// <summary>
         /// 公共变量
-        /// </summary>
         private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings; //本地存储的设置
         private static ApplicationDataContainer roamingSettings = ApplicationData.Current.RoamingSettings; //漫游存储的设置
 
+        // 设置的有关文档参考：https://docs.microsoft.com/zh-cn/windows/uwp/get-started/settings-learning-track
         /// <summary>
-        /// 设置的有关文档参考：https://docs.microsoft.com/zh-cn/windows/uwp/get-started/settings-learning-track
+        /// 保存单项设置
         /// </summary>
-        private static void SaveSetting(object data, string name, bool roaming_granted) //保存设置。如果允许漫游则漫游。字段值更改的时候引用。
+        /// <param name="data">要保存的数据</param>
+        /// <param name="name">要保存设置的名称</param>
+        /// <param name="roaming_granted">是否允许数据漫游保存。如果允许，需要到SaveAllRoaming()中添加保存项</param>
+        private static void SaveSetting(object data, string name, bool roaming_granted = false) //保存设置。如果允许漫游则漫游。字段值更改的时候引用。
         {
             if (roaming_granted)
                 roamingSettings.Values[name] = data; //保存到漫游数据
@@ -154,6 +166,7 @@ namespace Chamberlain_UWP.Settings
             SaveSetting(IsRemindOnTimeEnabled, "IsRemindOnTimeEnabled", true);
             SaveSetting(RemindTime, "RemindTime", true);
             SaveSetting(CheckUpdate, "CheckUpdate", true);
+            SaveSetting(IsPaneOpen, "IsPaneOpen", true);
         }
         //取消漫游时不需要额外执行，取消后做的更改不会再漫游
     }
