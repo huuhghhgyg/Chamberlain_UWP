@@ -23,28 +23,28 @@ namespace Chamberlain_UWP.Settings
             bool roaming_settings = IsSettingsRoamingEnabled = (cache == null) ? false : (bool)cache; //设置是否漫游，默认不漫游
 
             cache = roaming_settings ? roamingSettings.Values["IsNotificationEnabled"] : localSettings.Values["IsNotificationEnabled"];
-            IsNotificationEnabled = (cache == null) ? true : (bool)cache; //是否开启通知，默认开启
+            IsNotificationEnabled = (bool?)cache ?? true; //是否开启通知，默认开启
 
             cache = roaming_settings ? roamingSettings.Values["IsNotificationBlockingVisible"] : localSettings.Values["IsNotificationBlockingVisible"];
-            IsNotificationBlockingVisible = (cache == null) ? false : (bool)cache; //是否显示通知阻塞信息，默认关闭
+            IsNotificationBlockingVisible = (bool?)cache ?? false; //是否显示通知阻塞信息，默认关闭
 
             cache = roaming_settings ? roamingSettings.Values["UpdateTriggerInterval"] : localSettings.Values["UpdateTriggerInterval"];
-            UpdateTriggerInterval = (cache == null) ? 15 : (int)cache; ; //通知更新间隔，最小、默认=15
+            UpdateTriggerInterval = (int?)cache ?? 15; //通知更新间隔，最小、默认=15
 
             cache = localSettings.Values["TimepickerInterval"];
-            TimepickerInterval = (cache == null) ? 1 : (int)cache; ; //时间选择器时间间隔，最小、默认=1
+            TimepickerInterval = (int?)cache ?? 1; //时间选择器时间间隔，最小、默认=1
 
             cache = roaming_settings ? roamingSettings.Values["IsRemindOnTimeEnabled"] : localSettings.Values["IsRemindOnTimeEnabled"];
-            IsRemindOnTimeEnabled = (cache == null) ? true : (bool)cache; //是否开启每日定时通知，默认开启
+            IsRemindOnTimeEnabled = (bool?)cache ?? true; //是否开启每日定时通知，默认开启
 
             cache = roaming_settings ? roamingSettings.Values["RemindTime"] : localSettings.Values["RemindTime"];
-            RemindTime = (cache == null) ? new TimeSpan(17, 0, 0) : (TimeSpan)cache; //每日定时通知时间，默认17：00
+            RemindTime = (TimeSpan?)cache ?? new TimeSpan(17, 0, 0); //每日定时通知时间，默认17：00
 
             cache = roaming_settings ? roamingSettings.Values["CheckUpdate"] : localSettings.Values["CheckUpdate"];
-            CheckUpdate = (cache == null) ? "auto" : (string)cache; //检测更新的状态
+            CheckUpdate = (string)cache ?? "auto"; //检测更新的状态，默认auto
 
             cache = roaming_settings ? roamingSettings.Values["IsPaneOpen"] : localSettings.Values["IsPaneOpen"];
-            IsPaneOpen = (cache == null) ? false : (bool)cache; //检测更新的状态
+            IsPaneOpen = (bool?)cache ?? false; //程序开启时左导航栏是否打开，默默人关闭
 
         }
 
