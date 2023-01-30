@@ -15,15 +15,18 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="欢迎使用 Reminder 提醒👋"
+        <TextBlock Text="欢迎使用Reminder👋"
                    FontSize="36"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Bottom"/>
-        <TextBlock
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Bottom"
+                   TextWrapping="WrapWholeWords"
+                   TextAlignment="Center"/>
+        <TextBlock Text="现在来创建一些提醒项吧"
                    FontSize="20"
                    Grid.Row="1" Margin="0"
                    VerticalAlignment="Center"
-                   HorizontalAlignment="Center">现在来创建一些提醒项吧</TextBlock>
+                   HorizontalAlignment="Stretch"
+                   TextAlignment="Center"/>
         <RelativePanel Grid.Row="2" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <Button Content="导入备份" Name="GoImportPageButton"

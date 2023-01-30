@@ -77,6 +77,7 @@
                     <SymbolIcon Symbol="GlobalNavigationButton" />
                     <TextBlock Text="侧边栏默认开启状态" Grid.Column="1" VerticalAlignment="Center"/>
                     <ToggleSwitch MinWidth="80" Grid.Column="2" HorizontalAlignment="Right"
+                                  ToolTipService.ToolTip="此选项在Windows11上可能没有效果"
                                   IsOn="{x:Bind vm.IsPaneOpen, Mode=TwoWay}"/>
                 </Grid>
 

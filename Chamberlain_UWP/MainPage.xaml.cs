@@ -5,21 +5,14 @@ using Chamberlain_UWP.Settings.Update;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
@@ -36,6 +29,8 @@ namespace Chamberlain_UWP
         {
             this.InitializeComponent();
 
+            if (DataSettings.IsWindows10) SetAcrylic();
+
             SetTitleBar();
 
             SettingsConfig.InitialLoad();
@@ -43,6 +38,19 @@ namespace Chamberlain_UWP
             InitializeData(initializeNavigate); // 使用回调（Action），先data后navigate
 
             Update.CheckUpdate();
+        }
+
+        /// <summary>
+        /// 将背景设置为Acrylic(仅Win10)
+        /// </summary>
+        void SetAcrylic()
+        {
+            //win10
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.AcrylicBrush"))
+            {
+                KeyValuePair<object, object> styl = Resources.FirstOrDefault(x => x.Key.Equals("AcrylicBg"));
+                bgGrid.Style = (Style)styl.Value;
+            }
         }
 
         private void SetTitleBar()

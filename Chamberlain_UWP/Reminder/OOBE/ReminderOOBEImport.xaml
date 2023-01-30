@@ -18,15 +18,19 @@
         <TextBlock Text="现在导入提醒项数据📲"
                    Name="TitleTextBox"
                    FontSize="36"
-                   HorizontalAlignment="Center"
+                   HorizontalAlignment="Stretch"
+                   TextAlignment="Center"
                    VerticalAlignment="Bottom"
                    AllowDrop="True"
                    DragOver="TitleTextBox_DragOver"
                    Drop="TitleTextBox_Drop"/>
         <TextBlock FontSize="20"
-                   Grid.Row="1" Margin="0"
+                   Grid.Row="1" Margin="16,0"
+                   Text="点击按钮打开文件或将文件拖动到标题上，或指定文件夹"
                    VerticalAlignment="Center"
-                   HorizontalAlignment="Center" Text="点击按钮打开文件或将文件拖动到标题上，或指定文件夹"/>
+                   HorizontalAlignment="Stretch"
+                   TextAlignment="Center"
+                   TextWrapping="Wrap"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center">
             <Button Content="指定文件夹"
                     Name="PickFolderButton"

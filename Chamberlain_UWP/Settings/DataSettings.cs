@@ -9,7 +9,7 @@ using Windows.Storage;
 namespace Chamberlain_UWP.Settings
 {
     /// <summary>
-    /// 帮助管理应用产生的数据的存取
+    /// 帮助管理应用数据的存取
     /// </summary>
     internal static class DataSettings
     {
@@ -85,5 +85,13 @@ namespace Chamberlain_UWP.Settings
                 await file.DeleteAsync();
             }
         }
+
+        /// <summary>
+        /// 判断系统版本是否为Win10(区别于Win11)
+        /// </summary>
+        /// <returns>系统是否Windows10</returns>
+        public static bool IsWindows10 = Environment.OSVersion.Version.Build < 22000;
+
+        public static bool IsTypePresent() => IsWindows10;
     }
 }

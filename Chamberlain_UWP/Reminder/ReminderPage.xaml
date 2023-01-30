@@ -8,13 +8,14 @@
     mc:Ignorable="d"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Background="{ThemeResource NavigationViewExpandedPaneBackground}"
-    NavigationCacheMode="Enabled">
+    NavigationCacheMode="Enabled"
+    Unloaded="Page_Unloaded">
 
     <Page.Resources>
         <local:ListCount2VisibilityConverter x:Key="VisibilityConverter"/>
     </Page.Resources>
 
-    <Grid>
+    <Grid Name="bgGrid">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="Phone">

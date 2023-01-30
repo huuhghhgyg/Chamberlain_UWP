@@ -13,9 +13,12 @@
     <Page.Resources>
         <!--自定义TitleBar的高度-->
         <Thickness x:Key="NavigationViewContentMargin">0,48,0,0</Thickness>
+        <Style x:Key="AcrylicBg" TargetType="Grid">
+            <Setter Property="Background" Value="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}"/>
+        </Style>
     </Page.Resources>
 
-    <Grid>
+    <Grid Name="bgGrid">
         <Border x:Name="AppTitleBar"
                 IsHitTestVisible="True"
                 VerticalAlignment="Top"
@@ -37,7 +40,7 @@
                     Style="{StaticResource CaptionTextBlockStyle}" />
             </StackPanel>
         </Border>
-        
+
         <muxc:NavigationView Name="navControl"
                              IsTitleBarAutoPaddingEnabled="False"
                              ItemInvoked="navControl_ItemInvoked"
