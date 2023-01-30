@@ -14,7 +14,7 @@
         <!--自定义TitleBar的高度-->
         <Thickness x:Key="NavigationViewContentMargin">0,48,0,0</Thickness>
         <Style x:Key="AcrylicBg" TargetType="Grid">
-            <Setter Property="Background" Value="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="Background" Value="{ThemeResource AcrylicBackgroundFillColorBaseBrush}"/>
         </Style>
     </Page.Resources>
 
