@@ -105,6 +105,9 @@ namespace Chamberlain_UWP.Settings
             get { return _isNotificationBlockingVisible; }
             set { _isNotificationBlockingVisible = value; SaveSetting(value, "IsNotificationBlockingVisible", true); }
         }
+        /// <summary>
+        /// 时间选择器最小时间间隔，默认=1
+        /// </summary>
         public static int TimepickerInterval
         {
             get { return _timepickerInterval; }
