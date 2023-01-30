@@ -10,7 +10,9 @@
 可是自己写的东西用起来就是比较舒服（主要是好看），要啥造啥😉
 功能暂时就这么多，如果想到会继续更新
 
-![Main_Picture](./images/MainPage.png)
+![on Windows10](./images/Win10.png)
+![on Windows11](./images/Win11.png)
+![narrow on Windows11](./images/Win11_Narrow.png)
 
 ## 功能
 
@@ -29,35 +31,3 @@
 - 通过备份记录恢复备份的文件，支持恢复到原文件夹 & 导出到下载文件夹
 - 快速备份：通过与最近一次完整备份进行比对，跳过不需要备份的文件，节省空间。
 - 备份任务序列：一次添加多个备份任务到备份序列进行备份，无需手动操作每个备份。
-
-## 图片
-> 旧图懒得更新了，没啥区别
-
-- [待办事项](#待办事项页)
-- [备份](#文件备份页)
-- [设置](#设置页)
-
-### 待办事项
-主页
-![MainPage_Large](./images/MainPage_Large.png)
-
-提醒项勾选 | 主页也可以勾选，这里可以看到已完成
-![Reminder_Tick](./images/Reminder_Tick.png)
-
-提醒管理页
-![Reminder_Management](./images/Reminder_Management.png)
-
-### 文件备份页
-主页
-![Backup_MainPage_Backup](./images/Backup_MainPage_Backup.png)
-![Backup_MainPage_CalculatingHash](./images/Backup_MainPage_CalculatingHash.png)
-备份文件
-![Backup_Backup](./images/Backup_Backup.png)
-![Backup_CalculateHash](./images/Backup_CalculateHash.png)
-备份路径页（保存路径页大致相同）
-![Backup_BackupPathList](./images/Backup_BackupPathList.png)
-恢复文件
-![Backup_Recovery](./images/Backup_Recovery.png)
-
-### 设置页
-![Settings](./images/Settings.png)
