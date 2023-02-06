@@ -14,10 +14,11 @@ using Chamberlain_UWP.Reminder;
 using Microsoft.UI.Xaml.Controls;
 using Windows.Storage.Pickers;
 using Windows.ApplicationModel.DataTransfer;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Chamberlain_UWP.Settings
 {
-    internal class SettingsPageViewModel : ViewModelBase
+    internal partial class SettingsPageViewModel : ObservableObject
     {
         internal SettingsPageViewModel()
         {
@@ -74,16 +75,8 @@ namespace Chamberlain_UWP.Settings
             get => SettingsConfig.IsPaneOpen;
             set { SettingsConfig.IsPaneOpen = value; OnPropertyChanged(nameof(IsPaneOpen)); }
         }
-        string _selectedFolderPath = "";
-        internal string SelectedFolderPath
-        {
-            get => _selectedFolderPath;
-            set
-            {
-                _selectedFolderPath = value;
-                OnPropertyChanged(nameof(SelectedFolderPath));
-            }
-        }
+        [ObservableProperty]
+        string selectedFolderPath = "";
         internal string AppFolderPath
         {
             get => DataSettings.AppFolder.Path;
@@ -128,19 +121,12 @@ namespace Chamberlain_UWP.Settings
                 }
             }
         }
-        bool _clearFolderPathButtonEnabled = true;
         /// <summary>
         /// 清除在指定位置存放Reminder数据
         /// </summary>
-        internal bool ClearFolderPathButtonEnabled
-        {
-            get => _clearFolderPathButtonEnabled;
-            set
-            {
-                _clearFolderPathButtonEnabled = value;
-                OnPropertyChanged(nameof(ClearFolderPathButtonEnabled));
-            }
-        }
+        [ObservableProperty]
+        bool clearFolderPathButtonEnabled = true;
+
         internal string ReminderJsonText
         {
             get
@@ -151,59 +137,26 @@ namespace Chamberlain_UWP.Settings
             }
         }
 
-        InfoBar _importReminderInfoBar = new InfoBar();
         /// <summary>
         /// 导入ReminderJson的InfoBar
         /// </summary>
-        internal InfoBar ImportReminderInfoBar
-        {
-            get => _importReminderInfoBar;
-            set
-            {
-                _importReminderInfoBar = value;
-                OnPropertyChanged(nameof(ImportReminderInfoBar));
-            }
-        }
+        [ObservableProperty]
+        InfoBar importReminderInfoBar = new InfoBar();
 
-        string _importReminderText = string.Empty;
-        internal string ImportReminderText
-        {
-            get => _importReminderText;
-            set
-            {
-                _importReminderText = value;
-                OnPropertyChanged(nameof(ImportReminderText));
-            }
-        }
+        [ObservableProperty]
+        string importReminderText = string.Empty;
 
-        string _importReminderJsonText = string.Empty;
         /// <summary>
         /// 打开Expander时读取的ReminderJson文本
         /// </summary>
-        internal string ImportReminderJsonFileText
-        {
-            get => _importReminderJsonText;
-            set
-            {
-                _importReminderJsonText = value;
-                OnPropertyChanged(nameof(ImportReminderJsonFileText));
-            }
-        }
+        [ObservableProperty]
+        string importReminderJsonFileText = string.Empty;
 
-        string _reminderSavePath = string.Empty;
         /// <summary>
         /// 手动点击保存后得到的App目录内的ReminderJson文件路径
         /// </summary>
-        internal string ReminderSavePath
-        {
-            get => _reminderSavePath;
-            set
-            {
-                _reminderSavePath = value;
-                OnPropertyChanged(nameof(ReminderSavePath));
-            }
-        }
-
+        [ObservableProperty]
+        string reminderSavePath = string.Empty;
         #endregion
 
 
