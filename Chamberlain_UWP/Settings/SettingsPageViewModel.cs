@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml.Controls;
 using Windows.Storage.Pickers;
 using Windows.ApplicationModel.DataTransfer;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Chamberlain_UWP.Settings.Update;
 
 namespace Chamberlain_UWP.Settings
 {
@@ -67,7 +68,7 @@ namespace Chamberlain_UWP.Settings
         }
         internal bool IsCheckUpdateEnabled //CheckUpdate的附属类
         {
-            get { return CheckUpdate == "auto"; }
+            get { return CheckUpdate != "false"; }
             set { CheckUpdate = value ? "auto" : "false"; }
         }
         internal bool IsPaneOpen
@@ -166,7 +167,11 @@ namespace Chamberlain_UWP.Settings
             ImportReminderJsonFileText = string.Empty; //清除导入状态
             DeleteReminderDataText = string.Empty; //清除删除状态
         }
-        internal void ResetUpdateState() => CheckUpdate = "auto";
+        internal void ResetUpdateState()
+        {
+            CheckUpdate = "auto";
+            Updater.CheckUpdate();
+        }
         /// <summary>
         /// 读取提示文字
         /// </summary>

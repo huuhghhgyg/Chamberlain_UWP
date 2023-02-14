@@ -37,7 +37,7 @@ namespace Chamberlain_UWP
 
             InitializeData(initializeNavigate); // 使用回调（Action），先data后navigate
 
-            Update.CheckUpdate();
+            Updater.CheckUpdate();
         }
 
         /// <summary>

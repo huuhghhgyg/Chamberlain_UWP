@@ -174,7 +174,7 @@
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\SettingsConfig.cs" />
-    <Compile Include="Settings\Update\Update.cs" />
+    <Compile Include="Settings\Update\Updater.cs" />
     <Compile Include="TaskPage.xaml.cs">
       <DependentUpon>TaskPage.xaml</DependentUpon>
     </Compile>

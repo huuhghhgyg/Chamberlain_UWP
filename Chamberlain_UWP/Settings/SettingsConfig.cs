@@ -1,4 +1,5 @@
-﻿using Chamberlain_UWP.Backup;
+using Chamberlain_UWP.Backup;
+using Chamberlain_UWP.Settings.Update;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,45 +18,31 @@ namespace Chamberlain_UWP.Settings
         /// </summary>
         public static void InitialLoad()
         {
-            object cache;
+            bool roaming_settings = IsSettingsRoamingEnabled = LoadSetting("IsSettingsRoamingEnabled", false); //设置是否漫游，默认不漫游
 
-            cache = localSettings.Values["IsSettingsRoamingEnabled"];
-            bool roaming_settings = IsSettingsRoamingEnabled = (cache == null) ? false : (bool)cache; //设置是否漫游，默认不漫游
+            IsNotificationEnabled = LoadSetting("IsNotificationEnabled", true, roaming_settings); //是否开启通知，默认开启
 
-            cache = roaming_settings ? roamingSettings.Values["IsNotificationEnabled"] : localSettings.Values["IsNotificationEnabled"];
-            IsNotificationEnabled = (bool?)cache ?? true; //是否开启通知，默认开启
+            IsNotificationBlockingVisible = LoadSetting("IsNotificationBlockingVisible", false, roaming_settings); //是否显示通知阻塞信息，默认关闭
 
-            cache = roaming_settings ? roamingSettings.Values["IsNotificationBlockingVisible"] : localSettings.Values["IsNotificationBlockingVisible"];
-            IsNotificationBlockingVisible = (bool?)cache ?? false; //是否显示通知阻塞信息，默认关闭
+            UpdateTriggerInterval = LoadSetting("UpdateTriggerInterval", 15, roaming_settings); //通知更新间隔，最小、默认=15
 
-            cache = roaming_settings ? roamingSettings.Values["UpdateTriggerInterval"] : localSettings.Values["UpdateTriggerInterval"];
-            UpdateTriggerInterval = (int?)cache ?? 15; //通知更新间隔，最小、默认=15
+            TimepickerInterval = LoadSetting("TimepickerInterval", 1, false); //时间选择器时间间隔，最小、默认=1
 
-            cache = localSettings.Values["TimepickerInterval"];
-            TimepickerInterval = (int?)cache ?? 1; //时间选择器时间间隔，最小、默认=1
+            IsRemindOnTimeEnabled = LoadSetting("IsRemindOnTimeEnabled", true, roaming_settings); //是否开启每日定时通知，默认开启
 
-            cache = roaming_settings ? roamingSettings.Values["IsRemindOnTimeEnabled"] : localSettings.Values["IsRemindOnTimeEnabled"];
-            IsRemindOnTimeEnabled = (bool?)cache ?? true; //是否开启每日定时通知，默认开启
+            RemindTime = LoadSetting("RemindTime", new TimeSpan(17, 0, 0), roaming_settings); //每日定时通知时间，默认17：00
 
-            cache = roaming_settings ? roamingSettings.Values["RemindTime"] : localSettings.Values["RemindTime"];
-            RemindTime = (TimeSpan?)cache ?? new TimeSpan(17, 0, 0); //每日定时通知时间，默认17：00
+            CheckUpdate = LoadSetting("CheckUpdate", "Enabled", roaming_settings); //检测更新的状态，默认Enabled
 
-            cache = roaming_settings ? roamingSettings.Values["CheckUpdate"] : localSettings.Values["CheckUpdate"];
-            CheckUpdate = (string)cache ?? "auto"; //检测更新的状态，默认auto
-
-            cache = roaming_settings ? roamingSettings.Values["IsPaneOpen"] : localSettings.Values["IsPaneOpen"];
-            IsPaneOpen = (bool?)cache ?? false; //程序开启时左导航栏是否打开，默默人关闭
-
+            IsPaneOpen = LoadSetting("IsPaneOpen", false, roaming_settings); //程序开启时左导航栏是否打开，默认关闭
         }
 
-        /// <summary>
-        /// 数据区：
+        #region 数据区：
         /// 程序启动的时候读取一次，之后都是写入。
         /// 所以读取时InitialLoad()只读取非空的值，对于空值返回**默认值**。
         /// 存入的值都要在字段里面经过检验。
         /// 变量先存到程序内部，再存到设置中。
         /// * 新添加数据时，要同时添加到InitialLoad()读取、SaveAllRoaming()，如果可以漫游，添加到漫游
-        /// </summary>
         private static int _updateTriggerInterval;
         private static bool _isNotificationEnabled;
         private static bool _isSettingsRoamingEnabled;
@@ -144,25 +131,42 @@ namespace Chamberlain_UWP.Settings
             get => _isPaneOpen;
             set { _isPaneOpen = value; SaveSetting(value, "IsPaneOpen", true); }
         }
+        #endregion
 
-        /// 公共变量
+        #region 公共变量
         private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings; //本地存储的设置
         private static ApplicationDataContainer roamingSettings = ApplicationData.Current.RoamingSettings; //漫游存储的设置
+        #endregion
 
+        #region
         // 设置的有关文档参考：https://docs.microsoft.com/zh-cn/windows/uwp/get-started/settings-learning-track
         /// <summary>
         /// 保存单项设置
         /// </summary>
+        /// <typeparam name="T">要保存的值的类型</typeparam>
         /// <param name="data">要保存的数据</param>
         /// <param name="name">要保存设置的名称</param>
-        /// <param name="roaming_granted">是否允许数据漫游保存。如果允许，需要到SaveAllRoaming()中添加保存项</param>
-        private static void SaveSetting(object data, string name, bool roaming_granted = false) //保存设置。如果允许漫游则漫游。字段值更改的时候引用。
+        /// <param name="roaming">是否允许数据漫游保存。如果允许，需要到SaveAllRoaming()中添加保存项</param>
+        private static void SaveSetting<T>(T data, string name, bool roaming = false) //保存设置。如果允许漫游则漫游。字段值更改的时候引用。
         {
-            if (roaming_granted)
+            Type t = (localSettings.Values[name] ?? data).GetType();
+            if (t != typeof(T)) //如果类型不符，则删除数据记录
+            {
+                if (roaming)
+                    roamingSettings.Values.Remove(name);
+                localSettings.Values.Remove(name);
+            }
+
+            if (roaming)
                 roamingSettings.Values[name] = data; //保存到漫游数据
             localSettings.Values[name] = data; //不管是否漫游，都要保存到本地数据
         }
-        public static void SaveAllRoaming() //允许设置漫游时执行，将所有可以漫游的数据保存到Roaming
+
+        /// <summary>
+        /// 允许设置漫游时执行，将所有可以漫游的数据保存到Roaming
+        /// 取消漫游时不需要额外执行，取消后做的更改不会再漫游
+        /// </summary>
+        public static void SaveAllRoaming()
         {
             SaveSetting(UpdateTriggerInterval, "UpdateTriggerInterval", true);
             SaveSetting(IsNotificationEnabled, "IsNotificationEnabled", true);
@@ -171,6 +175,29 @@ namespace Chamberlain_UWP.Settings
             SaveSetting(CheckUpdate, "CheckUpdate", true);
             SaveSetting(IsPaneOpen, "IsPaneOpen", true);
         }
-        //取消漫游时不需要额外执行，取消后做的更改不会再漫游
+        /// <summary>
+        /// 读取设置
+        /// </summary>
+        /// <typeparam name="T">设置值的类型</typeparam>
+        /// <param name="dataName">设置的名称</param>
+        /// <param name="defaultValue">默认值</param>
+        /// <param name="roaming">是否允许数据漫游，如果不允许直接填入false</param>
+        /// <returns>读取到的值</returns>
+#nullable enable
+        private static T LoadSetting<T>(string dataName, T defaultValue, bool roaming = false)
+        {
+            try
+            {
+                object data = roaming ? roamingSettings.Values[dataName] : localSettings.Values[dataName];
+#pragma warning disable CS8600 // 将 null 字面量或可能为 null 的值转换为非 null 类型。
+                return (T)(data ?? defaultValue);
+#pragma warning restore CS8600 // 将 null 字面量或可能为 null 的值转换为非 null 类型。
+            }
+            catch (System.InvalidCastException)
+            {
+                return defaultValue;
+            }
+        }
+        #endregion
     }
 }
