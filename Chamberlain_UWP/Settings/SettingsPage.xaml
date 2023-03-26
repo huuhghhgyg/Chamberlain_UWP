@@ -65,7 +65,7 @@
                                     SpinButtonPlacementMode="Inline"
                                     SmallChange="1" LargeChange="5" Minimum="1" Maximum="30"
                                     Width="160" Grid.Column="2"
-                                    Text="{x:Bind vm.TimepickerInterval, Mode=TwoWay}"/>
+                                    Value="{x:Bind vm.TimepickerInterval, Mode=TwoWay}"/>
                 </Grid>
                 <!--侧边栏默认开启状态-->
                 <Grid Margin="0,4,0,0" Padding="16,12" Style="{StaticResource CardGrid}" ColumnSpacing="16">
@@ -97,7 +97,7 @@
                                     SpinButtonPlacementMode="Inline"
                                     SmallChange="10" LargeChange="100" Minimum="15"
                                     Grid.Column="2" Width="160"
-                                    Text="{x:Bind vm.UpdateTriggerInterval, Mode=TwoWay}"/>
+                                    Value="{x:Bind vm.UpdateTriggerInterval, Mode=TwoWay}"/>
                 </Grid>
 
                 <!--通知-->

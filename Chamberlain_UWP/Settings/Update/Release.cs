@@ -38,7 +38,12 @@ namespace Chamberlain_UWP.Settings
             return release;
         }
 
-        internal string RemoveMdSymbol(string msg) //移除Release返回的描述中阻碍阅读的markdown符号
+        /// <summary>
+        /// 移除Release返回的描述中阻碍阅读的markdown符号
+        /// </summary>
+        /// <param name="msg">Release返回的描述</param>
+        /// <returns></returns>
+        internal string RemoveMdSymbol(string msg)
         {
             StringBuilder sb = new StringBuilder(msg);
             sb.Replace("## ", ""); //移除二级标题标记
@@ -48,7 +53,12 @@ namespace Chamberlain_UWP.Settings
             return sb.ToString();
         }
 
-        internal bool VersionCompare(Release release) //与在线版本比较, true：本地版本最新；false：在线版本最新（默认4位版本号）
+        /// <summary>
+        /// 与在线版本比较, true：本地版本最新；false：在线版本最新（默认4位版本号）
+        /// </summary>
+        /// <param name="release"></param>
+        /// <returns>true：本地版本最新；false：在线版本最新</returns>
+        internal bool VersionCompare(Release release)
         {
             PackageVersion packageVersion = Package.Current.Id.Version;
             int[] local = { packageVersion.Major, packageVersion.Minor, packageVersion.Build, packageVersion.Revision }; //本地版本序列
