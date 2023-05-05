@@ -43,7 +43,7 @@
 
         <muxc:NavigationView Name="navControl"
                              IsTitleBarAutoPaddingEnabled="False"
-                             ItemInvoked="navControl_ItemInvoked"
+                             SelectionChanged="navControl_SelectionChanged"
                              IsBackEnabled="{x:Bind contentFrame.CanGoBack, Mode=OneWay}"
                              BackRequested="navControl_BackRequested"
                              DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
@@ -51,13 +51,13 @@
                              OpenPaneLength="280"
                              IsPaneOpen="{x:Bind settings:SettingsConfig.IsPaneOpen, Mode=OneTime}">
             <muxc:NavigationView.MenuItems>
-                <muxc:NavigationViewItem Icon="Clock" Content="任务" Tag="task"/>
-                <muxc:NavigationViewItem Content="提醒" Tag="reminder">
+                <muxc:NavigationViewItem x:Uid="NavigationItem_Task" Icon="Clock" Content="任务" Tag="task"/>
+                <muxc:NavigationViewItem x:Uid="NavigationItem_Reminder" Content="提醒" Tag="reminder">
                     <muxc:NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE0A2;"/>
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
-                <muxc:NavigationViewItem Content="备份" Tag="backup">
+                <muxc:NavigationViewItem x:Uid="NavigationItem_Backup" Content="备份" Tag="backup">
                     <muxc:NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE81C;"/>
                     </muxc:NavigationViewItem.Icon>

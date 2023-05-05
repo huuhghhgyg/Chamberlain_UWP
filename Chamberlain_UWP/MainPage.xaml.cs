@@ -241,32 +241,29 @@ namespace Chamberlain_UWP
             }
         }
 
-        private void navControl_ItemInvoked(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs args)
+        private void navControl_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
         {
-            if (args.IsSettingsInvoked)
+            if (args.IsSettingsSelected == true)
             {
                 //选中了Settings
                 contentFrame.Navigate(typeof(SettingsPage));
             }
-            else
+            else if (args.SelectedItemContainer != null)
             {
-                switch (args.InvokedItem) // 选择选中的其它选项
+                var navItemTag = args.SelectedItemContainer.Tag.ToString();
+                switch (navItemTag) // 选择选中的其它选项
                 {
-                    case "任务":
+                    case "task":
                         contentFrame.Navigate(typeof(TaskPage));
                         break;
-                    case "提醒":
+                    case "reminder":
                         Navigate2Reminder();
                         break;
-                    case "备份":
+                    case "backup":
                         contentFrame.Navigate(typeof(BackupPage));
                         break;
                 }
             }
-
-            //清除返回
-            contentFrame.BackStack.Clear();
-            contentFrame.ForwardStack.Clear();
         }
 
         private void navControl_BackRequested(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewBackRequestedEventArgs args)
