@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="(无描述)" xml:space="preserve">
-    <value>(无描述)</value>
-  </data>
   <data name="AddAppBarButton.Label" xml:space="preserve">
     <value>添加</value>
   </data>
@@ -222,7 +219,10 @@
   <data name="DataSavePathText.Text" xml:space="preserve">
     <value>指定位置存放数据</value>
   </data>
-  <data name="ddl日期必须要有" xml:space="preserve">
+  <data name="DateEmptyPrompt" xml:space="preserve">
+    <value>日期不能为空</value>
+  </data>
+  <data name="DateEmptyPromptDesc" xml:space="preserve">
     <value>ddl日期必须要有📅</value>
   </data>
   <data name="DebugOptionTitle.Text" xml:space="preserve">
@@ -242,6 +242,9 @@
   </data>
   <data name="DeleteSelectedFolderButton.Content" xml:space="preserve">
     <value>清除</value>
+  </data>
+  <data name="EmptyIndicator" xml:space="preserve">
+    <value>（空）</value>
   </data>
   <data name="EmptyIndicatorTextBlock.Text" xml:space="preserve">
     <value>（无）</value>
@@ -303,6 +306,12 @@
   <data name="ItemSuggestBox.PlaceholderText" xml:space="preserve">
     <value>搜索&amp;quot;提醒&amp;quot;</value>
   </data>
+  <data name="LabelEmptyPrompt" xml:space="preserve">
+    <value>标签不能为空</value>
+  </data>
+  <data name="LabelEmptyPromptDesc" xml:space="preserve">
+    <value>请在列表中选择一个或多个标签，也可以在下方新建标签🏷</value>
+  </data>
   <data name="ManageReminderCardSubitle.Text" xml:space="preserve">
     <value>添加 / 删除提醒项</value>
   </data>
@@ -324,17 +333,35 @@
   <data name="NavigationItem_Task.Content" xml:space="preserve">
     <value>任务</value>
   </data>
+  <data name="NoDescriptionIndicator" xml:space="preserve">
+    <value>(无描述)</value>
+  </data>
+  <data name="NoSelectedItemPrompt" xml:space="preserve">
+    <value>没有选中项</value>
+  </data>
+  <data name="NoSelectedItemPromptDesc" xml:space="preserve">
+    <value>请在这个列表中选择一项进行修改🛠</value>
+  </data>
   <data name="NoTaskIndicatorText.Text" xml:space="preserve">
     <value>（无任务）</value>
   </data>
   <data name="NoTaskTextBlock.Text" xml:space="preserve">
     <value>所有任务已完成☕</value>
   </data>
+  <data name="NotSelectedIndicator" xml:space="preserve">
+    <value>（未选择）</value>
+  </data>
   <data name="OnworkItemSuggestBox.PlaceholderText" xml:space="preserve">
     <value>搜索未完成的任务</value>
   </data>
   <data name="OpenFileButton.Content" xml:space="preserve">
     <value>打开文件</value>
+  </data>
+  <data name="PastTargetTimePrompt" xml:space="preserve">
+    <value>目标时间已经过了</value>
+  </data>
+  <data name="PastTargetTimePromptDesc" xml:space="preserve">
+    <value>穿越不了捏😵</value>
   </data>
   <data name="PathColumn.Header" xml:space="preserve">
     <value>路径</value>
@@ -456,8 +483,20 @@
   <data name="TaskPageTitle.Text" xml:space="preserve">
     <value>任务面板</value>
   </data>
+  <data name="TimeEmptyPrompt" xml:space="preserve">
+    <value>时间不能为空</value>
+  </data>
+  <data name="TimeEmptyPromptDesc" xml:space="preserve">
+    <value>还是选一个ddl时间吧⏰</value>
+  </data>
   <data name="TimeSelectorSpanText.Text" xml:space="preserve">
     <value>时间选择器选项间隔（分钟）</value>
+  </data>
+  <data name="TitleEmptyPrompt" xml:space="preserve">
+    <value>标题不能为空</value>
+  </data>
+  <data name="TitleEmptyPromptDesc" xml:space="preserve">
+    <value>不然就找不到这个项目了😥</value>
   </data>
   <data name="TotalBackupAppBarButton.Label" xml:space="preserve">
     <value>完整备份</value>
@@ -467,44 +506,5 @@
   </data>
   <data name="TotalPathColumn.Header" xml:space="preserve">
     <value>完整备份</value>
-  </data>
-  <data name="不然就找不到这个项目了" xml:space="preserve">
-    <value>不然就找不到这个项目了😥</value>
-  </data>
-  <data name="日期不能为空" xml:space="preserve">
-    <value>日期不能为空</value>
-  </data>
-  <data name="时间不能为空" xml:space="preserve">
-    <value>时间不能为空</value>
-  </data>
-  <data name="标签不能为空" xml:space="preserve">
-    <value>标签不能为空</value>
-  </data>
-  <data name="标题不能为空" xml:space="preserve">
-    <value>标题不能为空</value>
-  </data>
-  <data name="没有选中项" xml:space="preserve">
-    <value>没有选中项</value>
-  </data>
-  <data name="目标时间已经过了" xml:space="preserve">
-    <value>目标时间已经过了</value>
-  </data>
-  <data name="穿越不了捏" xml:space="preserve">
-    <value>穿越不了捏😵</value>
-  </data>
-  <data name="请在列表中选择一个或多个标签，也可以在下方新建标签" xml:space="preserve">
-    <value>请在列表中选择一个或多个标签，也可以在下方新建标签🏷</value>
-  </data>
-  <data name="请在这个列表中选择一项进行修改" xml:space="preserve">
-    <value>请在这个列表中选择一项进行修改🛠</value>
-  </data>
-  <data name="还是选一个ddl时间吧" xml:space="preserve">
-    <value>还是选一个ddl时间吧⏰</value>
-  </data>
-  <data name="（未选择）" xml:space="preserve">
-    <value>（未选择）</value>
-  </data>
-  <data name="（空）" xml:space="preserve">
-    <value>（空）</value>
   </data>
 </root>

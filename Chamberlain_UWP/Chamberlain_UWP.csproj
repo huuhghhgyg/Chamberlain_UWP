@@ -182,6 +182,11 @@
     </Compile>
     <Compile Include="Settings\SettingsConfig.cs" />
     <Compile Include="Settings\Update\Updater.cs" />
+    <Compile Include="Strings\zh-CN\Resources.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resw</DependentUpon>
+    </Compile>
     <Compile Include="TaskPage.xaml.cs">
       <DependentUpon>TaskPage.xaml</DependentUpon>
     </Compile>
@@ -318,8 +323,8 @@
   <ItemGroup>
     <None Include="Chamberlain_UWP_TemporaryKey.pfx" />
     <PRIResource Include="Strings\zh-CN\Resources.resw">
-      <Generator>ReswPlusAdvancedGenerator</Generator>
       <LastGenOutput>Resources.generated.cs</LastGenOutput>
+      <Generator>ReswPlusAdvancedGenerator</Generator>
     </PRIResource>
   </ItemGroup>
   <ItemGroup>
