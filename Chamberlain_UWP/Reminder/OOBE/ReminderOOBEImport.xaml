@@ -16,7 +16,7 @@
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="现在导入提醒项数据📲"
-                   Name="TitleTextBox"
+                   Name="TitleTextBox" x:Uid="ReminderOOBEImportTitle"
                    FontSize="36"
                    HorizontalAlignment="Stretch"
                    TextAlignment="Center"
@@ -26,6 +26,7 @@
                    Drop="TitleTextBox_Drop"/>
         <TextBlock FontSize="20"
                    Grid.Row="1" Margin="16,0"
+                   x:Uid="ReminderOOBEImportSubtitle"
                    Text="点击按钮打开文件或将文件拖动到标题上，或指定文件夹"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Stretch"
@@ -33,10 +34,10 @@
                    TextWrapping="Wrap"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center">
             <Button Content="指定文件夹"
-                    Name="PickFolderButton"
+                    Name="PickFolderButton" x:Uid="ReminderOOBEPickFolderButton"
                     Click="PickFolderButton_Click"/>
             <Button Content="打开文件"
-                    Name="OpenFileButton"
+                    Name="OpenFileButton" x:Uid="ReminderOOBEOpenFileButton"
                     Margin="12,0,0,0"
                     Style="{StaticResource AccentButtonStyle}"
                     Click="OpenFileButton_Click"/>

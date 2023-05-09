@@ -1,0 +1,510 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="(无描述)" xml:space="preserve">
+    <value>(无描述)</value>
+  </data>
+  <data name="AddAppBarButton.Label" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="AddDescTextBox.PlaceholderText" xml:space="preserve">
+    <value>提醒内容</value>
+  </data>
+  <data name="AddItemButton.Content" xml:space="preserve">
+    <value>添加项</value>
+  </data>
+  <data name="AddItemDatePicker.Header" xml:space="preserve">
+    <value>选择日期</value>
+  </data>
+  <data name="AddItemDatePicker.PlaceholderText" xml:space="preserve">
+    <value>到期日期</value>
+  </data>
+  <data name="AddItemPriorityComboBox.Header" xml:space="preserve">
+    <value>优先级</value>
+  </data>
+  <data name="AddItemTimePicker.Header" xml:space="preserve">
+    <value>到期时间</value>
+  </data>
+  <data name="AddTagButton.Content" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="AddTagTextBox.PlaceholderText" xml:space="preserve">
+    <value>标签名</value>
+  </data>
+  <data name="AddTextBlock.Text" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="AddTitleTextBox.PlaceholderText" xml:space="preserve">
+    <value>标题名称</value>
+  </data>
+  <data name="BackgroundTaskTitle.Text" xml:space="preserve">
+    <value>后台任务</value>
+  </data>
+  <data name="BackgroundWakeSpanText.Text" xml:space="preserve">
+    <value>后台唤醒间隔（分钟）</value>
+  </data>
+  <data name="BackupErrorIndicatorTextBlock.Text" xml:space="preserve">
+    <value>* 备份错误列表中有信息,请转到备份页查看</value>
+  </data>
+  <data name="BackupInfoPiviot.Title" xml:space="preserve">
+    <value>备份信息</value>
+  </data>
+  <data name="BackupPageTitle.Text" xml:space="preserve">
+    <value>备份任务</value>
+  </data>
+  <data name="BackupPathColumn.Header" xml:space="preserve">
+    <value>备份路径</value>
+  </data>
+  <data name="BackupPathPiviot.Header" xml:space="preserve">
+    <value>备份路径</value>
+  </data>
+  <data name="BackupStateTitle.Text" xml:space="preserve">
+    <value>备份状态</value>
+  </data>
+  <data name="BackupTargetPathColumn.Header" xml:space="preserve">
+    <value>备份目标</value>
+  </data>
+  <data name="BackupTaskSeqTitle.Text" xml:space="preserve">
+    <value>任务序列</value>
+  </data>
+  <data name="BackupTimeColumn.Header" xml:space="preserve">
+    <value>备份时间</value>
+  </data>
+  <data name="BackupTitle.Text" xml:space="preserve">
+    <value>备份</value>
+  </data>
+  <data name="BasicInfoTitle.Text" xml:space="preserve">
+    <value>基本信息</value>
+  </data>
+  <data name="ClearAppBarButton.Label" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="ClearButton.Content" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="ClearDataListDesc.Text" xml:space="preserve">
+    <value>这可能有助于修复崩溃问题</value>
+  </data>
+  <data name="ClearDataListTitle.Text" xml:space="preserve">
+    <value>清除所有列表数据</value>
+  </data>
+  <data name="ClearReminderDataTitle.Text" xml:space="preserve">
+    <value>清除Reminder数据</value>
+  </data>
+  <data name="CreatedTimeTextBlock.Text" xml:space="preserve">
+    <value>(空)</value>
+  </data>
+  <data name="CreateTimeTitle.Text" xml:space="preserve">
+    <value>创建时间</value>
+  </data>
+  <data name="DailyNotificationText.Text" xml:space="preserve">
+    <value>每日定时通知</value>
+  </data>
+  <data name="DailyNotificationTimeText.Text" xml:space="preserve">
+    <value>定时提醒时间</value>
+  </data>
+  <data name="DataSavePathText.Text" xml:space="preserve">
+    <value>指定位置存放数据</value>
+  </data>
+  <data name="ddl日期必须要有" xml:space="preserve">
+    <value>ddl日期必须要有📅</value>
+  </data>
+  <data name="DebugOptionTitle.Text" xml:space="preserve">
+    <value>调试选项</value>
+  </data>
+  <data name="DeleteAppBarButton.Label" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="DeleteBackupButton.Label" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="DeleteButton.Content" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="DeleteItemButton.Content" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="DeleteSelectedFolderButton.Content" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="EmptyIndicatorTextBlock.Text" xml:space="preserve">
+    <value>（无）</value>
+  </data>
+  <data name="ErrorInfoTitle.Text" xml:space="preserve">
+    <value>错误信息</value>
+  </data>
+  <data name="ExportBackupAppBarButton.Label" xml:space="preserve">
+    <value>导出至下载</value>
+  </data>
+  <data name="ExportBackupAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>将选中的备份导出到库中的下载文件夹</value>
+  </data>
+  <data name="FolderNameColumn.Header" xml:space="preserve">
+    <value>目录名称</value>
+  </data>
+  <data name="ImportReminderButton.Content" xml:space="preserve">
+    <value>导入</value>
+  </data>
+  <data name="ImportReminderJsonTitle.Text" xml:space="preserve">
+    <value>导入Reminder(JSON)</value>
+  </data>
+  <data name="ImportReminderTextBox.PlaceholderText" xml:space="preserve">
+    <value>JSON格式文本（支持文件拖拽）</value>
+  </data>
+  <data name="IsNotificationEnableText.Text" xml:space="preserve">
+    <value>开启通知</value>
+  </data>
+  <data name="IsSidebarOpenText.Text" xml:space="preserve">
+    <value>侧边栏默认开启状态</value>
+  </data>
+  <data name="IsSidebarOpenText.ToolTipService.ToolTip" xml:space="preserve">
+    <value>此选项在Windows11上可能没有效果</value>
+  </data>
+  <data name="ItemReviseDatePicker.Header" xml:space="preserve">
+    <value>Deadline日期</value>
+  </data>
+  <data name="ItemReviseDatePicker.PlaceholderText" xml:space="preserve">
+    <value>Deadline日期</value>
+  </data>
+  <data name="ItemReviseDescText.Header" xml:space="preserve">
+    <value>提醒描述</value>
+  </data>
+  <data name="ItemReviseDescText.PlaceholderText" xml:space="preserve">
+    <value>(未选择)</value>
+  </data>
+  <data name="ItemRevisePriorityComboBox.Header" xml:space="preserve">
+    <value>优先级</value>
+  </data>
+  <data name="ItemReviseTimePicker.Header" xml:space="preserve">
+    <value>Deadline时间</value>
+  </data>
+  <data name="ItemReviseTitleText.Header" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="ItemReviseTitleText.PlaceholderText" xml:space="preserve">
+    <value>(未选择)</value>
+  </data>
+  <data name="ItemSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>搜索&amp;quot;提醒&amp;quot;</value>
+  </data>
+  <data name="ManageReminderCardSubitle.Text" xml:space="preserve">
+    <value>添加 / 删除提醒项</value>
+  </data>
+  <data name="ManageReminderCardTitle.Text" xml:space="preserve">
+    <value>管理提醒</value>
+  </data>
+  <data name="ManageRemindItemButton.Content" xml:space="preserve">
+    <value>转到管理页面</value>
+  </data>
+  <data name="ModifyItemButton.Content" xml:space="preserve">
+    <value>修改项</value>
+  </data>
+  <data name="NavigationItem_Backup.Content" xml:space="preserve">
+    <value>备份</value>
+  </data>
+  <data name="NavigationItem_Reminder.Content" xml:space="preserve">
+    <value>提醒</value>
+  </data>
+  <data name="NavigationItem_Task.Content" xml:space="preserve">
+    <value>任务</value>
+  </data>
+  <data name="NoTaskIndicatorText.Text" xml:space="preserve">
+    <value>（无任务）</value>
+  </data>
+  <data name="NoTaskTextBlock.Text" xml:space="preserve">
+    <value>所有任务已完成☕</value>
+  </data>
+  <data name="OnworkItemSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>搜索未完成的任务</value>
+  </data>
+  <data name="OpenFileButton.Content" xml:space="preserve">
+    <value>打开文件</value>
+  </data>
+  <data name="PathColumn.Header" xml:space="preserve">
+    <value>路径</value>
+  </data>
+  <data name="PriorityDefaultItem.Content" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="PriorityHighItem.Content" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="PriorityMiddleItem.Content" xml:space="preserve">
+    <value>中</value>
+  </data>
+  <data name="QuickBackupAppBarButton.Label" xml:space="preserve">
+    <value>快速备份</value>
+  </data>
+  <data name="RecordPiviot.Header" xml:space="preserve">
+    <value>记录</value>
+  </data>
+  <data name="RefreshAppBarButton.Label" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="RefreshAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>重新从所有文件夹中读取数据</value>
+  </data>
+  <data name="ReminderDoneTitle.Text" xml:space="preserve">
+    <value>已完成</value>
+  </data>
+  <data name="ReminderLoadFromJsonTitle.Text" xml:space="preserve">
+    <value>从JSON文件中读取数据</value>
+  </data>
+  <data name="ReminderManageTitle.Text" xml:space="preserve">
+    <value>管理提醒项</value>
+  </data>
+  <data name="ReminderOOBEImportSubtitle.Text" xml:space="preserve">
+    <value>点击按钮打开文件或将文件拖动到标题上，或指定文件夹</value>
+  </data>
+  <data name="ReminderOOBEImportTitle.Text" xml:space="preserve">
+    <value>现在导入提醒项数据📲</value>
+  </data>
+  <data name="ReminderOOBEOpenFileButton.Content" xml:space="preserve">
+    <value>打开文件</value>
+  </data>
+  <data name="ReminderOOBEPickFolderButton.Content" xml:space="preserve">
+    <value>指定文件夹</value>
+  </data>
+  <data name="ReminderText.Text" xml:space="preserve">
+    <value>提醒</value>
+  </data>
+  <data name="ReminderTodoTextBlock.Text" xml:space="preserve">
+    <value>待处理</value>
+  </data>
+  <data name="ReminderTodoTitle.Text" xml:space="preserve">
+    <value>待办事项</value>
+  </data>
+  <data name="RemindTextBlock.Text" xml:space="preserve">
+    <value>提醒</value>
+  </data>
+  <data name="RestoreAppBarButton.Label" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="ReviseReminderTitle.Text" xml:space="preserve">
+    <value>修改提醒</value>
+  </data>
+  <data name="SaveAppBarButton.Label" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="SaveListAppBarButton.Label" xml:space="preserve">
+    <value>保存列表</value>
+  </data>
+  <data name="SavePathColumn.Header" xml:space="preserve">
+    <value>保存路径</value>
+  </data>
+  <data name="SavePathPiviot.Header" xml:space="preserve">
+    <value>保存路径</value>
+  </data>
+  <data name="SelectedTagsTextBlock.Text" xml:space="preserve">
+    <value>（未选择）</value>
+  </data>
+  <data name="SelectTagTextBlock.Text" xml:space="preserve">
+    <value>选择标签</value>
+  </data>
+  <data name="SetReminderFolderButton.Content" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="SettingsPageTitle.Text" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="Setting_ComponentTitle.Text" xml:space="preserve">
+    <value>组件设置</value>
+  </data>
+  <data name="Setting_ControlTitle.Text" xml:space="preserve">
+    <value>控件设置</value>
+  </data>
+  <data name="ShowDetailToggleButton.Content" xml:space="preserve">
+    <value>显示详细信息</value>
+  </data>
+  <data name="ShowNotificationInfoText.Text" xml:space="preserve">
+    <value>显示通知显示阻塞信息</value>
+  </data>
+  <data name="SortByNameItem.Content" xml:space="preserve">
+    <value>按照名称</value>
+  </data>
+  <data name="SortByTagItem.Content" xml:space="preserve">
+    <value>按照标签</value>
+  </data>
+  <data name="SortSearchTextBlock.Text" xml:space="preserve">
+    <value>搜索排序：</value>
+  </data>
+  <data name="StartBackupButton.Label" xml:space="preserve">
+    <value>开始备份</value>
+  </data>
+  <data name="SyncByWindowsText.Text" xml:space="preserve">
+    <value>应用设置跨设备同步</value>
+  </data>
+  <data name="TagTextBlock.Text" xml:space="preserve">
+    <value>标签</value>
+  </data>
+  <data name="TaskPageTitle.Text" xml:space="preserve">
+    <value>任务面板</value>
+  </data>
+  <data name="TimeSelectorSpanText.Text" xml:space="preserve">
+    <value>时间选择器选项间隔（分钟）</value>
+  </data>
+  <data name="TotalBackupAppBarButton.Label" xml:space="preserve">
+    <value>完整备份</value>
+  </data>
+  <data name="TotalBackupColumn.Header" xml:space="preserve">
+    <value>完整备份</value>
+  </data>
+  <data name="TotalPathColumn.Header" xml:space="preserve">
+    <value>完整备份</value>
+  </data>
+  <data name="不然就找不到这个项目了" xml:space="preserve">
+    <value>不然就找不到这个项目了😥</value>
+  </data>
+  <data name="日期不能为空" xml:space="preserve">
+    <value>日期不能为空</value>
+  </data>
+  <data name="时间不能为空" xml:space="preserve">
+    <value>时间不能为空</value>
+  </data>
+  <data name="标签不能为空" xml:space="preserve">
+    <value>标签不能为空</value>
+  </data>
+  <data name="标题不能为空" xml:space="preserve">
+    <value>标题不能为空</value>
+  </data>
+  <data name="没有选中项" xml:space="preserve">
+    <value>没有选中项</value>
+  </data>
+  <data name="目标时间已经过了" xml:space="preserve">
+    <value>目标时间已经过了</value>
+  </data>
+  <data name="穿越不了捏" xml:space="preserve">
+    <value>穿越不了捏😵</value>
+  </data>
+  <data name="请在列表中选择一个或多个标签，也可以在下方新建标签" xml:space="preserve">
+    <value>请在列表中选择一个或多个标签，也可以在下方新建标签🏷</value>
+  </data>
+  <data name="请在这个列表中选择一项进行修改" xml:space="preserve">
+    <value>请在这个列表中选择一项进行修改🛠</value>
+  </data>
+  <data name="还是选一个ddl时间吧" xml:space="preserve">
+    <value>还是选一个ddl时间吧⏰</value>
+  </data>
+  <data name="（未选择）" xml:space="preserve">
+    <value>（未选择）</value>
+  </data>
+  <data name="（空）" xml:space="preserve">
+    <value>（空）</value>
+  </data>
+</root>

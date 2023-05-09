@@ -60,13 +60,13 @@
                     <FontIcon x:Name="ItemFontIcon" FontFamily="{ThemeResource SymbolThemeFontFamily}"
                               Glyph="&#xE133;"/>
                     <StackPanel VerticalAlignment="Center" Grid.Column="1">
-                        <TextBlock Text="管理提醒" 
+                        <TextBlock Text="管理提醒" x:Uid="ManageReminderCardTitle"
                                    Style="{ThemeResource BodyTextBlockStyle}"/>
-                        <TextBlock Text="添加 / 删除提醒项" 
+                        <TextBlock Text="添加 / 删除提醒项" x:Uid="ManageReminderCardSubitle"
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                     </StackPanel>
-                    <Button Name="ManageRemindItemButton" Content="转到管理页面"
+                    <Button Name="ManageRemindItemButton" x:Uid="ManageRemindItemButton" Content="转到管理页面"
                             Grid.Column="2" HorizontalAlignment="Right"
                             Style="{StaticResource AccentButtonStyle}"
                             Click="ManageRemindItemButton_Click"/>
@@ -87,32 +87,32 @@
                         </Grid.ColumnDefinitions>
                         <AutoSuggestBox PlaceholderText="搜索未完成的任务"
                                         QueryIcon="Find"
-                                        Name="OnworkItemSuggestBox"
+                                        Name="OnworkItemSuggestBox" x:Uid="OnworkItemSuggestBox"
                                         HorizontalAlignment="Stretch"
                                         TextChanged="OnworkItemSuggestBox_TextChanged"/>
                     </Grid>
                     <StackPanel Orientation="Horizontal" Grid.Column="1">
-                        <TextBlock Text="搜索排序："
+                        <TextBlock Text="搜索排序：" x:Uid="SortSearchTextBlock"
                                 VerticalAlignment="Center" Margin="14,0,0,0"/>
                         <ComboBox Name="ItemsSortComboBox" 
                                   SelectedIndex="0" Margin="0,0,1,0"
                                   SelectionChanged="ItemsSortComboBox_SelectionChanged">
-                            <ComboBoxItem Content="按照标签"/>
-                            <ComboBoxItem Content="按照名称"/>
+                            <ComboBoxItem x:Uid="SortByTagItem" Content="按照标签"/>
+                            <ComboBoxItem x:Uid="SortByNameItem" Content="按照名称"/>
                         </ComboBox>
                     </StackPanel>
                 </Grid>
 
-                <TextBlock Text="待处理" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <TextBlock Text="待处理" x:Uid="ReminderTodoTextBlock" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <TextBlock Visibility="{x:Bind ReminderListOnwork.Count, Mode=OneWay, Converter={StaticResource VisibilityConverter}}"
-                           Text="（无）"
+                           Text="（无）" x:Uid="EmptyIndicatorTextBlock"
                            Style="{StaticResource BodyTextBlockStyle}"/>
                 <local:ReminderCardListView x:Name="ListOnWork"
                     ReminderList="{x:Bind ReminderListOnwork,Mode=OneWay}"
                     ListViewItemChecked="ReminderCardListView_ItemChecked"/>
-                <TextBlock Text="已完成" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <TextBlock Text="已完成" x:Uid="ReminderDoneTitle" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <TextBlock Visibility="{x:Bind ReminderListFinished.Count, Mode=OneWay, Converter={StaticResource VisibilityConverter}}"
-                           Text="（无）"
+                           Text="（无）" x:Uid="EmptyIndicatorTextBlock"
                            Style="{StaticResource BodyTextBlockStyle}"/>
                 <local:ReminderCardListView x:Name="ListFinished"
                     ReminderList="{x:Bind ReminderListFinished,Mode=OneWay}" 
