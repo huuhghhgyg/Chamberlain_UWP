@@ -8,6 +8,7 @@
     mc:Ignorable="d"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:Reminder="using:Chamberlain_UWP.Reminder"
+    xmlns:strings="using:Chamberlain_UWP.Strings"
     Background="{ThemeResource NavigationViewExpandedPaneBackground}"
     NavigationCacheMode="Enabled">
 
@@ -43,8 +44,10 @@
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
-        <TextBlock Name="PageTitleTextBlock" Text="任务面板"
+
+        <!--任务面板-->
+        <TextBlock Name="PageTitleTextBlock"
+                   Text="{x:Bind strings:Resources.TaskPage}"
                    Margin="48,48,48,12"
                    Style="{ThemeResource TitleTextBlockStyle}"/>
 
@@ -53,13 +56,14 @@
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48">
                 <!--待办-->
                 <StackPanel>
-                    <TextBlock Text="待办事项" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,8"/>
-                    <TextBlock Name="NoTaskTextBlock" Text="所有任务已完成☕" Margin="0,4,0,0"/>
+                    <!--待办事项-->
+                    <TextBlock Text="{x:Bind strings:Resources.ReminderTodoItems}" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,8"/>
+                    <TextBlock Name="NoTaskTextBlock" Text="{x:Bind strings:Resources.TaskClearIndicator}" Margin="0,4,0,0"/>
                     <Reminder:ReminderCardListView ReminderList="{x:Bind ReminderListOnwork,Mode=OneWay}" ListViewItemChecked="ReminderCardListView_ListViewItemChecked"/>
                 </StackPanel>
                 <!--备份-->
                 <StackPanel Visibility="{x:Bind BackupViewModel.IsBackupCardVisible, Mode=OneWay}">
-                    <TextBlock Text="备份状态" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <TextBlock Text="备份状态" x:Uid="BackupStateTitle" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
                     <TextBlock Text="{x:Bind BackupViewModel.BackupTaskSequenceDescription, Mode=OneWay}"
                                Visibility="{x:Bind BackupViewModel.IsBackupTaskSequenceVisible,Mode=OneWay}"
                                Margin="0,0,0,4"/>
@@ -96,12 +100,12 @@
                         <muxc:Expander.Content>
                             <StackPanel Orientation="Horizontal">
                                 <!--<Button Content="取消" Margin="0,0,8,0"/>-->
-                                <ToggleButton Content="显示详细信息" IsChecked="{x:Bind BackupViewModel.Manager.ShowDetail,Mode=TwoWay}"/>
+                                <ToggleButton Content="显示详细信息" x:Uid="ShowDetailToggleButton" IsChecked="{x:Bind BackupViewModel.Manager.ShowDetail,Mode=TwoWay}"/>
                             </StackPanel>
                         </muxc:Expander.Content>
                     </muxc:Expander>
                     <TextBlock Visibility="{x:Bind BackupViewModel.Manager.IsAnyError,Mode=OneWay}"
-                               Text="* 备份错误列表中有信息,请转到备份页查看"
+                               Text="* 备份错误列表中有信息,请转到备份页查看" x:Uid="BackupErrorIndicatorTextBlock"
                                Margin="0,4,0,0"/>
                 </StackPanel>
             </StackPanel>

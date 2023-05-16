@@ -5,6 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Chamberlain_UWP"
+    xmlns:strings="using:Chamberlain_UWP.Strings"
+    xmlns:setting="using:Chamberlain_UWP.Settings"
     mc:Ignorable="d"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     NavigationCacheMode="Enabled"
@@ -41,15 +43,17 @@
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <!--设置-->
         <TextBlock Name="PageTitleTextBlock"
-                   Text="设置"
+                   Text="{x:Bind strings:Resources.Settings}"
                    Margin="48,48,48,12"
                    Style="{ThemeResource TitleTextBlockStyle}"/>
         <ScrollViewer Grid.Row="1">
             <!--设置面板-->
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48" Grid.Row="1">
                 <!--应用设置-->
-                <TextBlock Text="易用性设置" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <!--控件设置-->
+                <TextBlock Text="{x:Bind strings:Resources.ControlSettings}" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <!--时间选择器-->
                 <Grid Margin="0,4,0,0" Padding="16" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
@@ -58,7 +62,8 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE169;"/>
-                    <TextBlock Text="时间选择器选项间隔（分钟）" 
+                    <!--时间选择器选项间隔（分钟）-->
+                    <TextBlock Text="{x:Bind strings:Resources.TimeSelectorSpan}"
                                TextWrapping="Wrap"
                                VerticalAlignment="Center" Grid.Column="1"/>
                     <muxc:NumberBox Name="TimepickerIntervalComboBox"
@@ -75,14 +80,29 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <SymbolIcon Symbol="GlobalNavigationButton" />
-                    <TextBlock Text="侧边栏默认开启状态" Grid.Column="1" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Bind strings:Resources.SidebarOpenState}" Grid.Column="1" VerticalAlignment="Center"/>
                     <ToggleSwitch MinWidth="80" Grid.Column="2" HorizontalAlignment="Right"
                                   ToolTipService.ToolTip="此选项在Windows11上可能没有效果"
                                   IsOn="{x:Bind vm.IsPaneOpen, Mode=TwoWay}"/>
                 </Grid>
+                <!--语言设置-->
+                <Grid Margin="0,4,0,0" Padding="16,12" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <FontIcon Glyph="&#xF2B7;" />
+                    <TextBlock Text="{x:Bind strings:Resources.Language}" Grid.Column="1" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="LanguageComboBox"
+                              Grid.Column="2" HorizontalAlignment="Right"
+                              Width="160"
+                              SelectedIndex="{x:Bind vm.LanguageIndex, Mode=TwoWay}"
+                              ItemsSource="{x:Bind setting:LanguageHelper.SupportLang}"/>
+                </Grid>
 
                 <!--后台任务-->
-                <TextBlock Text="后台任务" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <TextBlock Text="{x:Bind strings:Resources.BackgroundTask}" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <Grid Margin="0,4,0,0" Padding="16" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
@@ -90,7 +110,7 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE7C4;"/>
-                    <TextBlock Text="后台唤醒间隔（分钟）"
+                    <TextBlock Text="{x:Bind strings:Resources.BackgroundWakeSpan}"
                                Grid.Column="1" VerticalAlignment="Center"
                                TextWrapping="Wrap"/>
                     <muxc:NumberBox Name="TriggerSpanComboBox"
@@ -115,7 +135,8 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xED0C;"/>
-                            <TextBlock Text="开启通知" Grid.Column="1" VerticalAlignment="Center"/>
+                            <!--开启通知-->
+                            <TextBlock Text="{x:Bind strings:Resources.EnableNotification}" Grid.Column="1" VerticalAlignment="Center"/>
                             <ToggleSwitch Name="NotificationSwitch" 
                                   Grid.Column="2" HorizontalAlignment="Right"
                                   IsOn="{x:Bind vm.IsNotificationEnabled, Mode=TwoWay}" Width="20" MinWidth="80"/>
@@ -129,7 +150,8 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xF5E7;"/>
-                            <TextBlock Text="显示通知显示阻塞信息" Grid.Column="1" VerticalAlignment="Center"/>
+                            <!--显示通知显示阻塞信息-->
+                            <TextBlock Text="{x:Bind strings:Resources.ShowNotificationBlockingInfo}" Grid.Column="1" VerticalAlignment="Center"/>
                             <ToggleSwitch Grid.Column="2" HorizontalAlignment="Right" MinWidth="124"
                                   IsOn="{x:Bind vm.IsNotificationBlockingVisible, Mode=TwoWay}"
                                   IsEnabled="{Binding IsOn, ElementName=NotificationSwitch}"/>
@@ -155,7 +177,8 @@
                             </Grid.ColumnDefinitions>
 
                             <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE15F;"/>
-                            <TextBlock Text="每日定时通知" Grid.Column="1" VerticalAlignment="Center"/>
+                            <!--每日定时通知-->
+                            <TextBlock Text="{x:Bind strings:Resources.DailyNotification}" Grid.Column="1" VerticalAlignment="Center"/>
                             <ToggleSwitch Name="RemindOnTimeSwitch" 
                                           Grid.Column="2" HorizontalAlignment="Right"
                                           IsOn="{x:Bind vm.IsRemindOnTimeEnabled, Mode=TwoWay}" 
@@ -175,7 +198,8 @@
                             </Grid.ColumnDefinitions>
 
                             <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE121;"/>
-                            <TextBlock Text="定时提醒时间"
+                            <!--每日定时提醒时间-->
+                            <TextBlock Text="{x:Bind strings:Resources.DailyNotificationTime}" x:Uid="DailyNotificationTimeText"
                                        Grid.Column="1" VerticalAlignment="Center"
                                        TextWrapping="Wrap"/>
                             <TimePicker Grid.Column="2"
@@ -184,7 +208,8 @@
                     </muxc:Expander.Content>
                 </muxc:Expander>
 
-                <TextBlock Text="同步" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <!--同步-->
+                <TextBlock Text="{x:Bind strings:Resources.Sync}" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <Grid Margin="0,4,0,0" Padding="16,12" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
@@ -192,14 +217,16 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE7C4;"/>
-                    <TextBlock Text="应用设置跨设备同步" Grid.Column="1" VerticalAlignment="Center"/>
+                    <!--应用设置跨设备同步-->
+                    <TextBlock Text="{x:Bind strings:Resources.SyncByWindowsOS}" Grid.Column="1" VerticalAlignment="Center"/>
                     <ToggleSwitch x:Name="SettingSyncSwitch"
                                   MinWidth="80" Grid.Column="2" HorizontalAlignment="Right"
                                   IsOn="{x:Bind vm.IsSettingsRoamingEnabled, Mode=TwoWay}"
                                   Toggled="{x:Bind vm.SettingSyncSwitch_Toggled}"/>
                 </Grid>
 
-                <TextBlock Text="组件设置" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <!--组件设置-->
+                <TextBlock Text="{x:Bind strings:Resources.ComponentSettings}" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <muxc:Expander Name="ReminderExpander" Margin="0,4,0,0"
                                IsExpanded="True" ExpandDirection="Down"
                                VerticalAlignment="Top" HorizontalAlignment="Stretch"
@@ -209,11 +236,13 @@
                         <StackPanel Orientation="Horizontal" Height="64">
                             <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
                                       Glyph="&#xE73A;"/>
-                            <TextBlock Text="提醒" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
+                            <!--提醒-->
+                            <TextBlock Text="{x:Bind strings:Resources.Reminder}" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
                         </StackPanel>
                     </muxc:Expander.Header>
                     <StackPanel>
-                        <TextBlock Text="指定位置存放数据"
+                        <!--指定位置存放数据-->
+                        <TextBlock Text="{x:Bind strings:Resources.DataSavePath}"
                                    Margin="0,0,0,8"
                                    Style="{ThemeResource BaseTextBlockStyle}"/>
                         <StackPanel>
@@ -221,16 +250,19 @@
                                        Text="{x:Bind vm.SelectedFolderPath, Mode=OneWay}"
                                        VerticalAlignment="Center" TextWrapping="Wrap"/>
                             <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                <Button Name="SetReminderFolderButton" Content="打开文件夹"
+                                <!--打开文件夹-->
+                                <Button Name="SetReminderFolderButton" Content="{x:Bind strings:Resources.OpenFolder}"
                                         Click="{x:Bind vm.SetReminderExternalFolder}"/>
-                                <Button Name="DeleteSelectedFolderButton" Content="清除"
+                                <!--清除-->
+                                <Button Content="{x:Bind strings:Resources.Clear}"
                                         Margin="8,0,0,0"
                                         IsEnabled="{x:Bind vm.ClearFolderPathButtonEnabled, Mode=OneWay}"
                                         Click="{x:Bind vm.ClearFolderPath}"/>
                             </StackPanel>
                         </StackPanel>
 
-                        <TextBlock Text="导入Reminder(JSON)"
+                        <!--导入Reminder(JSON)-->
+                        <TextBlock Text="{x:Bind strings:Resources.ImportReminderJson}"
                                    Margin="0,12,0,8"
                                    Style="{ThemeResource BaseTextBlockStyle}"/>
                         <muxc:InfoBar Name="ImportReminderInfoBar" Title="{x:Bind vm.ImportReminderInfoBar.Title, Mode=OneWay}"
@@ -242,24 +274,26 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox Name="ImportReminderTextBox"
+                            <TextBox Name="ImportReminderTextBox" x:Uid="ImportReminderTextBox"
                                      PlaceholderText="JSON格式文本（支持文件拖拽）"
                                      MaxHeight="200"
                                      TextWrapping="Wrap"
                                      Text="{x:Bind vm.ImportReminderText, Mode=TwoWay}"
                                      DragOver="{x:Bind vm.ImportReminderTextBox_DragOver}"
                                      Drop="{x:Bind vm.ImportReminderTextBox_Drop}"/>
-                            <Button Name="ImportReminderButton" Content="导入"
+                            <Button Name="ImportReminderButton" Content="{x:Bind strings:Resources.Import}"
                                     Grid.Column="1" VerticalAlignment="Top"
                                     HorizontalAlignment="Right"
                                     Click="{x:Bind vm.ImportReminder}"/>
                         </Grid>
 
-                        <TextBlock Text="从JSON文件中读取数据"
+                        <!--从JSON文件中读取数据-->
+                        <TextBlock Text="{x:Bind strings:Resources.ReminderLoadFromJsonFile}"
                                    Margin="0,12,0,8"
                                    Style="{ThemeResource BaseTextBlockStyle}"/>
                         <RelativePanel>
-                            <Button Content="打开文件" Name="OpenFileButton" Click="{x:Bind vm.OpenReminderJsonFile}"/>
+                            <!--打开文件-->
+                            <Button Content="{x:Bind strings:Resources.OpenFile}" Name="OpenFileButton" x:Uid="OpenFileButton" Click="{x:Bind vm.OpenReminderJsonFile}"/>
                             <TextBlock Name="OpenFileTextBlock"
                                        Text="{x:Bind vm.ImportReminderJsonFileText,Mode=OneWay}"
                                        Margin="8,0,0,0"
@@ -267,11 +301,13 @@
                                        RelativePanel.RightOf="OpenFileButton"
                                        RelativePanel.AlignVerticalCenterWithPanel="True"/>
                         </RelativePanel>
-                        <TextBlock Text="清除Reminder数据"
+                        <!--清除Reminder数据-->
+                        <TextBlock Text="{x:Bind strings:Resources.ClearReminderData}"
                                    Margin="0,12,0,8"
                                    Style="{ThemeResource BaseTextBlockStyle}"/>
                         <StackPanel Orientation="Horizontal">
-                            <Button Content="删除" Name="DeleteFlyoutButton"
+                            <!--删除-->
+                            <Button Content="{x:Bind strings:Resources.Delete}" Name="DeleteFlyoutButton"
                                     Click="{x:Bind vm.DeleteButtonFlyout}">
                             </Button>
                             <TextBlock Text="{x:Bind vm.DeleteReminderDataText, Mode=OneWay}"
@@ -288,16 +324,20 @@
                     <muxc:Expander.Header>
                         <StackPanel Orientation="Horizontal" Height="64">
                             <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE81C;" />
-                            <TextBlock Text="备份" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
+                            <!--备份-->
+                            <TextBlock Text="{x:Bind strings:Resources.BackupTitle}" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
                         </StackPanel>
                     </muxc:Expander.Header>
                     <StackPanel>
-                        <TextBlock Text="清除所有列表数据"
+                        <!--清除所有列表数据-->
+                        <TextBlock Text="{x:Bind strings:Resources.ClearDataListTitle}"
                                    Margin="0,0,0,8"
                                    Style="{ThemeResource BaseTextBlockStyle}"/>
                         <StackPanel>
-                            <TextBlock Text="这可能有助于修复崩溃问题" Margin="0,0,0,8"/>
-                            <Button Content="清除" Click="{x:Bind vm.ClearBackupListData}"/>
+                            <!--这可能有助于修复崩溃问题-->
+                            <TextBlock Text="{x:Bind strings:Resources.ClearDataListDesc}" x:Uid="ClearDataListDesc" Margin="0,0,0,8"/>
+                            <!--清除-->
+                            <Button Content="{x:Bind strings:Resources.Clear}" Click="{x:Bind vm.ClearBackupListData}"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -315,13 +355,16 @@
                         <StackPanel Orientation="Horizontal" Height="64">
                             <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
                                       Glyph="&#xE90F;" FontSize="20"/>
-                            <TextBlock Text="调试选项" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
+                            <!--调试选项-->
+                            <TextBlock Text="{x:Bind strings:Resources.DebugOption}" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
                         </StackPanel>
                     </muxc:Expander.Header>
                     <StackPanel>
-                        <TextBlock Text="应用" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <!--应用-->
+                        <TextBlock Text="{x:Bind strings:Resources.Application}" Style="{ThemeResource BaseTextBlockStyle}"/>
                         <StackPanel>
-                            <TextBlock Text="应用程序文件夹" Margin="0,8,0,8"/>
+                            <!--应用程序文件夹-->
+                            <TextBlock Text="{x:Bind strings:Resources.ApplicationFolder}" Margin="0,8,0,8"/>
                             <TextBox Text="{x:Bind vm.AppFolderPath,Mode=OneWay}"
                                      IsReadOnly="True"/>
                         </StackPanel>
@@ -329,7 +372,8 @@
                         <TextBlock Text="Reminder" Style="{ThemeResource BaseTextBlockStyle}"
                                    Margin="0,12,0,0"/>
                         <StackPanel>
-                            <TextBlock Text="JSON（仅输出）"
+                            <!--JSON（仅输出）-->
+                            <TextBlock Text="{x:Bind strings:Resources.JsonOutputOnly}"
                                    Margin="0,8,0,8"
                                    Style="{ThemeResource BodyTextBlockStyle}"/>
                             <TextBox Name="ReminderJsonTextBox"
@@ -337,12 +381,14 @@
                                  IsReadOnly="True"
                                  TextWrapping="Wrap"
                                      Text="{x:Bind vm.ReminderJsonText, Mode=OneWay}"/>
-                            <TextBlock Text="保存数据"
+                            <!--保存数据-->
+                            <TextBlock Text="{x:Bind strings:Resources.SaveData}"
                                    Margin="0,8,0,0"
                                    Style="{ThemeResource BodyTextBlockStyle}"/>
                             <StackPanel Margin="0,8,0,0">
-                                <Button Name="ReminderSave" Content="保存Reminder" Click="{x:Bind vm.ReminderSave}"/>
-                                <TextBox Name="ReminderSaveTextBox"
+                                <!--保存Reminder-->
+                                <Button Name="ReminderSave" Content="{x:Bind strings:Resources.SaveReminderDataFile}" Click="{x:Bind vm.ReminderSave}"/>
+                                <TextBox Name="ReminderSaveTextBox" x:Uid="ReminderSaveTextBox"
                                          Text="{x:Bind vm.ReminderSavePath, Mode=OneWay}"
                                          Margin="0,8,0,0"
                                          IsReadOnly="True"
@@ -352,7 +398,8 @@
                     </StackPanel>
                 </muxc:Expander>
 
-                <TextBlock Text="更新" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <!--更新-->
+                <TextBlock Text="{x:Bind strings:Resources.Update}" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <muxc:Expander 
                     HorizontalAlignment="Stretch" 
                     HorizontalContentAlignment="Stretch"
@@ -371,7 +418,7 @@
                             </Grid.ColumnDefinitions>
 
                             <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE117;"/>
-                            <TextBlock Text="自动检测更新" Grid.Column="1" VerticalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind strings:Resources.AutoDetectUpdateTitle}" Grid.Column="1" VerticalAlignment="Center"/>
                             <ToggleSwitch Name="CheckUpdateSwitch" 
                                           Grid.Column="2" HorizontalAlignment="Right"
                                           IsOn="{x:Bind vm.IsCheckUpdateEnabled, Mode=TwoWay}"
@@ -393,7 +440,7 @@
                             <TextBlock Text="{x:Bind vm.UpdateStatusString,Mode=OneWay}"
                                        Grid.Column="1" VerticalAlignment="Center"
                                        TextWrapping="Wrap"/>
-                            <Button Content="重置" Grid.Column="2" HorizontalAlignment="Right"
+                            <Button Content="{x:Bind strings:Resources.Reset}" Grid.Column="2" HorizontalAlignment="Right"
                                     IsEnabled="{x:Bind CheckUpdateSwitch.IsOn, Mode=OneWay}"
                                     Click="{x:Bind vm.ResetUpdateState}"/>
                         </Grid>
@@ -401,7 +448,7 @@
                 </muxc:Expander>
 
 
-                <TextBlock Text="关于" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <TextBlock Text="{x:Bind strings:Resources.About}" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <muxc:Expander Name="ProgramInfoExpander"
                                IsExpanded="True" ExpandDirection="Down"
                                Margin="0,4,0,0"
@@ -412,13 +459,14 @@
                         <StackPanel Orientation="Horizontal" Height="64">
                             <FontIcon Name="ProgramInfoIcon" FontFamily="{ThemeResource SymbolThemeFontFamily}"
                                       Glyph="&#xE946;" FontSize="20"/>
-                            <TextBlock Text="详细信息" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
+                            <!--详细信息-->
+                            <TextBlock Text="{x:Bind strings:Resources.DetailedInfo}" Margin="16,0,0,0" Padding="0,0,0,3" VerticalAlignment="Center"/>
                         </StackPanel>
                     </muxc:Expander.Header>
                     <StackPanel>
                         <Grid RowSpacing="8">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="180"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -427,18 +475,18 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="Chamberlain" Style="{ThemeResource BaseTextBlockStyle}"/>
-                            <TextBlock Text="版本" Grid.Row="1" Style="{ThemeResource BaseTextBlockStyle}"/>
+                            <TextBlock Text="{x:Bind strings:Resources.Version}" Grid.Row="1" Style="{ThemeResource BaseTextBlockStyle}"/>
                             <TextBlock Name="ProgramVersionText"
                                        Text="{x:Bind vm.ProgramVersion}"
                                        Grid.Row="1" Grid.Column="1"/>
-                            <TextBlock Text="安装日期" Grid.Row="2" Style="{ThemeResource BaseTextBlockStyle}"/>
+                            <TextBlock Text="{x:Bind strings:Resources.InstallDate}" Grid.Row="2" Style="{ThemeResource BaseTextBlockStyle}"/>
                             <TextBlock Name="ProgramInstalledDate"
                                        Text="{x:Bind vm.ProgramInstalledDate}"
                                        Grid.Row="2" Grid.Column="1"/>
                         </Grid>
                         <Grid Margin="0,24,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="108"/>
+                                <ColumnDefinition Width="170"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -446,14 +494,14 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="开发者" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
+                            <TextBlock Text="{x:Bind strings:Resources.Developer}" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
                             <HyperlinkButton Content="@huuhghhgyg" NavigateUri="https://github.com/huuhghhgyg"
                                              Grid.Column="1"/>
-                            <TextBlock Text="项目主页" Grid.Row="1" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
+                            <TextBlock Text="{x:Bind strings:Resources.RepositoryPage}" Grid.Row="1" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
                             <HyperlinkButton Content="Github/Chamberlain_UWP" NavigateUri="https://github.com/huuhghhgyg/Chamberlain_UWP"
                                              Grid.Row="1" Grid.Column="1"/>
-                            <TextBlock Text="遇到问题？" Grid.Row="2" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
-                            <HyperlinkButton Content="前往Github反馈" NavigateUri="https://github.com/huuhghhgyg/Chamberlain_UWP/issues"
+                            <TextBlock Text="{x:Bind strings:Resources.EncounterProblem}" Grid.Row="2" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
+                            <HyperlinkButton Content="{x:Bind strings:Resources.FeedbackOnGithub}" NavigateUri="https://github.com/huuhghhgyg/Chamberlain_UWP/issues"
                                              Grid.Row="2" Grid.Column="1"/>
                         </Grid>
                     </StackPanel>

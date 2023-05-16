@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+﻿using Chamberlain_UWP.Settings;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +12,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Globalization;
 using Windows.Storage;
 using Windows.UI.Notifications;
 using Windows.UI.ViewManagement;
@@ -35,9 +37,13 @@ namespace Chamberlain_UWP
         /// </summary>
         public App()
         {
+            SettingsConfig.InitialLoad();
+            LanguageHelper.SetLanguage();
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
+
+
 
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。

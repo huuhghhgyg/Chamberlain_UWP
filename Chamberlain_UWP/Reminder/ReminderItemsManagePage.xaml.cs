@@ -1,4 +1,5 @@
 using Chamberlain_UWP.Settings;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -97,7 +98,7 @@ namespace Chamberlain_UWP.Reminder
             if (tags.Length > 0)
                 SelectedTagsTextBlock.Text = string.Join(',', tags);
             else
-                SelectedTagsTextBlock.Text = "（未选择）";
+                SelectedTagsTextBlock.Text = Strings.Resources.NotSelectedIndicator;
         }
 
         private void AddTagButton_Click(object sender, RoutedEventArgs e)
@@ -158,29 +159,32 @@ namespace Chamberlain_UWP.Reminder
             {
                 RemindItemListView.SelectedItem = null;
                 ClearReviseControl();
-                CallTeachingTip("没有选中项", "请在这个列表中选择一项进行修改🛠",RemindItemListView);
+                //CallTeachingTip(ResourceLoader.GetString("没有选中项"), ResourceLoader.GetString("请在这个列表中选择一项进行修改"),RemindItemListView);
+                CallTeachingTip(Strings.Resources.NoSelectedItemPrompt, Strings.Resources.NoSelectedItemPromptDesc, RemindItemListView);
                 return;
             }
 
             // 检测表单内容合法性
-            if(string.IsNullOrEmpty(ItemReviseTitleText.Text))
+            if (string.IsNullOrEmpty(ItemReviseTitleText.Text))
             {
-                CallTeachingTip("标题不能为空", "否则你想怎么称呼？🤔", ItemReviseTitleText);
+                //CallTeachingTip(ResourceLoader.GetString("标题不能为空"), ResourceLoader.GetString("否则你想怎么称呼？🤔"), ItemReviseTitleText);
+                CallTeachingTip(Strings.Resources.TitleEmptyPrompt, Strings.Resources.TitleEmptyPromptDesc, ItemReviseTitleText);
                 return;
             }
 
-            if(string.IsNullOrEmpty(ItemReviseDescText.Text))
+            if (string.IsNullOrEmpty(ItemReviseDescText.Text))
             {
-                ItemReviseDescText.Text = "(无描述)";
+                ItemReviseDescText.Text = Strings.Resources.NoDescriptionIndicator;
             }
 
             DateTimeOffset dto = (DateTimeOffset)ItemReviseDatePicker.Date; //转换为DateTimeOffset类型
             DateTime ddlDate = dto.LocalDateTime.Date; //获得本地时间
             ddlDate += ItemReviseTimePicker.Time; //计算预设的时间
 
-            if(ddlDate - DateTime.Now <= TimeSpan.Zero)
+            if (ddlDate - DateTime.Now <= TimeSpan.Zero)
             {
-                CallTeachingTip("目标时间已经过了", "穿越不了捏😵", ItemReviseTimePicker);
+                //CallTeachingTip(ResourceLoader.GetString("目标时间已经过了"), ResourceLoader.GetString("穿越不了捏"), ItemReviseTimePicker);
+                CallTeachingTip(Strings.Resources.TimeEmptyPrompt, Strings.Resources.TimeEmptyPromptDesc, ItemReviseTimePicker);
                 return;
             }
 
@@ -206,7 +210,7 @@ namespace Chamberlain_UWP.Reminder
         {
             ItemReviseTitleText.Text = "";
             ItemReviseDescText.Text = "";
-            CreatedTimeTextBlock.Text = "（空）";
+            CreatedTimeTextBlock.Text = Strings.Resources.EmptyIndicator;
             ItemReviseDatePicker.Date = null; //清空选中的日期
             ItemReviseTimePicker.SelectedTime = null; //清空选中的时间
             ItemRevisePriorityComboBox.SelectedIndex = 0; //选中“默认”
@@ -235,11 +239,12 @@ namespace Chamberlain_UWP.Reminder
             string title, desc;
 
             //标题
-            if (!string.IsNullOrEmpty(AddTitleTextBox.Text)) 
+            if (!string.IsNullOrEmpty(AddTitleTextBox.Text))
                 title = AddTitleTextBox.Text;
             else
             {
-                CallTeachingTip("标题不能为空", "不然就找不到这个项目了😥", AddTitleTextBox);
+                //CallTeachingTip("标题不能为空", "不然就找不到这个项目了😥", AddTitleTextBox);
+                CallTeachingTip(Strings.Resources.TitleEmptyPrompt, Strings.Resources.TitleEmptyPromptDesc, AddTitleTextBox);
                 return;
             }
 
@@ -247,18 +252,20 @@ namespace Chamberlain_UWP.Reminder
             if (!string.IsNullOrEmpty(AddDescTextBox.Text))
                 desc = AddDescTextBox.Text;
             else
-                desc = "(无描述)";
+                desc = Strings.Resources.NoDescriptionIndicator; //（无描述）
 
             //日期和时间
             DateTime ddlDate;
-            if (AddItemDatePicker.Date==null)
+            if (AddItemDatePicker.Date == null)
             {
-                CallTeachingTip("日期不能为空", "ddl日期必须要有📅", AddItemDatePicker);
+                //CallTeachingTip(ResourceLoader.GetString("日期不能为空"), ResourceLoader.GetString("ddl日期必须要有"), AddItemDatePicker);
+                CallTeachingTip(Strings.Resources.DateEmptyPrompt, Strings.Resources.DateEmptyPromptDesc, AddItemDatePicker);
                 return;
             }
             else if (AddItemTimePicker.SelectedTime == null)
             {
-                CallTeachingTip("时间不能为空", "还是选一个ddl时间吧⏰", AddItemTimePicker);
+                //CallTeachingTip(ResourceLoader.GetString("时间不能为空"), ResourceLoader.GetString("还是选一个ddl时间吧"), AddItemTimePicker);
+                CallTeachingTip(Strings.Resources.TimeEmptyPrompt, Strings.Resources.TimeEmptyPromptDesc, AddItemTimePicker);
                 return;
             }
             else
@@ -271,7 +278,8 @@ namespace Chamberlain_UWP.Reminder
 
             if (ddlDate - DateTime.Now <= TimeSpan.Zero)
             {
-                CallTeachingTip("目标时间已经过了", "穿越不了捏😵", AddItemTimePicker);
+                //CallTeachingTip(ResourceLoader.GetString("目标时间已经过了"), ResourceLoader.GetString("穿越不了捏"), AddItemTimePicker);
+                CallTeachingTip(Strings.Resources.PastTargetTimePrompt, Strings.Resources.PastTargetTimePromptDesc, AddItemTimePicker);
                 return;
             }
 
@@ -283,14 +291,14 @@ namespace Chamberlain_UWP.Reminder
             }
             else
             {
-                CallTeachingTip("标签不能为空", "请在列表中选择一个或多个标签，也可以在下方新建标签🏷", TagListBox);
+                CallTeachingTip(Strings.Resources.LabelEmptyPrompt, Strings.Resources.LabelEmptyPromptDesc, TagListBox);
                 return;
             }
 
             Priority priority = new Priority();
             priority = (Priority)AddItemPriorityComboBox.SelectedIndex; // 因为无法为空，所以不检查
 
-            ReminderItem item = new ReminderItem(title, desc, tags, ddlDate, TaskState.Onwork,priority); // 新建ReminderItem
+            ReminderItem item = new ReminderItem(title, desc, tags, ddlDate, TaskState.Onwork, priority); // 新建ReminderItem
             ReminderList.Insert(0, item);
 
             ReminderManager.UpdateList(ReminderList); //更新存放在类中的列表
@@ -308,7 +316,7 @@ namespace Chamberlain_UWP.Reminder
         private void DeleteItemButton_Click(object sender, RoutedEventArgs e)
         {
             int i = RemindItemListView.SelectedIndex;
-            if(i != -1)
+            if (i != -1)
             {
                 ReminderList.RemoveAt(i);
                 ReminderManager.UpdateList(ReminderList);

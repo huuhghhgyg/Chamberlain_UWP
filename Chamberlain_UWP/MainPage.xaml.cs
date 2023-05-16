@@ -33,8 +33,6 @@ namespace Chamberlain_UWP
 
             SetTitleBar();
 
-            SettingsConfig.InitialLoad();
-
             InitializeData(initializeNavigate); // 使用回调（Action），先data后navigate
 
             Updater.CheckUpdate();
@@ -118,58 +116,57 @@ namespace Chamberlain_UWP
 
             StorageFile backupfile = await local_folder.TryGetItemAsync(ReminderManager.BackupFilename) as StorageFile;
 
-            if (backupfile != null) //判断是否存在备份文件
+            if (backupfile == null) return;//判断是否存在备份文件，不存在则直接返回
+
+            //存在备份文件
+            StorageFolder folder = await ReminderManager.Data.getFolder(); //获取使用目录
+            StorageFile datafile = await folder.TryGetItemAsync(ReminderManager.DataFilename) as StorageFile;
+
+            if (datafile != null) //判断是否存在数据文件
             {
-                //存在备份文件
-                StorageFolder folder = await ReminderManager.Data.getFolder(); //获取使用目录
-
-                StorageFile datafile = await folder.TryGetItemAsync(ReminderManager.DataFilename) as StorageFile;
-                if (datafile != null) //判断是否存在数据文件
+                // 存在数据文件
+                if (string.IsNullOrEmpty(await ReminderManager.Data.Load()))
                 {
-                    // 存在数据文件
-                    if (string.IsNullOrEmpty(await ReminderManager.Data.Load()))
+                    if (ReminderManager.ItemCount > 0) await backupfile.DeleteAsync(); //数据不为空，删除备份
+                    else
                     {
-                        if (ReminderManager.ItemCount > 0) await backupfile.DeleteAsync(); //数据不为空，删除备份
-                        else
+                        // 数据为空
+                        ContentDialog restoreDialog = new ContentDialog
                         {
-                            // 数据为空
-                            ContentDialog restoreDialog = new ContentDialog
-                            {
-                                Title = "找到\"提醒\"的数据备份",
-                                Content = "找到数据文件，数据为空，但是找到数据备份。是否使用备份数据恢复？",
-                                PrimaryButtonText = "恢复",
-                                CloseButtonText = "取消"
-                            };
-                            ContentDialogResult result = await restoreDialog.ShowAsync();
+                            Title = Strings.Resources.ReminderFoundBackupFileTitle, //"找到"提醒"的数据备份"
+                            Content = Strings.Resources.ReminderFoundDataEmptyDesc, //找到数据文件，数据为空，但是找到数据备份。是否使用备份数据恢复？
+                            PrimaryButtonText = Strings.Resources.Restore, //恢复
+                            CloseButtonText = Strings.Resources.Cancel //取消
+                        };
+                        ContentDialogResult result = await restoreDialog.ShowAsync();
 
-                            if (result == ContentDialogResult.Primary)
-                            {
-                                //恢复文件
-                                await backupfile.CopyAndReplaceAsync(datafile); //替换数据文件
-                            }
-                            await backupfile.DeleteAsync(); //删除备份文件
+                        if (result == ContentDialogResult.Primary)
+                        {
+                            //恢复文件
+                            await backupfile.CopyAndReplaceAsync(datafile); //替换数据文件
                         }
+                        await backupfile.DeleteAsync(); //删除备份文件
                     }
                 }
-                else
+            }
+            else
+            {
+                // 不存在数据文件
+                ContentDialog restoreDialog = new ContentDialog
                 {
-                    // 不存在数据文件
-                    ContentDialog restoreDialog = new ContentDialog
-                    {
-                        Title = "找到\"提醒\"的数据备份",
-                        Content = "目前无数据文件，但是找到数据备份。是否使用备份数据恢复？",
-                        PrimaryButtonText = "恢复",
-                        CloseButtonText = "取消"
-                    };
-                    ContentDialogResult result = await restoreDialog.ShowAsync();
+                    Title = Strings.Resources.ReminderFoundBackupFileTitle,
+                    Content = Strings.Resources.ReminderNotFoundDataDesc, //目前无数据文件，但是找到数据备份。是否使用备份数据恢复？
+                    PrimaryButtonText = Strings.Resources.Restore, //恢复
+                    CloseButtonText = Strings.Resources.Cancel //取消
+                };
+                ContentDialogResult result = await restoreDialog.ShowAsync();
 
-                    if (result == ContentDialogResult.Primary)
-                    {
-                        //恢复文件
-                        await backupfile.CopyAsync(folder, ReminderManager.DataFilename); //替换数据文件
-                    }
-                    await backupfile.DeleteAsync(); //删除备份文件
+                if (result == ContentDialogResult.Primary)
+                {
+                    //恢复文件
+                    await backupfile.CopyAsync(folder, ReminderManager.DataFilename); //替换数据文件
                 }
+                await backupfile.DeleteAsync(); //删除备份文件
             }
         }
 

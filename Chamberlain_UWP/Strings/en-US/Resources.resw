@@ -1,0 +1,742 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddDescTextBox.PlaceholderText" xml:space="preserve">
+    <value>What to remind</value>
+  </data>
+  <data name="AddItemDatePicker.Header" xml:space="preserve">
+    <value>Due date</value>
+  </data>
+  <data name="AddItemDatePicker.PlaceholderText" xml:space="preserve">
+    <value>Select date</value>
+  </data>
+  <data name="AddItemPriorityComboBox.Header" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="AddTagTextBox.PlaceholderText" xml:space="preserve">
+    <value>Label name</value>
+  </data>
+  <data name="AddTitleTextBox.PlaceholderText" xml:space="preserve">
+    <value>Title name</value>
+  </data>
+  <data name="AutoDetectUpdateTitle" xml:space="preserve">
+    <value>Auto detect updates</value>
+  </data>
+  <data name="BackupDone" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="BackupErrorIndicatorTextBlock.Text" xml:space="preserve">
+    <value>* There is information in the backup error list, please go to the backup page to view</value>
+  </data>
+  <data name="Backuping" xml:space="preserve">
+    <value>Backing up files</value>
+  </data>
+  <data name="BackupPathColumn.Header" xml:space="preserve">
+    <value>Backup path</value>
+  </data>
+  <data name="BackupPathExistDesc" xml:space="preserve">
+    <value>Detected that the path already exists, the path will not be added</value>
+  </data>
+  <data name="BackupProcessing" xml:space="preserve">
+    <value>Processing</value>
+  </data>
+  <data name="BackupRestoring" xml:space="preserve">
+    <value>Restoring files</value>
+  </data>
+  <data name="BackupTargetPathColumn.Header" xml:space="preserve">
+    <value>Backup Target</value>
+  </data>
+  <data name="BackupTaskSequenceDesc" xml:space="preserve">
+    <value>{0} tasks remaining</value>
+    <comment>#Format[Int count]</comment>
+  </data>
+  <data name="BackupTimeColumn.Header" xml:space="preserve">
+    <value>Backup Time</value>
+  </data>
+  <data name="CalculatingHash" xml:space="preserve">
+    <value>Calculating file Hash</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CheckUpdateWhenStartup" xml:space="preserve">
+    <value>{0} Automatically check for updates when launching the app</value>
+    <comment>#Format[String hintString]</comment>
+  </data>
+  <data name="ClearAppBarButton.Label" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="ClearBackupDataConfirmDesc" xml:space="preserve">
+    <value>Do you want to clear the data of the backup module? Data saved in the backup folder will not be erased</value>
+  </data>
+  <data name="ClearBackupDataTitle" xml:space="preserve">
+    <value>Clear backup list</value>
+  </data>
+  <data name="ClearExternalReminderDataDesc" xml:space="preserve">
+    <value>Do you want to delete them together?</value>
+  </data>
+  <data name="ClearExternalReminderDataTitle" xml:space="preserve">
+    <value>You are using data from the specified folder</value>
+  </data>
+  <data name="ClearReminderDataDialogDesc" xml:space="preserve">
+    <value>Deleted data cannot be recovered, are you sure to delete?</value>
+  </data>
+  <data name="ClearReminderDataDialogTitle" xml:space="preserve">
+    <value>You are trying to delete Reminder's data</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ComparingInfo" xml:space="preserve">
+    <value>Comparing information</value>
+  </data>
+  <data name="ComparingToFullBackup" xml:space="preserve">
+    <value>Comparing with full backup</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="DateEmptyPrompt" xml:space="preserve">
+    <value>Date cannot be empty</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Developer" xml:space="preserve">
+    <value>Developer</value>
+  </data>
+  <data name="DoNotCheckUpdate" xml:space="preserve">
+    <value>{0} does not check for updates</value>
+    <comment>#Format[String hintString]</comment>
+  </data>
+  <data name="DownloadNewVersion" xml:space="preserve">
+    <value>go to download</value>
+  </data>
+  <data name="DragJsonFileHere" xml:space="preserve">
+    <value>Drag the Json file here</value>
+  </data>
+  <data name="EmptyIndicator" xml:space="preserve">
+    <value>(Empty)</value>
+  </data>
+  <data name="EncounterProblem" xml:space="preserve">
+    <value>Encountering problems?</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ErrorMessageUnableSaveTo" xml:space="preserve">
+    <value>Unable to save to {0}</value>
+    <comment>#Format[String filename]</comment>
+  </data>
+  <data name="ExportBackupAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Export selected backups to the Downloads folder in the library</value>
+  </data>
+  <data name="ExternalReminderDataAccessible" xml:space="preserve">
+    <value>Enabled, with path access to: {0}</value>
+    <comment>#Format[String path]</comment>
+  </data>
+  <data name="ExternalReminderFolderDataDetectedDesc" xml:space="preserve">
+    <value>Import from this file, or overwrite this file?</value>
+  </data>
+  <data name="ExternalReminderFolderDataDetectedTitle" xml:space="preserve">
+    <value>Data files detected in the selected folder</value>
+  </data>
+  <data name="ExternalReminderFolderUnavailable" xml:space="preserve">
+    <value>The specified folder does not exist and has been cleared</value>
+  </data>
+  <data name="ExternalReminderFolderUnspecified" xml:space="preserve">
+    <value>No folder specified</value>
+  </data>
+  <data name="FeedbackOnGithub" xml:space="preserve">
+    <value>Feedback on Github</value>
+  </data>
+  <data name="FileNotExist" xml:space="preserve">
+    <value>File does not exist when copying: {0}</value>
+    <comment>#Format[String path]</comment>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="FolderNameColumn.Header" xml:space="preserve">
+    <value>Folder Name</value>
+  </data>
+  <data name="GetBackupPathFailed" xml:space="preserve">
+    <value>Unable to get backup folder {0}</value>
+    <comment>#Format[String backupPath]</comment>
+  </data>
+  <data name="GetSavePathFailed" xml:space="preserve">
+    <value>Unable to get save folder {0}</value>
+    <comment>#Format[String savePath]</comment>
+  </data>
+  <data name="GoAhead" xml:space="preserve">
+    <value>Go ahead</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="ImportBackup" xml:space="preserve">
+    <value>Import backup</value>
+  </data>
+  <data name="ImportFailed" xml:space="preserve">
+    <value>⚠Import failed</value>
+  </data>
+  <data name="ImportReminderTextBox.PlaceholderText" xml:space="preserve">
+    <value>JSON format text (support file drag and drop)</value>
+  </data>
+  <data name="ImportSuccessful" xml:space="preserve">
+    <value>✅Import successfully</value>
+  </data>
+  <data name="InstallDate" xml:space="preserve">
+    <value>Install date</value>
+  </data>
+  <data name="IsSidebarOpenText.ToolTipService.ToolTip" xml:space="preserve">
+    <value>This option may have no effect on Windows 11</value>
+  </data>
+  <data name="ItemReviseDescText.Header" xml:space="preserve">
+    <value>Reminder description</value>
+  </data>
+  <data name="ItemReviseDescText.PlaceholderText" xml:space="preserve">
+    <value>(Not Selected)</value>
+  </data>
+  <data name="ItemRevisePriorityComboBox.Header" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="ItemReviseTimePicker.Header" xml:space="preserve">
+    <value>Deadline Time</value>
+  </data>
+  <data name="ItemReviseTitleText.Header" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="ItemReviseTitleText.PlaceholderText" xml:space="preserve">
+    <value>(Not Selected)</value>
+  </data>
+  <data name="ItemSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>Search for "Reminders"</value>
+  </data>
+  <data name="Label" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="LabelEmptyPrompt" xml:space="preserve">
+    <value>Tag cannot be empty</value>
+  </data>
+  <data name="LabelEmptyPromptDesc" xml:space="preserve">
+    <value>Please select one or more tags in the list, or create a new tag below🏷</value>
+  </data>
+  <data name="LevelStringError" xml:space="preserve">
+    <value>Error❌：</value>
+  </data>
+  <data name="LevelStringInfo" xml:space="preserve">
+    <value>Infoℹ：</value>
+  </data>
+  <data name="LevelStringWarning" xml:space="preserve">
+    <value>Warning⚠：</value>
+  </data>
+  <data name="LoadingBackups" xml:space="preserve">
+    <value>Loading backup file</value>
+  </data>
+  <data name="ManageReminderCardSubitle.Text" xml:space="preserve">
+    <value>Add/Remove Reminders</value>
+  </data>
+  <data name="ManageReminderCardTitle.Text" xml:space="preserve">
+    <value>Reminder Management</value>
+  </data>
+  <data name="ManageRemindItemButton.Content" xml:space="preserve">
+    <value>Manage Reminders</value>
+  </data>
+  <data name="NavigationItem_Backup.Content" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="NavigationItem_Reminder.Content" xml:space="preserve">
+    <value>Reminder</value>
+  </data>
+  <data name="NavigationItem_Task.Content" xml:space="preserve">
+    <value>Task</value>
+  </data>
+  <data name="NewVersionDetectedTitle" xml:space="preserve">
+    <value>New version detected: {0}</value>
+    <comment>#Format[String version]</comment>
+  </data>
+  <data name="NoAccessToSourceFolderToken" xml:space="preserve">
+    <value>Unable to access source folder token</value>
+  </data>
+  <data name="NoAccessToTargetFolderToken" xml:space="preserve">
+    <value>Unable to access target folder token</value>
+  </data>
+  <data name="NoBackupTaskDesc" xml:space="preserve">
+    <value>Please add a backup task first</value>
+  </data>
+  <data name="NoBackupTaskSelectedDesc" xml:space="preserve">
+    <value>Please select a backup task before performing backup</value>
+  </data>
+  <data name="NoBackupTaskSelectedTitle" xml:space="preserve">
+    <value>No backup task selected</value>
+  </data>
+  <data name="NoBackupTaskTitle" xml:space="preserve">
+    <value>No backup tasks</value>
+  </data>
+  <data name="NoContentDetectedDesc" xml:space="preserve">
+    <value>Please fill in text content</value>
+  </data>
+  <data name="NoContentDetectedTitle" xml:space="preserve">
+    <value>No contenet detected</value>
+  </data>
+  <data name="NoDescriptionIndicator" xml:space="preserve">
+    <value>(No Description)</value>
+  </data>
+  <data name="NoFileChangeDetected" xml:space="preserve">
+    <value>No file changes detected</value>
+  </data>
+  <data name="NoSelectedItemPrompt" xml:space="preserve">
+    <value>No item selected</value>
+  </data>
+  <data name="NoSelectedItemPromptDesc" xml:space="preserve">
+    <value>Please select an item in this list to edit 🛠</value>
+  </data>
+  <data name="NoTaskNow" xml:space="preserve">
+    <value>Currently no tasks</value>
+  </data>
+  <data name="NotifyBlockingInfo" xml:space="preserve">
+    <value>{0} (idling times: {1}, {2}ms in total)</value>
+    <comment>desc, blocking_count, blocking_time</comment>
+  </data>
+  <data name="NotifyDeadlineWithinHours" xml:space="preserve">
+    <value>Deadline is less than {0} hours</value>
+    <comment>remain_hour</comment>
+  </data>
+  <data name="NotifyDescInAddition" xml:space="preserve">
+    <value>In addition, </value>
+  </data>
+  <data name="NotifyDueInHours" xml:space="preserve">
+    <value>Will expire in {0} hours.</value>
+    <comment>remain_hour</comment>
+  </data>
+  <data name="NotifyMultipleDeadlineWithinHours" xml:space="preserve">
+    <value>The deadline for {0} items is less than {1} hours</value>
+    <comment>count, remain_hour</comment>
+  </data>
+  <data name="NotifyMultipleDueInHours" xml:space="preserve">
+    <value> {0} items in total will expire in {1} hours.</value>
+    <comment>count, remain_hour</comment>
+  </data>
+  <data name="NotifyOutdatedItems" xml:space="preserve">
+    <value>Item {0} has expired, please process it as soon as possible.</value>
+    <comment>outdated</comment>
+  </data>
+  <data name="NotifyReminderItemMeetDeadline" xml:space="preserve">
+    <value>"{0}" is about to expire, has it been completed?</value>
+    <comment>item.Title</comment>
+  </data>
+  <data name="NotSelectedIndicator" xml:space="preserve">
+    <value>(Not Selected)</value>
+  </data>
+  <data name="OnworkItemSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>Search for unfinished tasks</value>
+  </data>
+  <data name="OperationCanceled" xml:space="preserve">
+    <value>Operation Canceled</value>
+  </data>
+  <data name="OutOfDate" xml:space="preserve">
+    <value>Expired</value>
+  </data>
+  <data name="Override" xml:space="preserve">
+    <value>Override</value>
+  </data>
+  <data name="PastTargetTimePrompt" xml:space="preserve">
+    <value>Target time has passed</value>
+  </data>
+  <data name="PastTargetTimePromptDesc" xml:space="preserve">
+    <value>Cannot be set to preivous time😵</value>
+  </data>
+  <data name="PathColumn.Header" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="PlainText" xml:space="preserve">
+    <value>Plain Text</value>
+  </data>
+  <data name="PriorityDefaultItem.Content" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="PriorityHigh" xml:space="preserve">
+    <value>🔴(Urgent)</value>
+  </data>
+  <data name="PriorityHighItem.Content" xml:space="preserve">
+    <value>Urgent</value>
+  </data>
+  <data name="PriorityMiddle" xml:space="preserve">
+    <value>🟡(Prior)</value>
+  </data>
+  <data name="PriorityMiddleItem.Content" xml:space="preserve">
+    <value>Prior</value>
+  </data>
+  <data name="Prompt" xml:space="preserve">
+    <value>Prompt</value>
+  </data>
+  <data name="RefreshAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Reload data from all folders</value>
+  </data>
+  <data name="ReminderDataBothDeleted" xml:space="preserve">
+    <value>🗑 Both internal data files and external data files have been cleared</value>
+    <comment>内外部数据文件均清空</comment>
+  </data>
+  <data name="ReminderDataDeleted" xml:space="preserve">
+    <value>🗑 Deleted internal data files</value>
+  </data>
+  <data name="ReminderFolderImportCancel" xml:space="preserve">
+    <value>Import canceled, path: {0}</value>
+    <comment>#Format[String path]</comment>
+  </data>
+  <data name="ReminderFoundBackupFileTitle" xml:space="preserve">
+    <value>Find the data backup of "Reminder"</value>
+  </data>
+  <data name="ReminderFoundDataEmptyDesc" xml:space="preserve">
+    <value>The data file is found, the data is empty, but the data backup is found. Do you want to use the backup data to restore?</value>
+  </data>
+  <data name="ReminderNotFoundDataDesc" xml:space="preserve">
+    <value>There is currently no data file, but a data backup has been found. Do you want to use the backup data to restore?</value>
+  </data>
+  <data name="ReminderNotifyDescItemDueInADay" xml:space="preserve">
+    <value>Will expire within 1 day, please pay attention.</value>
+  </data>
+  <data name="ReminderNotifyDescItemsDueInADay" xml:space="preserve">
+    <value>{0} items in total will expire within 1 day.</value>
+    <comment>list.Count</comment>
+  </data>
+  <data name="ReminderNotifyDescMultipleDueInADay" xml:space="preserve">
+    <value>There are {0} items due within 1 day.</value>
+    <comment>list.Count</comment>
+  </data>
+  <data name="ReminderNotifyDescRemaining" xml:space="preserve">
+    <value>Reminder of Remaining Items</value>
+  </data>
+  <data name="ReminderNotifyTitle" xml:space="preserve">
+    <value>Reminder</value>
+  </data>
+  <data name="ReminderOOBEImportSubtitle.Text" xml:space="preserve">
+    <value>Click the button to open the file or drag the file onto the header, or specify a folder</value>
+  </data>
+  <data name="ReminderOOBEImportTitle.Text" xml:space="preserve">
+    <value>Now import reminder data 📲</value>
+  </data>
+  <data name="ReminderOOBEOpenFileButton.Content" xml:space="preserve">
+    <value>Open File</value>
+  </data>
+  <data name="ReminderOOBEPickFolderButton.Content" xml:space="preserve">
+    <value>Specified folder</value>
+  </data>
+  <data name="ReminderOOBEWelcomeDesc" xml:space="preserve">
+    <value>Now let's create some reminders</value>
+  </data>
+  <data name="ReminderOOBEWelcomeTitle" xml:space="preserve">
+    <value>Welcome to Reminder👋</value>
+  </data>
+  <data name="RepositoryPage" xml:space="preserve">
+    <value>Project Repository</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="RestoreAppBarButton.Label" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="Retain" xml:space="preserve">
+    <value>Retain</value>
+  </data>
+  <data name="SavePathColumn.Header" xml:space="preserve">
+    <value>Save Path</value>
+  </data>
+  <data name="SavePathPiviot.Header" xml:space="preserve">
+    <value>Save Path</value>
+  </data>
+  <data name="ScanningPaths" xml:space="preserve">
+    <value>Scanning path</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SelectedFolder" xml:space="preserve">
+    <value>Selected folder: </value>
+  </data>
+  <data name="SkipCheckUpdateOfVersion" xml:space="preserve">
+    <value>{0} does not prompt for update of version {1}</value>
+    <comment>#Format[String hintString, String CheckUpdate]</comment>
+  </data>
+  <data name="SkipThisVersion" xml:space="preserve">
+    <value>Skip updates for this version</value>
+  </data>
+  <data name="SortByNameItem.Content" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SortByTagItem.Content" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="TaskClearIndicator" xml:space="preserve">
+    <value>All tasks completed ☕</value>
+  </data>
+  <data name="TimeEmptyPrompt" xml:space="preserve">
+    <value>Time cannot be empty</value>
+  </data>
+  <data name="TimeEmptyPromptDesc" xml:space="preserve">
+    <value>Let’s choose a deadline time⏰</value>
+  </data>
+  <data name="TitleEmptyPrompt" xml:space="preserve">
+    <value>The title can not be blank</value>
+  </data>
+  <data name="TitleEmptyPromptDesc" xml:space="preserve">
+    <value>Otherwise you will not find this item 😥</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Tomorrow" xml:space="preserve">
+    <value>Tomorrow</value>
+  </data>
+  <data name="TwoDaysLater" xml:space="preserve">
+    <value>2 days later</value>
+  </data>
+  <data name="UnableToLoadFolder" xml:space="preserve">
+    <value>Could not read folder {0}</value>
+    <comment>#Format[String path]</comment>
+  </data>
+  <data name="UnknownBackupState" xml:space="preserve">
+    <value>Backup status unknown</value>
+  </data>
+  <data name="Unselected" xml:space="preserve">
+    <value>Not Selected</value>
+  </data>
+  <data name="UpdateStatusTitle" xml:space="preserve">
+    <value>Check update status:</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Add Item</value>
+  </data>
+  <data name="BackupTitle" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="BasicInfo" xml:space="preserve">
+    <value>Basic Information</value>
+  </data>
+  <data name="ClearDataListDesc" xml:space="preserve">
+    <value>This might help fix the crash</value>
+  </data>
+  <data name="ClearDataListTitle" xml:space="preserve">
+    <value>Clear all list data</value>
+  </data>
+  <data name="DetailedInfo" xml:space="preserve">
+    <value>Detailed information</value>
+  </data>
+  <data name="ModifyItem" xml:space="preserve">
+    <value>Modify items</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="ApplicationFolder" xml:space="preserve">
+    <value>Application folder</value>
+  </data>
+  <data name="JsonOutputOnly" xml:space="preserve">
+    <value>JSON (output only)</value>
+  </data>
+  <data name="SaveData" xml:space="preserve">
+    <value>Save Data</value>
+  </data>
+  <data name="ReminderSaveTextBox.PlaceholderText" xml:space="preserve">
+    <value>File save path (output only)</value>
+  </data>
+  <data name="SaveReminderDataFile" xml:space="preserve">
+    <value>Save Reminder</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ReviseReminder" xml:space="preserve">
+    <value>Revise Reminder Item</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="DataSavePath" xml:space="preserve">
+    <value>Specify location to store data</value>
+  </data>
+  <data name="Reminder" xml:space="preserve">
+    <value>Reminder</value>
+  </data>
+  <data name="DebugOption" xml:space="preserve">
+    <value>Debug options</value>
+  </data>
+  <data name="BackgroundTask" xml:space="preserve">
+    <value>Background task</value>
+  </data>
+  <data name="BackgroundWakeSpan" xml:space="preserve">
+    <value>Background wakeup interval (minutes)</value>
+  </data>
+  <data name="BackupInfoTitle" xml:space="preserve">
+    <value>Backup Information</value>
+  </data>
+  <data name="TaskList" xml:space="preserve">
+    <value>Task List</value>
+  </data>
+  <data name="BackupTask" xml:space="preserve">
+    <value>Backup Task</value>
+  </data>
+  <data name="BackupState" xml:space="preserve">
+    <value>Backup Status</value>
+  </data>
+  <data name="BackupTaskSeq" xml:space="preserve">
+    <value>Task Sequence</value>
+  </data>
+  <data name="ClearReminderData" xml:space="preserve">
+    <value>Clear Reminder Data</value>
+  </data>
+  <data name="CreatedTime" xml:space="preserve">
+    <value>Created time</value>
+  </data>
+  <data name="DailyNotification" xml:space="preserve">
+    <value>Daily scheduled notification</value>
+  </data>
+  <data name="DailyNotificationTime" xml:space="preserve">
+    <value>Daily regular reminder time</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Sync</value>
+  </data>
+  <data name="DeadlineDate" xml:space="preserve">
+    <value>Deadline Date</value>
+  </data>
+  <data name="EnableNotification" xml:space="preserve">
+    <value>Turn on notifications</value>
+  </data>
+  <data name="ExportToDownloadFolder" xml:space="preserve">
+    <value>Export to download</value>
+  </data>
+  <data name="ImportReminderJson" xml:space="preserve">
+    <value>Import Reminder (JSON)</value>
+  </data>
+  <data name="SidebarOpenState" xml:space="preserve">
+    <value>Sidebar open on launch</value>
+  </data>
+  <data name="DeadlineTime" xml:space="preserve">
+    <value>Deadline time</value>
+  </data>
+  <data name="NoTaskIndicator" xml:space="preserve">
+    <value>(No Task)</value>
+  </data>
+  <data name="OpenFile" xml:space="preserve">
+    <value>Open file</value>
+  </data>
+  <data name="Priority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="ReminderDescription" xml:space="preserve">
+    <value>Reminder description</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Record" xml:space="preserve">
+    <value>Record</value>
+  </data>
+  <data name="ReminderDone" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="ReminderItemsManagement" xml:space="preserve">
+    <value>Manage Reminders</value>
+  </data>
+  <data name="ReminderLoadFromJsonFile" xml:space="preserve">
+    <value>Load data from JSON file</value>
+  </data>
+  <data name="ReminderTodo" xml:space="preserve">
+    <value>Pending Reminders</value>
+  </data>
+  <data name="ReminderTodoItems" xml:space="preserve">
+    <value>Reminder Todo</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ControlSettings" xml:space="preserve">
+    <value>Control Settings</value>
+  </data>
+  <data name="ErrorInformation" xml:space="preserve">
+    <value>Error Information</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
+  <data name="QuickBackup" xml:space="preserve">
+    <value>Quick backup</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="SaveList" xml:space="preserve">
+    <value>Save list</value>
+  </data>
+  <data name="SearchResultSortBy" xml:space="preserve">
+    <value>Search Sort by: </value>
+  </data>
+  <data name="SelectTag" xml:space="preserve">
+    <value>Select tag</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ShowDetailedInfo" xml:space="preserve">
+    <value>Show detailed info</value>
+  </data>
+  <data name="ShowNotificationBlockingInfo" xml:space="preserve">
+    <value>Show blocking information when showing notifications</value>
+  </data>
+  <data name="StartBackup" xml:space="preserve">
+    <value>Start backup</value>
+  </data>
+  <data name="SyncByWindowsOS" xml:space="preserve">
+    <value>App settings sync across devices</value>
+  </data>
+  <data name="ComponentSettings" xml:space="preserve">
+    <value>Component settings</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="TaskPage" xml:space="preserve">
+    <value>Task Page</value>
+  </data>
+  <data name="TimeSelectorSpan" xml:space="preserve">
+    <value>Time picker option interval (minutes)</value>
+  </data>
+  <data name="TotalBackup" xml:space="preserve">
+    <value>Total backup</value>
+  </data>
+  <data name="BackupPath" xml:space="preserve">
+    <value>Backup Path</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="DueTime" xml:space="preserve">
+    <value>Due Time</value>
+  </data>
+</root>

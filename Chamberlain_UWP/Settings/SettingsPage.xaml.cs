@@ -13,6 +13,7 @@ using Chamberlain_UWP.Settings;
 using Windows.Storage.AccessCache;
 using Windows.ApplicationModel;
 using System.Windows.Input;
+using System.Reflection.Context;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 

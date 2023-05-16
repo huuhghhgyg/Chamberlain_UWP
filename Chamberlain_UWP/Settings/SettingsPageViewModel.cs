@@ -25,6 +25,7 @@ namespace Chamberlain_UWP.Settings
         {
             LoadExternalReminderFolder();
         }
+
         #region 属性和内部变量
         // 应用设置
         internal int UpdateTriggerInterval
@@ -110,15 +111,15 @@ namespace Chamberlain_UWP.Settings
         {
             get
             {
-                string hintString = "检测更新状态：";
+                string hintString = Strings.Resources.UpdateStatusTitle; //"检测更新状态："
                 switch (CheckUpdate)
                 {
                     case "auto":
-                        return $"{hintString}开启应用时自动检查更新";
+                        return Strings.Resources.CheckUpdateWhenStartup(hintString);
                     case "false":
-                        return $"{hintString}不检查更新";
+                        return Strings.Resources.DoNotCheckUpdate(hintString);
                     default:
-                        return $"{hintString}不提示版本{CheckUpdate}的更新";
+                        return Strings.Resources.SkipCheckUpdateOfVersion(hintString, CheckUpdate);
                 }
             }
         }
@@ -135,6 +136,23 @@ namespace Chamberlain_UWP.Settings
                 List<ReminderItem> reminderList = new List<ReminderItem>();
                 ReminderManager.GetList(reminderList);
                 return ReminderManager.GenerateJson();
+            }
+        }
+
+        int languageIndex = LanguageHelper.SupportLang.Count - 1;
+
+        /// <summary>
+        /// 对应LanguageHelper.SupportLang中的Index，用于ComboBox
+        /// </summary>
+        internal int LanguageIndex
+        {
+            get => languageIndex;
+            set
+            {
+                languageIndex = value;
+                string[] langItem = LanguageHelper.SupportLang[languageIndex].Split(' '); //获取Item的语言代码
+                LanguageHelper.SetLanguage(langItem[0]); //设置语言
+                OnPropertyChanged(nameof(LanguageIndex));
             }
         }
 
@@ -166,12 +184,28 @@ namespace Chamberlain_UWP.Settings
         {
             ImportReminderJsonFileText = string.Empty; //清除导入状态
             DeleteReminderDataText = string.Empty; //清除删除状态
+            LoadLanguageSettings(); //设置语言
         }
         internal void ResetUpdateState()
         {
             CheckUpdate = "auto";
             Updater.CheckUpdate();
         }
+
+        /// <summary>
+        /// 读取语言
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        private void LoadLanguageSettings()
+        {
+            string displayLanguage = LanguageHelper.CurrentLanguage;
+
+            //从支持的语言中找到当前显示语言的index
+            for (int i = 0; i < LanguageHelper.SupportLang.Count; i++)
+                if (LanguageHelper.SupportLang[i].Split(" ").Contains(displayLanguage))
+                    LanguageIndex = i; //设置绑定到ComboBox的LanguageIndex
+        }
+
         /// <summary>
         /// 读取提示文字
         /// </summary>
@@ -184,19 +218,19 @@ namespace Chamberlain_UWP.Settings
                 try
                 {
                     future_folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
-                    SelectedFolderPath = string.Format($"已启用，具有访问权限：{future_folder.Path}");
+                    SelectedFolderPath = Strings.Resources.ExternalReminderDataAccessible(future_folder.Path); //$"已启用，具有访问权限：{future_folder.Path}"
                     ClearFolderPathButtonEnabled = true;
                 }
                 catch (FileNotFoundException)
                 {
                     StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken"); //指定文件夹不存在，清除指定项
-                    SelectedFolderPath = "指定文件夹不存在，已被清除";
+                    SelectedFolderPath = Strings.Resources.ExternalReminderFolderUnavailable; //"指定文件夹不存在，已被清除"
                     ClearFolderPathButtonEnabled = false;
                 }
             }
             else
             {
-                SelectedFolderPath = "未指定任何文件夹";
+                SelectedFolderPath = Strings.Resources.ExternalReminderFolderUnspecified; //未指定任何文件夹
             }
         }
 
@@ -204,10 +238,10 @@ namespace Chamberlain_UWP.Settings
         {
             ContentDialog clearBackupDataDialog = new ContentDialog()
             {
-                Title = "确认",
-                Content = "是否要清除备份模块的数据？保存于备份文件夹中的数据将不会被清除",
-                PrimaryButtonText = "确定",
-                CloseButtonText = "取消",
+                Title = Strings.Resources.ClearBackupDataTitle,
+                Content = Strings.Resources.ClearBackupDataConfirmDesc, //是否要清除备份模块的数据？保存于备份文件夹中的数据将不会被清除
+                PrimaryButtonText = Strings.Resources.Confirm, //确定
+                CloseButtonText = Strings.Resources.Cancel, //取消
                 DefaultButton = ContentDialogButton.Close
             };
 
@@ -229,7 +263,7 @@ namespace Chamberlain_UWP.Settings
             {
                 StorageApplicationPermissions.FutureAccessList.Remove("ReminderFolderToken");
                 ClearFolderPathButtonEnabled = false;
-                SelectedFolderPath = "未指定任何文件夹";
+                SelectedFolderPath = Strings.Resources.ExternalReminderFolderUnspecified; //未指定任何文件夹
             }
         }
         /// <summary>
@@ -247,8 +281,8 @@ namespace Chamberlain_UWP.Settings
 
             if (string.IsNullOrEmpty(ImportReminderText))
             {
-                ImportReminderInfoBar.Title = "未检测到内容";
-                ImportReminderInfoBar.Message = "请填写有意义的文本内容";
+                ImportReminderInfoBar.Title = Strings.Resources.NoContentDetectedTitle; //"未检测到内容"
+                ImportReminderInfoBar.Message = Strings.Resources.NoContentDetectedDesc; //"请填写有意义的文本内容"
                 ImportReminderInfoBar.Severity = Microsoft.UI.Xaml.Controls.InfoBarSeverity.Warning;
             }
             else
@@ -257,14 +291,14 @@ namespace Chamberlain_UWP.Settings
 
                 if (string.IsNullOrEmpty(msg))
                 {
-                    ImportReminderInfoBar.Title = "导入成功";
+                    ImportReminderInfoBar.Title = Strings.Resources.ImportSuccessful; //"✅导入成功"
                     ImportReminderInfoBar.Severity = Microsoft.UI.Xaml.Controls.InfoBarSeverity.Success;
                     ImportReminderText = string.Empty;
                     await ReminderManager.Data.Save();
                 }
                 else
                 {
-                    ImportReminderInfoBar.Title = "导入失败";
+                    ImportReminderInfoBar.Title = Strings.Resources.ImportFailed; //"⚠导入失败"
                     ImportReminderInfoBar.Severity = Microsoft.UI.Xaml.Controls.InfoBarSeverity.Error;
                 }
                 ImportReminderInfoBar.Message = msg;
@@ -288,7 +322,7 @@ namespace Chamberlain_UWP.Settings
                 string msg = await ReminderManager.Data.LoadFile(file);
                 if (string.IsNullOrEmpty(msg))
                 {
-                    ImportReminderJsonFileText = "✅导入成功";
+                    ImportReminderJsonFileText = Strings.Resources.ImportSuccessful; //✅导入成功
                     await ReminderManager.Data.Save();
                 }
                 else ImportReminderJsonFileText = msg; // 导入失败
@@ -315,10 +349,10 @@ namespace Chamberlain_UWP.Settings
         {
             ContentDialog deleteDataDialog = new ContentDialog
             {
-                Title = "您正在尝试删除Reminder的数据",
-                Content = "删除的数据不可恢复，确定删除？",
-                PrimaryButtonText = "确定",
-                SecondaryButtonText = "取消",
+                Title = Strings.Resources.ClearReminderDataDialogTitle, //"您正在尝试删除Reminder的数据"
+                Content = Strings.Resources.ClearReminderDataDialogDesc, //"删除的数据不可恢复，确定删除？"
+                PrimaryButtonText = Strings.Resources.Confirm, //确定
+                SecondaryButtonText = Strings.Resources.Cancel, //取消
                 DefaultButton = ContentDialogButton.Secondary
             };
             ContentDialogResult result = await deleteDataDialog.ShowAsync();
@@ -336,11 +370,11 @@ namespace Chamberlain_UWP.Settings
                 // 使用外部数据，询问是否删除
                 ContentDialog deleteDataDialog = new ContentDialog
                 {
-                    Title = "您正在使用指定文件夹中的数据",
-                    Content = "是否一并删除？",
-                    PrimaryButtonText = "保留",
-                    SecondaryButtonText = "删除",
-                    CloseButtonText = "取消",
+                    Title = Strings.Resources.ClearExternalReminderDataTitle, //"您正在使用指定文件夹中的数据"
+                    Content = Strings.Resources.ClearExternalReminderDataDesc, //"是否一并删除？"
+                    PrimaryButtonText = Strings.Resources.Retain, //保留
+                    SecondaryButtonText = Strings.Resources.Delete, //删除
+                    CloseButtonText = Strings.Resources.Cancel, //取消
                     DefaultButton = ContentDialogButton.Primary
                 };
                 ContentDialogResult result = await deleteDataDialog.ShowAsync();
@@ -350,20 +384,20 @@ namespace Chamberlain_UWP.Settings
                     ClearFolderPath();// 相当于先取消使用外部数据文件
 
                     ReminderManager.Data.Clear(); // 取消完再删除
-                    DeleteReminderDataText = "🗑已删除内部数据文件";
+                    DeleteReminderDataText = Strings.Resources.ReminderDataDeleted; //🗑已删除内部数据文件
                 }
                 else if (result == ContentDialogResult.Secondary)
                 {
                     ReminderManager.Data.Clear(); // 删除数据
                     await ReminderManager.Data.Save(); // 保存空文件
-                    DeleteReminderDataText = "🗑内部数据文件和外部数据文件均已清空";
+                    DeleteReminderDataText = Strings.Resources.ReminderDataBothDeleted; //🗑内部数据文件和外部数据文件均已清空
                 }
             }
             else
             {
                 // 不使用外部数据，直接删除
                 ReminderManager.Data.Clear();
-                DeleteReminderDataText = "🗑已删除";
+                DeleteReminderDataText = Strings.Resources.ReminderDataDeleted; //🗑已删除内部数据文件
             }
         }
 
@@ -377,7 +411,7 @@ namespace Chamberlain_UWP.Settings
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
             if (folder != null)
             {
-                SelectedFolderPath = "选取的文件夹: " + folder.Path;
+                SelectedFolderPath = Strings.Resources.SelectedFolder + folder.Path; //选取的文件夹
 
                 // 检测文件夹内是否有数据文件
                 StorageFile file = await folder.TryGetItemAsync(ReminderManager.DataFilename) as StorageFile;
@@ -386,11 +420,11 @@ namespace Chamberlain_UWP.Settings
                     //文件存在
                     ContentDialog importDataDialog = new ContentDialog
                     {
-                        Title = "检测到选定的文件夹内存在数据文件",
-                        Content = "从这个文件内导入，还是覆盖这个文件？",
-                        PrimaryButtonText = "导入",
-                        SecondaryButtonText = "覆盖",
-                        CloseButtonText = "取消",
+                        Title = Strings.Resources.ExternalReminderFolderDataDetectedTitle, //检测到选定的文件夹内存在数据文件
+                        Content = Strings.Resources.ExternalReminderFolderDataDetectedDesc, //从这个文件内导入，还是覆盖这个文件？
+                        PrimaryButtonText = Strings.Resources.Import, //导入
+                        SecondaryButtonText = Strings.Resources.Override, //覆盖
+                        CloseButtonText = Strings.Resources.Cancel, //取消
                         DefaultButton = ContentDialogButton.Primary
                     };
                     ContentDialogResult result = await importDataDialog.ShowAsync();
@@ -419,10 +453,9 @@ namespace Chamberlain_UWP.Settings
                         if (StorageApplicationPermissions.FutureAccessList.ContainsItem("ReminderFolderToken")) //本来有路径
                         {
                             folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("ReminderFolderToken");
-                            SelectedFolderPath = String.Format("取消导入，" +
-                                $"路径：{folder.Path}");
+                            SelectedFolderPath = Strings.Resources.ReminderFolderImportCancel(folder.Path); //取消导入，路径：{folder.Path}
                         }
-                        else SelectedFolderPath = "操作取消";
+                        else SelectedFolderPath = Strings.Resources.OperationCanceled; //操作取消
                     }
                 }
                 else //选定的文件夹中没有文件，直接保存
@@ -432,7 +465,7 @@ namespace Chamberlain_UWP.Settings
                     ClearFolderPathButtonEnabled = true; //开启清除按钮
                 }
             }
-            else SelectedFolderPath = "操作取消";
+            else SelectedFolderPath = Strings.Resources.OperationCanceled; //操作取消
         }
 
         #endregion
@@ -442,7 +475,7 @@ namespace Chamberlain_UWP.Settings
         internal void ImportReminderTextBox_DragOver(object sender, DragEventArgs e)
         {
             e.AcceptedOperation = DataPackageOperation.Copy; // 声明拖拽支持文件复制操作
-            e.DragUIOverride.Caption = "将Json文件拖到此处"; // 自定义拖拽提示
+            e.DragUIOverride.Caption = Strings.Resources.DragJsonFileHere; // 自定义拖拽提示：将Json文件拖到此处
         }
         internal async void ImportReminderTextBox_Drop(object sender, DragEventArgs e)
         {

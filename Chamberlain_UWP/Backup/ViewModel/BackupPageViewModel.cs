@@ -184,7 +184,7 @@ namespace Chamberlain_UWP.Backup
             get
             {
                 if (BackupRecordComboBoxSelectedIndex == -1)
-                    return "暂未选中";
+                    return Strings.Resources.Unselected; //暂未选中
                 else
                     return BackupPathRecords[BackupRecordComboBoxSelectedIndex].Path;
             }
@@ -333,7 +333,7 @@ namespace Chamberlain_UWP.Backup
 
         public string BackupTaskSequenceDescription //剩余任务显示
         {
-            get => $"剩余{BackupTaskSequence.Count}条任务"; //正在处理的也算
+            get => Strings.Resources.BackupTaskSequenceDesc(BackupTaskSequence.Count); //正在处理的也算：剩余{BackupTaskSequence.Count}条任务
         }
 
         /// <summary>
@@ -367,9 +367,9 @@ namespace Chamberlain_UWP.Backup
             else
             {
                 if (BackupTasks.Count > 0)
-                    DisplayDialog("没有选中备份任务", "请先选中备份任务再进行备份");
+                    DisplayDialog(Strings.Resources.NoBackupTaskSelectedTitle, Strings.Resources.NoBackupTaskSelectedDesc); //没有选中备份任务; 请先选中备份任务再进行备份
                 else
-                    DisplayDialog("没有备份任务", "请先添加备份任务");
+                    DisplayDialog(Strings.Resources.NoBackupTaskTitle, Strings.Resources.NoBackupTaskDesc); //没有备份任务; 请先添加备份任务
             }
         }
 
@@ -439,7 +439,7 @@ namespace Chamberlain_UWP.Backup
                 List<string> list = (from PathRecord record in Manager.SaveFolderList
                                      select record.Path).ToList();
                 if (list.Contains(folder.Path))
-                    DisplayDialog("提示", "检测到路径已经存在，路径将不会被添加");
+                    DisplayDialog(Strings.Resources.Prompt, Strings.Resources.BackupPathExistDesc); //提示; 检测到路径已经存在，路径将不会被添加
                 else
                 {
                     SavePathRecords.Add(new PathRecord(folder)); //UI
@@ -476,7 +476,7 @@ namespace Chamberlain_UWP.Backup
                 List<string> list = (from PathRecord record in Manager.BackupFolderList
                                      select record.Path).ToList();
                 if (list.Contains(folder.Path))
-                    DisplayDialog("提示", "检测到路径已经存在，路径将不会被添加");
+                    DisplayDialog(Strings.Resources.Prompt, Strings.Resources.BackupPathExistDesc); //提示; 检测到路径已经存在，路径将不会被添加
                 else
                 {
                     BackupPathRecords.Add(new PathRecord(folder)); //UI
@@ -532,7 +532,7 @@ namespace Chamberlain_UWP.Backup
             savePicker.SuggestedStartLocation =
                 Windows.Storage.Pickers.PickerLocationId.Desktop;
             // Dropdown of file types the user can save the file as
-            savePicker.FileTypeChoices.Add("纯文本", new List<string>() { ".txt" });
+            savePicker.FileTypeChoices.Add(Strings.Resources.PlainText, new List<string>() { ".txt" }); //描述：纯文本
             // Default file name if the user does not type one in or select a file to replace
             savePicker.SuggestedFileName = $"log{DateTime.Now.ToString("MMddHHmm")}";
 
@@ -550,7 +550,7 @@ namespace Chamberlain_UWP.Backup
                 Windows.Storage.Provider.FileUpdateStatus status =
                     await CachedFileManager.CompleteUpdatesAsync(file);
                 if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
-                    Manager.AddErrorMessage(0, $"无法保存到 {file.Name}");
+                    Manager.AddErrorMessage(0, Strings.Resources.ErrorMessageUnableSaveTo(file.Name)); //无法保存到 {file.Name}
             }
         }
 
@@ -618,7 +618,7 @@ namespace Chamberlain_UWP.Backup
             {
                 Title = title,
                 Content = content,
-                CloseButtonText = "确定"
+                CloseButtonText = Strings.Resources.Confirm //确定
             };
 
             await dialog.ShowAsync();

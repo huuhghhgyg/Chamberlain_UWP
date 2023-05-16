@@ -44,7 +44,7 @@ namespace Chamberlain_UWP.Backup.Models
         bool _isScanning = false;
         bool _showDetail = true;
         public List<BackupVersionRecord> BackupVersionRecordList = new List<BackupVersionRecord>(); //存放历史备份
-        string _backupTaskStageString = "当前无任务";
+        string _backupTaskStageString = Strings.Resources.NoTaskNow; //当前无任务
 
         #endregion
 
@@ -97,35 +97,35 @@ namespace Chamberlain_UWP.Backup.Models
                 switch (_stage)
                 {
                     case BackupStage.Spare:
-                        WorkingFilePath = "已完成";
+                        WorkingFilePath = Strings.Resources.BackupDone; //已完成
                         IsScanning = false;
-                        BackupTaskStageString = "当前无任务";
+                        BackupTaskStageString = Strings.Resources.NoTaskNow; //当前无任务
                         break;
                     case BackupStage.Preparing: //BackupStage.Preparing
-                        WorkingFilePath = "处理中";
+                        WorkingFilePath = Strings.Resources.BackupProcessing; //处理中
                         IsScanning = true;
-                        BackupTaskStageString = "正在扫描路径";
+                        BackupTaskStageString = Strings.Resources.ScanningPaths; //正在扫描路径
                         break;
                     case BackupStage.Comparing:
-                        WorkingFilePath = "处理中";
+                        WorkingFilePath = Strings.Resources.BackupProcessing; //处理中
                         IsScanning = true;
-                        BackupTaskStageString = "正在比对信息";
+                        BackupTaskStageString = Strings.Resources.ComparingInfo; //正在比对信息
                         break;
                     case BackupStage.ScanningHash:
                         IsScanning = false;
-                        BackupTaskStageString = "正在计算文件Hash";
+                        BackupTaskStageString = Strings.Resources.CalculatingHash; //正在计算文件Hash
                         break;
                     case BackupStage.Backup:
                         IsScanning = false;
-                        BackupTaskStageString = "正在备份文件";
+                        BackupTaskStageString = Strings.Resources.Backuping; //正在备份文件
                         break;
                     case BackupStage.Restore:
                         IsScanning = false;
-                        BackupTaskStageString = "正在恢复文件";
+                        BackupTaskStageString = Strings.Resources.BackupRestoring; //正在恢复文件
                         break;
                     default:
                         IsScanning = true;
-                        BackupTaskStageString = "状态未知";
+                        BackupTaskStageString = Strings.Resources.UnknownBackupState; //状态未知
                         break;
                 }
 
@@ -238,11 +238,13 @@ namespace Chamberlain_UWP.Backup.Models
 
             if (saveRecord.Folder == null || backupRecord.Folder == null) //如果记录不存在
             {
-                if (saveRecord == null) AddErrorMessage(0, $"无法获取保存文件夹 {savePath}");
-                else AddErrorMessage(0, $"无法获取备份文件夹 {backupPath}");
+                //if (saveRecord == null) AddErrorMessage(0, $"无法获取保存文件夹 {savePath}");
+                //else AddErrorMessage(0, $"无法获取备份文件夹 {backupPath}");
+                if (saveRecord == null) AddErrorMessage(0, Strings.Resources.GetSavePathFailed(savePath));
+                else AddErrorMessage(0, Strings.Resources.GetBackupPathFailed(backupPath));
                 //恢复显示
                 BackupTaskStage = BackupStage.Spare;
-                WorkingFilePath = "错误";
+                WorkingFilePath = Strings.Resources.Error; //错误
             }
             else
             {
@@ -260,8 +262,8 @@ namespace Chamberlain_UWP.Backup.Models
             StorageFolder goalFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(goalToken);
             if (rootFolder == null || goalFolder == null)
             {
-                if (rootFolder == null) throw new Exception("无法访问源文件夹token");
-                else throw new Exception("无法访问目标文件夹token");
+                if (rootFolder == null) throw new Exception(Strings.Resources.NoAccessToSourceFolderToken);
+                else throw new Exception(Strings.Resources.NoAccessToTargetFolderToken);
             }
 
             // 获取基本信息
@@ -323,7 +325,7 @@ namespace Chamberlain_UWP.Backup.Models
 
             foreach (FileNode fileNode in fileNodeList)
             {
-                WorkingFilePath = ShowDetail ? fileNode.File.Path : "正在备份"; //更新正在工作的文件路径
+                WorkingFilePath = ShowDetail ? fileNode.File.Path : Strings.Resources.Backuping; //更新正在工作的文件路径
 
                 //获取相对路径
                 StorageFolder relativeFolder = await CreateRelativePath(goalVersionFolder, fileNode.RelativePath);
@@ -334,7 +336,8 @@ namespace Chamberlain_UWP.Backup.Models
                 }
                 catch (FileNotFoundException)
                 {
-                    AddErrorMessage(0, $"复制时文件不存在：{fileNode.File.Path}");
+                    //AddErrorMessage(0, $"复制时文件不存在：{fileNode.File.Path}");
+                    AddErrorMessage(0, Strings.Resources.FileNotExist(fileNode.File.Path));
                 }
                 ProcessedFileCount++; //增加一个完成文件
             }
@@ -343,7 +346,7 @@ namespace Chamberlain_UWP.Backup.Models
             await ExportBackupVersionJsonAsync(goalFolder, rootFolder, backupDateString, isTotalBackup);
             if(TotalFileCount == 0)
             {
-                AddErrorMessage(2, "没有检测到文件变更");
+                AddErrorMessage(2, Strings.Resources.NoFileChangeDetected);
                 TotalFileCount = 1;
                 ProcessedFileCount = 1;
             }
@@ -371,16 +374,16 @@ namespace Chamberlain_UWP.Backup.Models
             switch (level)
             {
                 case 0:
-                    levelString = "错误❌：";
+                    levelString = Strings.Resources.LevelStringError;
                     break;
                 case 1:
-                    levelString = "警告⚠：";
+                    levelString = Strings.Resources.LevelStringWarning;
                     break;
                 case 2:
-                    levelString = "提示ℹ：";
+                    levelString = Strings.Resources.LevelStringInfo;
                     break;
                 default:
-                    levelString = "提示ℹ：";
+                    levelString = Strings.Resources.LevelStringInfo;
                     break;
             }
             ErrorMessages.Add($"{levelString}{msg}");
@@ -435,7 +438,7 @@ namespace Chamberlain_UWP.Backup.Models
             List<FileNode> fileNodeList = backupInfo.SaveList; //获取保存信息
 
             //读取对应版本文件夹中的文件
-            WorkingFilePath = "正在读取备份文件";
+            WorkingFilePath = Strings.Resources.LoadingBackups; //正在读取备份文件
             await GetFileNodesHandleAsync(backupRecord, fileNodeList);
 
             StorageFolder rootFolder; //声明rootFolder
@@ -457,7 +460,7 @@ namespace Chamberlain_UWP.Backup.Models
 
             if (!backupRecord.IsFullBackup) //判断是否完整备份
             {
-                WorkingFilePath = "正在与完整备份进行比对"; //更新信息
+                WorkingFilePath = Strings.Resources.ComparingToFullBackup; //更新信息：正在与完整备份进行比对
 
                 List<string> deletedFileNodeString =
                     new List<string>(from FileNode node in backupInfo.DeleteList select node.RelativePath); //获取当前版本标记的删除项
@@ -491,7 +494,7 @@ namespace Chamberlain_UWP.Backup.Models
 
             foreach (FileNode file in fileNodeList)
             {
-                WorkingFilePath = ShowDetail ? file.RelativePath : "正在恢复"; //显示正在处理的文件
+                WorkingFilePath = ShowDetail ? file.RelativePath : Strings.Resources.BackupRestoring; //显示正在处理的文件
                 StorageFolder relativeFolder = await CreateRelativePath(rootFolder, file.RelativePath);
                 await file.File.CopyAsync(relativeFolder, file.File.Name, NameCollisionOption.ReplaceExisting);
                 ProcessedFileCount++;
@@ -532,8 +535,8 @@ namespace Chamberlain_UWP.Backup.Models
             StorageFolder goalFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(goalToken);
             if (rootFolder == null || goalFolder == null)
             {
-                if (rootFolder == null) throw new Exception("无法访问源文件夹token");
-                else throw new Exception("无法访问目标文件夹token");
+                if (rootFolder == null) throw new Exception(Strings.Resources.NoAccessToSourceFolderToken); //无法访问源文件夹token
+                else throw new Exception(Strings.Resources.NoAccessToTargetFolderToken); //无法访问目标文件夹token
             }
 
             // 获取基本信息
@@ -677,7 +680,8 @@ namespace Chamberlain_UWP.Backup.Models
                 }
                 catch (FileNotFoundException)
                 {
-                    AddErrorMessage(1, $"未能读取文件夹 {record.Path}");
+                    //AddErrorMessage(1, $"未能读取文件夹 {record.Path}");
+                    AddErrorMessage(1, Strings.Resources.UnableToLoadFolder(record.Path));
                 }
             }
         }

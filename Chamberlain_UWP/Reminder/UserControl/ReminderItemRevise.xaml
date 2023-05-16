@@ -16,17 +16,17 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <CheckBox Name="ItemCheckBox"
-                                  Content="{x:Bind Reminder.Title,Mode=OneWay}"
-                                  IsChecked="{x:Bind Reminder.IsReminderDone,Mode=TwoWay}"
-                                  Click="ItemCheckBox_Click"/>
+                        Content="{x:Bind Reminder.Title,Mode=OneWay}"
+                        IsChecked="{x:Bind Reminder.IsReminderDone,Mode=TwoWay}"
+                        Click="ItemCheckBox_Click"/>
             <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" Padding="0,0,0,4">
                 <TextBlock Text="{x:Bind Reminder.PriorityString,Mode=OneWay}"
-                                       Margin="0,0,4,0"
-                                       Style="{ThemeResource BodyTextBlockStyle}"
-                                       Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                            Margin="0,0,4,0"
+                            Style="{ThemeResource BodyTextBlockStyle}"
+                            Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
                 <TextBlock Text="{x:Bind Reminder.ProgressString,Mode=OneWay}" 
-                                       Name="ProgressTextBlock"
-                                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+                            Name="ProgressTextBlock"
+                            Foreground="{ThemeResource TextFillColorPrimary}"/>
             </StackPanel>
         </Grid>
         <muxc:ProgressBar x:Name="progressBar" Value="{x:Bind Reminder.ProgressValue,Mode=OneWay}" Maximum="1" Margin="0,0,0,4"/>
@@ -41,29 +41,29 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{x:Bind Reminder.Description,Mode=OneWay}" 
-                                   Name="ItemDescriptionTextBlock"
-                                   TextWrapping="Wrap"
-                                   Grid.ColumnSpan="2"
-                                   Style="{StaticResource CaptionTextBlockStyle}" 
-                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        Name="ItemDescriptionTextBlock"
+                        TextWrapping="Wrap"
+                        Grid.ColumnSpan="2"
+                        Style="{StaticResource CaptionTextBlockStyle}" 
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             <TextBlock Text="{x:Bind Reminder.TagsString,Mode=OneWay}" 
-                                   Grid.Row="1"
-                                   Style="{StaticResource CaptionTextBlockStyle}" 
-                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+                        Grid.Row="1"
+                        Style="{StaticResource CaptionTextBlockStyle}" 
+                        Foreground="{ThemeResource TextFillColorPrimary}"/>
             <TextBlock Text="ddl: "
-                                   VerticalAlignment="Bottom"
-                                   Margin="4,0,4,0"
-                                   Grid.Row="1"
-                                   Grid.Column="1"
-                                   Style="{StaticResource CaptionTextBlockStyle}" 
-                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+                        VerticalAlignment="Bottom"
+                        Margin="4,0,4,0"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Style="{StaticResource CaptionTextBlockStyle}" 
+                        Foreground="{ThemeResource TextFillColorPrimary}"/>
             <TextBlock x:Name="DateTimeTextBlock"
-                                   Text="{x:Bind Reminder.DeadlineString,Mode=OneWay}"
-                                   VerticalAlignment="Bottom"
-                                   Grid.Row="1"
-                                   Grid.Column="2"
-                                   Style="{StaticResource CaptionTextBlockStyle}" 
-                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+                        Text="{x:Bind Reminder.DeadlineString,Mode=OneWay}"
+                        VerticalAlignment="Bottom"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Style="{StaticResource CaptionTextBlockStyle}" 
+                        Foreground="{ThemeResource TextFillColorPrimary}"/>
         </Grid>
     </StackPanel>
 </UserControl>
