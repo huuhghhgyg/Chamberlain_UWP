@@ -110,6 +110,9 @@
   <data name="DateEmptyPrompt" xml:space="preserve">
     <value>Date cannot be empty</value>
   </data>
+  <data name="DateEmptyPromptDesc" xml:space="preserve">
+    <value>Must have a deadline date 📅</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -397,7 +400,7 @@
     <comment>#Format[String path]</comment>
   </data>
   <data name="ReminderFoundBackupFileTitle" xml:space="preserve">
-    <value>Find the data backup of "Reminder"</value>
+    <value>Find the data backup for "Reminder"</value>
   </data>
   <data name="ReminderFoundDataEmptyDesc" xml:space="preserve">
     <value>The data file is found, the data is empty, but the data backup is found. Do you want to use the backup data to restore?</value>
@@ -677,7 +680,7 @@
     <value>Save</value>
   </data>
   <data name="ControlSettings" xml:space="preserve">
-    <value>Control Settings</value>
+    <value>Control settings</value>
   </data>
   <data name="ErrorInformation" xml:space="preserve">
     <value>Error Information</value>
@@ -738,5 +741,8 @@
   </data>
   <data name="DueTime" xml:space="preserve">
     <value>Due Time</value>
+  </data>
+  <data name="NoReminderIndicator" xml:space="preserve">
+    <value>(None)</value>
   </data>
 </root>

@@ -138,7 +138,7 @@
         </trans-unit>
         <trans-unit id="DateEmptyPromptDesc" translate="yes" xml:space="preserve">
           <source>ddl日期必须要有📅</source>
-          <target state="new">ddl日期必须要有📅</target>
+          <target state="translated">Must have a deadline date 📅</target>
         </trans-unit>
         <trans-unit id="Delete" translate="yes" xml:space="preserve">
           <source>删除</source>
@@ -518,7 +518,7 @@
         </trans-unit>
         <trans-unit id="ReminderFoundBackupFileTitle" translate="yes" xml:space="preserve">
           <source>找到"提醒"的数据备份</source>
-          <target state="translated">Find the data backup of "Reminder"</target>
+          <target state="translated">Find the data backup for "Reminder"</target>
         </trans-unit>
         <trans-unit id="ReminderFoundDataEmptyDesc" translate="yes" xml:space="preserve">
           <source>找到数据文件，数据为空，但是找到数据备份。是否使用备份数据恢复？</source>
@@ -974,7 +974,7 @@
         </trans-unit>
         <trans-unit id="NoReminderIndicator" translate="yes" xml:space="preserve">
           <source>(无)</source>
-          <target state="new">(无)</target>
+          <target state="translated">(None)</target>
         </trans-unit>
       </group>
     </body>

@@ -198,11 +198,12 @@ namespace Chamberlain_UWP.Settings
         /// <exception cref="NotImplementedException"></exception>
         private void LoadLanguageSettings()
         {
-            string displayLanguage = LanguageHelper.CurrentLanguage;
+            string currentLanguage = LanguageHelper.CurrentLanguage;
 
+            LanguageIndex = LanguageHelper.SupportLang.Count - 1; //初始值
             //从支持的语言中找到当前显示语言的index
-            for (int i = 0; i < LanguageHelper.SupportLang.Count; i++)
-                if (LanguageHelper.SupportLang[i].Split(" ").Contains(displayLanguage))
+            for (int i = 0; i < LanguageHelper.LangCode.Count; i++)
+                if (LanguageHelper.LangCode[i].Split(" ").Contains(currentLanguage))
                     LanguageIndex = i; //设置绑定到ComboBox的LanguageIndex
         }
 
