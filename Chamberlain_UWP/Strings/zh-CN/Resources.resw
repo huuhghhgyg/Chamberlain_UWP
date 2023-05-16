@@ -117,13 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddAppBarButton.Label" xml:space="preserve">
+  <data name="About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="Add" xml:space="preserve">
     <value>添加</value>
   </data>
   <data name="AddDescTextBox.PlaceholderText" xml:space="preserve">
     <value>提醒内容</value>
   </data>
-  <data name="AddItemButton.Content" xml:space="preserve">
+  <data name="AddItem" xml:space="preserve">
     <value>添加项</value>
   </data>
   <data name="AddItemDatePicker.Header" xml:space="preserve">
@@ -138,85 +141,150 @@
   <data name="AddItemTimePicker.Header" xml:space="preserve">
     <value>到期时间</value>
   </data>
-  <data name="AddTagButton.Content" xml:space="preserve">
-    <value>添加</value>
-  </data>
   <data name="AddTagTextBox.PlaceholderText" xml:space="preserve">
     <value>标签名</value>
-  </data>
-  <data name="AddTextBlock.Text" xml:space="preserve">
-    <value>添加</value>
   </data>
   <data name="AddTitleTextBox.PlaceholderText" xml:space="preserve">
     <value>标题名称</value>
   </data>
-  <data name="BackgroundTaskTitle.Text" xml:space="preserve">
+  <data name="Application" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="ApplicationFolder" xml:space="preserve">
+    <value>应用程序文件夹</value>
+  </data>
+  <data name="AutoDetectUpdateTitle" xml:space="preserve">
+    <value>自动检测更新</value>
+  </data>
+  <data name="BackgroundTask" xml:space="preserve">
     <value>后台任务</value>
   </data>
-  <data name="BackgroundWakeSpanText.Text" xml:space="preserve">
+  <data name="BackgroundWakeSpan" xml:space="preserve">
     <value>后台唤醒间隔（分钟）</value>
+  </data>
+  <data name="BackupDone" xml:space="preserve">
+    <value>已完成</value>
   </data>
   <data name="BackupErrorIndicatorTextBlock.Text" xml:space="preserve">
     <value>* 备份错误列表中有信息,请转到备份页查看</value>
   </data>
-  <data name="BackupInfoPiviot.Title" xml:space="preserve">
+  <data name="BackupInfoTitle" xml:space="preserve">
     <value>备份信息</value>
   </data>
-  <data name="BackupPageTitle.Text" xml:space="preserve">
-    <value>备份任务</value>
+  <data name="Backuping" xml:space="preserve">
+    <value>正在备份文件</value>
+  </data>
+  <data name="BackupPath" xml:space="preserve">
+    <value>备份路径</value>
   </data>
   <data name="BackupPathColumn.Header" xml:space="preserve">
     <value>备份路径</value>
   </data>
-  <data name="BackupPathPiviot.Header" xml:space="preserve">
-    <value>备份路径</value>
+  <data name="BackupPathExistDesc" xml:space="preserve">
+    <value>检测到路径已经存在，路径将不会被添加</value>
   </data>
-  <data name="BackupStateTitle.Text" xml:space="preserve">
+  <data name="BackupProcessing" xml:space="preserve">
+    <value>处理中</value>
+  </data>
+  <data name="BackupRestoring" xml:space="preserve">
+    <value>正在恢复文件</value>
+  </data>
+  <data name="BackupState" xml:space="preserve">
     <value>备份状态</value>
   </data>
   <data name="BackupTargetPathColumn.Header" xml:space="preserve">
     <value>备份目标</value>
   </data>
-  <data name="BackupTaskSeqTitle.Text" xml:space="preserve">
+  <data name="BackupTask" xml:space="preserve">
+    <value>备份任务</value>
+  </data>
+  <data name="BackupTaskSeq" xml:space="preserve">
     <value>任务序列</value>
+  </data>
+  <data name="BackupTaskSequenceDesc" xml:space="preserve">
+    <value>剩余{0}条任务</value>
+    <comment>#Format[Int count]</comment>
   </data>
   <data name="BackupTimeColumn.Header" xml:space="preserve">
     <value>备份时间</value>
   </data>
-  <data name="BackupTitle.Text" xml:space="preserve">
+  <data name="BackupTitle" xml:space="preserve">
     <value>备份</value>
   </data>
-  <data name="BasicInfoTitle.Text" xml:space="preserve">
+  <data name="BasicInfo" xml:space="preserve">
     <value>基本信息</value>
+  </data>
+  <data name="CalculatingHash" xml:space="preserve">
+    <value>正在计算文件Hash</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="CheckUpdateWhenStartup" xml:space="preserve">
+    <value>{0}开启应用时自动检查更新</value>
+    <comment>#Format[String hintString]</comment>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>清除</value>
   </data>
   <data name="ClearAppBarButton.Label" xml:space="preserve">
     <value>清除</value>
   </data>
-  <data name="ClearButton.Content" xml:space="preserve">
-    <value>清除</value>
+  <data name="ClearBackupDataConfirmDesc" xml:space="preserve">
+    <value>是否要清除备份模块的数据？保存于备份文件夹中的数据将不会被清除</value>
   </data>
-  <data name="ClearDataListDesc.Text" xml:space="preserve">
+  <data name="ClearBackupDataTitle" xml:space="preserve">
+    <value>清除备份列表</value>
+  </data>
+  <data name="ClearDataListDesc" xml:space="preserve">
     <value>这可能有助于修复崩溃问题</value>
   </data>
-  <data name="ClearDataListTitle.Text" xml:space="preserve">
+  <data name="ClearDataListTitle" xml:space="preserve">
     <value>清除所有列表数据</value>
   </data>
-  <data name="ClearReminderDataTitle.Text" xml:space="preserve">
+  <data name="ClearExternalReminderDataDesc" xml:space="preserve">
+    <value>是否一并删除？</value>
+  </data>
+  <data name="ClearExternalReminderDataTitle" xml:space="preserve">
+    <value>您正在使用指定文件夹中的数据</value>
+  </data>
+  <data name="ClearReminderData" xml:space="preserve">
     <value>清除Reminder数据</value>
   </data>
-  <data name="CreatedTimeTextBlock.Text" xml:space="preserve">
-    <value>(空)</value>
+  <data name="ClearReminderDataDialogDesc" xml:space="preserve">
+    <value>删除的数据不可恢复，确定删除？</value>
   </data>
-  <data name="CreateTimeTitle.Text" xml:space="preserve">
+  <data name="ClearReminderDataDialogTitle" xml:space="preserve">
+    <value>您正在尝试删除Reminder的数据</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="ComparingInfo" xml:space="preserve">
+    <value>正在比对信息</value>
+  </data>
+  <data name="ComparingToFullBackup" xml:space="preserve">
+    <value>正在与完整备份进行比对</value>
+  </data>
+  <data name="ComponentSettings" xml:space="preserve">
+    <value>组件设置</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="ControlSettings" xml:space="preserve">
+    <value>控件设置</value>
+  </data>
+  <data name="CreatedTime" xml:space="preserve">
     <value>创建时间</value>
   </data>
-  <data name="DailyNotificationText.Text" xml:space="preserve">
+  <data name="DailyNotification" xml:space="preserve">
     <value>每日定时通知</value>
   </data>
-  <data name="DailyNotificationTimeText.Text" xml:space="preserve">
-    <value>定时提醒时间</value>
+  <data name="DailyNotificationTime" xml:space="preserve">
+    <value>每日定时提醒时间</value>
   </data>
-  <data name="DataSavePathText.Text" xml:space="preserve">
+  <data name="DataSavePath" xml:space="preserve">
     <value>指定位置存放数据</value>
   </data>
   <data name="DateEmptyPrompt" xml:space="preserve">
@@ -225,65 +293,122 @@
   <data name="DateEmptyPromptDesc" xml:space="preserve">
     <value>ddl日期必须要有📅</value>
   </data>
-  <data name="DebugOptionTitle.Text" xml:space="preserve">
+  <data name="DeadlineDate" xml:space="preserve">
+    <value>Deadline日期</value>
+  </data>
+  <data name="DeadlineTime" xml:space="preserve">
+    <value>Deadline时间</value>
+  </data>
+  <data name="DebugOption" xml:space="preserve">
     <value>调试选项</value>
   </data>
-  <data name="DeleteAppBarButton.Label" xml:space="preserve">
+  <data name="Delete" xml:space="preserve">
     <value>删除</value>
   </data>
-  <data name="DeleteBackupButton.Label" xml:space="preserve">
-    <value>删除</value>
+  <data name="DetailedInfo" xml:space="preserve">
+    <value>详细信息</value>
   </data>
-  <data name="DeleteButton.Content" xml:space="preserve">
-    <value>删除</value>
+  <data name="Developer" xml:space="preserve">
+    <value>开发者</value>
   </data>
-  <data name="DeleteItemButton.Content" xml:space="preserve">
-    <value>删除</value>
+  <data name="DoNotCheckUpdate" xml:space="preserve">
+    <value>{0}不检查更新</value>
+    <comment>#Format[String hintString]</comment>
   </data>
-  <data name="DeleteSelectedFolderButton.Content" xml:space="preserve">
-    <value>清除</value>
+  <data name="DownloadNewVersion" xml:space="preserve">
+    <value>前往下载</value>
+  </data>
+  <data name="DragJsonFileHere" xml:space="preserve">
+    <value>将Json文件拖到此处</value>
   </data>
   <data name="EmptyIndicator" xml:space="preserve">
     <value>（空）</value>
   </data>
-  <data name="EmptyIndicatorTextBlock.Text" xml:space="preserve">
-    <value>（无）</value>
+  <data name="EnableNotification" xml:space="preserve">
+    <value>开启通知</value>
   </data>
-  <data name="ErrorInfoTitle.Text" xml:space="preserve">
+  <data name="EncounterProblem" xml:space="preserve">
+    <value>遇到问题？</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="ErrorInformation" xml:space="preserve">
     <value>错误信息</value>
   </data>
-  <data name="ExportBackupAppBarButton.Label" xml:space="preserve">
-    <value>导出至下载</value>
+  <data name="ErrorMessageUnableSaveTo" xml:space="preserve">
+    <value>无法保存到 {0}</value>
+    <comment>#Format[String filename]</comment>
   </data>
   <data name="ExportBackupAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>将选中的备份导出到库中的下载文件夹</value>
   </data>
+  <data name="ExportToDownloadFolder" xml:space="preserve">
+    <value>导出至下载</value>
+  </data>
+  <data name="ExternalReminderDataAccessible" xml:space="preserve">
+    <value>已启用，具有访问权限：{0}</value>
+    <comment>#Format[String path]</comment>
+  </data>
+  <data name="ExternalReminderFolderDataDetectedDesc" xml:space="preserve">
+    <value>从这个文件内导入，还是覆盖这个文件？</value>
+  </data>
+  <data name="ExternalReminderFolderDataDetectedTitle" xml:space="preserve">
+    <value>检测到选定的文件夹内存在数据文件</value>
+  </data>
+  <data name="ExternalReminderFolderUnavailable" xml:space="preserve">
+    <value>指定文件夹不存在，已被清除</value>
+  </data>
+  <data name="ExternalReminderFolderUnspecified" xml:space="preserve">
+    <value>未指定任何文件夹</value>
+  </data>
+  <data name="FeedbackOnGithub" xml:space="preserve">
+    <value>前往Github反馈</value>
+  </data>
+  <data name="FileNotExist" xml:space="preserve">
+    <value>复制时文件不存在：{0}</value>
+    <comment>#Format[String path]</comment>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>已完成</value>
+  </data>
   <data name="FolderNameColumn.Header" xml:space="preserve">
     <value>目录名称</value>
   </data>
-  <data name="ImportReminderButton.Content" xml:space="preserve">
+  <data name="GetBackupPathFailed" xml:space="preserve">
+    <value>无法获取备份文件夹 {0}</value>
+    <comment>#Format[String backupPath]</comment>
+  </data>
+  <data name="GetSavePathFailed" xml:space="preserve">
+    <value>无法获取保存文件夹 {0}</value>
+    <comment>#Format[String savePath]</comment>
+  </data>
+  <data name="GoAhead" xml:space="preserve">
+    <value>前往</value>
+  </data>
+  <data name="Import" xml:space="preserve">
     <value>导入</value>
   </data>
-  <data name="ImportReminderJsonTitle.Text" xml:space="preserve">
+  <data name="ImportBackup" xml:space="preserve">
+    <value>导入备份</value>
+  </data>
+  <data name="ImportFailed" xml:space="preserve">
+    <value>⚠导入失败</value>
+  </data>
+  <data name="ImportReminderJson" xml:space="preserve">
     <value>导入Reminder(JSON)</value>
   </data>
   <data name="ImportReminderTextBox.PlaceholderText" xml:space="preserve">
     <value>JSON格式文本（支持文件拖拽）</value>
   </data>
-  <data name="IsNotificationEnableText.Text" xml:space="preserve">
-    <value>开启通知</value>
+  <data name="ImportSuccessful" xml:space="preserve">
+    <value>✅导入成功</value>
   </data>
-  <data name="IsSidebarOpenText.Text" xml:space="preserve">
-    <value>侧边栏默认开启状态</value>
+  <data name="InstallDate" xml:space="preserve">
+    <value>安装日期</value>
   </data>
   <data name="IsSidebarOpenText.ToolTipService.ToolTip" xml:space="preserve">
     <value>此选项在Windows11上可能没有效果</value>
-  </data>
-  <data name="ItemReviseDatePicker.Header" xml:space="preserve">
-    <value>Deadline日期</value>
-  </data>
-  <data name="ItemReviseDatePicker.PlaceholderText" xml:space="preserve">
-    <value>Deadline日期</value>
   </data>
   <data name="ItemReviseDescText.Header" xml:space="preserve">
     <value>提醒描述</value>
@@ -304,13 +429,31 @@
     <value>(未选择)</value>
   </data>
   <data name="ItemSuggestBox.PlaceholderText" xml:space="preserve">
-    <value>搜索&amp;quot;提醒&amp;quot;</value>
+    <value>搜索"提醒"</value>
+  </data>
+  <data name="JsonOutputOnly" xml:space="preserve">
+    <value>JSON（仅输出）</value>
+  </data>
+  <data name="Label" xml:space="preserve">
+    <value>标签</value>
   </data>
   <data name="LabelEmptyPrompt" xml:space="preserve">
     <value>标签不能为空</value>
   </data>
   <data name="LabelEmptyPromptDesc" xml:space="preserve">
     <value>请在列表中选择一个或多个标签，也可以在下方新建标签🏷</value>
+  </data>
+  <data name="LevelStringError" xml:space="preserve">
+    <value>错误❌：</value>
+  </data>
+  <data name="LevelStringInfo" xml:space="preserve">
+    <value>提示ℹ：</value>
+  </data>
+  <data name="LevelStringWarning" xml:space="preserve">
+    <value>警告⚠：</value>
+  </data>
+  <data name="LoadingBackups" xml:space="preserve">
+    <value>正在读取备份文件</value>
   </data>
   <data name="ManageReminderCardSubitle.Text" xml:space="preserve">
     <value>添加 / 删除提醒项</value>
@@ -321,7 +464,7 @@
   <data name="ManageRemindItemButton.Content" xml:space="preserve">
     <value>转到管理页面</value>
   </data>
-  <data name="ModifyItemButton.Content" xml:space="preserve">
+  <data name="ModifyItem" xml:space="preserve">
     <value>修改项</value>
   </data>
   <data name="NavigationItem_Backup.Content" xml:space="preserve">
@@ -333,8 +476,39 @@
   <data name="NavigationItem_Task.Content" xml:space="preserve">
     <value>任务</value>
   </data>
+  <data name="NewVersionDetectedTitle" xml:space="preserve">
+    <value>检测到新版本:{0}</value>
+    <comment>#Format[String version]</comment>
+  </data>
+  <data name="NoAccessToSourceFolderToken" xml:space="preserve">
+    <value>无法访问源文件夹token</value>
+  </data>
+  <data name="NoAccessToTargetFolderToken" xml:space="preserve">
+    <value>无法访问目标文件夹token</value>
+  </data>
+  <data name="NoBackupTaskDesc" xml:space="preserve">
+    <value>请先添加备份任务</value>
+  </data>
+  <data name="NoBackupTaskSelectedDesc" xml:space="preserve">
+    <value>请先选中备份任务再进行备份</value>
+  </data>
+  <data name="NoBackupTaskSelectedTitle" xml:space="preserve">
+    <value>没有选中备份任务</value>
+  </data>
+  <data name="NoBackupTaskTitle" xml:space="preserve">
+    <value>没有备份任务</value>
+  </data>
+  <data name="NoContentDetectedDesc" xml:space="preserve">
+    <value>请填写有意义的文本内容</value>
+  </data>
+  <data name="NoContentDetectedTitle" xml:space="preserve">
+    <value>未检测到内容</value>
+  </data>
   <data name="NoDescriptionIndicator" xml:space="preserve">
     <value>(无描述)</value>
+  </data>
+  <data name="NoFileChangeDetected" xml:space="preserve">
+    <value>没有检测到文件变更</value>
   </data>
   <data name="NoSelectedItemPrompt" xml:space="preserve">
     <value>没有选中项</value>
@@ -342,20 +516,63 @@
   <data name="NoSelectedItemPromptDesc" xml:space="preserve">
     <value>请在这个列表中选择一项进行修改🛠</value>
   </data>
-  <data name="NoTaskIndicatorText.Text" xml:space="preserve">
-    <value>（无任务）</value>
+  <data name="NoTaskIndicator" xml:space="preserve">
+    <value>(无任务)</value>
   </data>
-  <data name="NoTaskTextBlock.Text" xml:space="preserve">
-    <value>所有任务已完成☕</value>
+  <data name="NoTaskNow" xml:space="preserve">
+    <value>当前无任务</value>
+  </data>
+  <data name="NotifyBlockingInfo" xml:space="preserve">
+    <value>{0}(空转次数{1}，共{2}ms)</value>
+    <comment>desc, blocking_count, blocking_time</comment>
+  </data>
+  <data name="NotifyDeadlineWithinHours" xml:space="preserve">
+    <value>deadline不足{0}小时</value>
+    <comment>remain_hour</comment>
+  </data>
+  <data name="NotifyDescInAddition" xml:space="preserve">
+    <value>此外，</value>
+  </data>
+  <data name="NotifyDueInHours" xml:space="preserve">
+    <value>将在{0}个小时内到期。</value>
+    <comment>remain_hour</comment>
+  </data>
+  <data name="NotifyMultipleDeadlineWithinHours" xml:space="preserve">
+    <value>{0}项deadline不足{1}小时</value>
+    <comment>count, remain_hour</comment>
+  </data>
+  <data name="NotifyMultipleDueInHours" xml:space="preserve">
+    <value>等，共{0}项将在{1}个小时内到期。</value>
+    <comment>count, remain_hour</comment>
+  </data>
+  <data name="NotifyOutdatedItems" xml:space="preserve">
+    <value>{0}项已过期，请尽快处理。</value>
+    <comment>outdated</comment>
+  </data>
+  <data name="NotifyReminderItemMeetDeadline" xml:space="preserve">
+    <value>"{0}"即将到期，是否已经完成？</value>
+    <comment>item.Title</comment>
   </data>
   <data name="NotSelectedIndicator" xml:space="preserve">
-    <value>（未选择）</value>
+    <value>(未选择)</value>
   </data>
   <data name="OnworkItemSuggestBox.PlaceholderText" xml:space="preserve">
     <value>搜索未完成的任务</value>
   </data>
-  <data name="OpenFileButton.Content" xml:space="preserve">
+  <data name="OpenFile" xml:space="preserve">
     <value>打开文件</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="OperationCanceled" xml:space="preserve">
+    <value>操作取消</value>
+  </data>
+  <data name="OutOfDate" xml:space="preserve">
+    <value>已过期</value>
+  </data>
+  <data name="Override" xml:space="preserve">
+    <value>覆盖</value>
   </data>
   <data name="PastTargetTimePrompt" xml:space="preserve">
     <value>目标时间已经过了</value>
@@ -366,35 +583,93 @@
   <data name="PathColumn.Header" xml:space="preserve">
     <value>路径</value>
   </data>
+  <data name="PlainText" xml:space="preserve">
+    <value>纯文本</value>
+  </data>
+  <data name="Priority" xml:space="preserve">
+    <value>优先级</value>
+  </data>
   <data name="PriorityDefaultItem.Content" xml:space="preserve">
     <value>默认</value>
+  </data>
+  <data name="PriorityHigh" xml:space="preserve">
+    <value>🔴(紧急)</value>
   </data>
   <data name="PriorityHighItem.Content" xml:space="preserve">
     <value>高</value>
   </data>
+  <data name="PriorityMiddle" xml:space="preserve">
+    <value>🟡(优先)</value>
+  </data>
   <data name="PriorityMiddleItem.Content" xml:space="preserve">
     <value>中</value>
   </data>
-  <data name="QuickBackupAppBarButton.Label" xml:space="preserve">
+  <data name="Prompt" xml:space="preserve">
+    <value>提示</value>
+  </data>
+  <data name="QuickBackup" xml:space="preserve">
     <value>快速备份</value>
   </data>
-  <data name="RecordPiviot.Header" xml:space="preserve">
+  <data name="Record" xml:space="preserve">
     <value>记录</value>
   </data>
-  <data name="RefreshAppBarButton.Label" xml:space="preserve">
+  <data name="Refresh" xml:space="preserve">
     <value>刷新</value>
   </data>
   <data name="RefreshAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>重新从所有文件夹中读取数据</value>
   </data>
-  <data name="ReminderDoneTitle.Text" xml:space="preserve">
+  <data name="Reminder" xml:space="preserve">
+    <value>提醒</value>
+  </data>
+  <data name="ReminderDataBothDeleted" xml:space="preserve">
+    <value>🗑内部数据文件和外部数据文件均已清空</value>
+    <comment>内外部数据文件均清空</comment>
+  </data>
+  <data name="ReminderDataDeleted" xml:space="preserve">
+    <value>🗑已删除内部数据文件</value>
+  </data>
+  <data name="ReminderDescription" xml:space="preserve">
+    <value>提醒描述</value>
+  </data>
+  <data name="ReminderDone" xml:space="preserve">
     <value>已完成</value>
   </data>
-  <data name="ReminderLoadFromJsonTitle.Text" xml:space="preserve">
+  <data name="ReminderFolderImportCancel" xml:space="preserve">
+    <value>取消导入，路径：{0}</value>
+    <comment>#Format[String path]</comment>
+  </data>
+  <data name="ReminderFoundBackupFileTitle" xml:space="preserve">
+    <value>找到"提醒"的数据备份</value>
+  </data>
+  <data name="ReminderFoundDataEmptyDesc" xml:space="preserve">
+    <value>找到数据文件，数据为空，但是找到数据备份。是否使用备份数据恢复？</value>
+  </data>
+  <data name="ReminderItemsManagement" xml:space="preserve">
+    <value>管理提醒项</value>
+  </data>
+  <data name="ReminderLoadFromJsonFile" xml:space="preserve">
     <value>从JSON文件中读取数据</value>
   </data>
-  <data name="ReminderManageTitle.Text" xml:space="preserve">
-    <value>管理提醒项</value>
+  <data name="ReminderNotFoundDataDesc" xml:space="preserve">
+    <value>目前无数据文件，但是找到数据备份。是否使用备份数据恢复？</value>
+  </data>
+  <data name="ReminderNotifyDescItemDueInADay" xml:space="preserve">
+    <value>将在1天之内到期，请留意。</value>
+  </data>
+  <data name="ReminderNotifyDescItemsDueInADay" xml:space="preserve">
+    <value>共{0}项将在1天之内到期。</value>
+    <comment>list.Count</comment>
+  </data>
+  <data name="ReminderNotifyDescMultipleDueInADay" xml:space="preserve">
+    <value>有{0}项将在1天之内到期。</value>
+    <comment>list.Count</comment>
+  </data>
+  <data name="ReminderNotifyDescRemaining" xml:space="preserve">
+    <value>剩余事项提醒</value>
+  </data>
+  <data name="ReminderNotifyTitle" xml:space="preserve">
+    <value>事项提醒</value>
   </data>
   <data name="ReminderOOBEImportSubtitle.Text" xml:space="preserve">
     <value>点击按钮打开文件或将文件拖动到标题上，或指定文件夹</value>
@@ -408,28 +683,46 @@
   <data name="ReminderOOBEPickFolderButton.Content" xml:space="preserve">
     <value>指定文件夹</value>
   </data>
-  <data name="ReminderText.Text" xml:space="preserve">
-    <value>提醒</value>
+  <data name="ReminderOOBEWelcomeDesc" xml:space="preserve">
+    <value>现在来创建一些提醒项吧</value>
   </data>
-  <data name="ReminderTodoTextBlock.Text" xml:space="preserve">
+  <data name="ReminderOOBEWelcomeTitle" xml:space="preserve">
+    <value>欢迎使用Reminder👋</value>
+  </data>
+  <data name="ReminderSaveTextBox.PlaceholderText" xml:space="preserve">
+    <value>文件保存路径（仅输出）</value>
+  </data>
+  <data name="ReminderTodo" xml:space="preserve">
     <value>待处理</value>
   </data>
-  <data name="ReminderTodoTitle.Text" xml:space="preserve">
+  <data name="ReminderTodoItems" xml:space="preserve">
     <value>待办事项</value>
   </data>
-  <data name="RemindTextBlock.Text" xml:space="preserve">
-    <value>提醒</value>
+  <data name="RepositoryPage" xml:space="preserve">
+    <value>项目主页</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>恢复</value>
   </data>
   <data name="RestoreAppBarButton.Label" xml:space="preserve">
     <value>恢复</value>
   </data>
-  <data name="ReviseReminderTitle.Text" xml:space="preserve">
+  <data name="Retain" xml:space="preserve">
+    <value>保留</value>
+  </data>
+  <data name="ReviseReminder" xml:space="preserve">
     <value>修改提醒</value>
   </data>
-  <data name="SaveAppBarButton.Label" xml:space="preserve">
+  <data name="Save" xml:space="preserve">
     <value>保存</value>
   </data>
-  <data name="SaveListAppBarButton.Label" xml:space="preserve">
+  <data name="SaveData" xml:space="preserve">
+    <value>保存数据</value>
+  </data>
+  <data name="SaveList" xml:space="preserve">
     <value>保存列表</value>
   </data>
   <data name="SavePathColumn.Header" xml:space="preserve">
@@ -438,29 +731,42 @@
   <data name="SavePathPiviot.Header" xml:space="preserve">
     <value>保存路径</value>
   </data>
-  <data name="SelectedTagsTextBlock.Text" xml:space="preserve">
-    <value>（未选择）</value>
+  <data name="SaveReminderDataFile" xml:space="preserve">
+    <value>保存Reminder</value>
   </data>
-  <data name="SelectTagTextBlock.Text" xml:space="preserve">
+  <data name="ScanningPaths" xml:space="preserve">
+    <value>正在扫描路径</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="SearchResultSortBy" xml:space="preserve">
+    <value>搜索排序：</value>
+  </data>
+  <data name="SelectedFolder" xml:space="preserve">
+    <value>选取的文件夹:</value>
+  </data>
+  <data name="SelectTag" xml:space="preserve">
     <value>选择标签</value>
   </data>
-  <data name="SetReminderFolderButton.Content" xml:space="preserve">
-    <value>打开文件夹</value>
-  </data>
-  <data name="SettingsPageTitle.Text" xml:space="preserve">
+  <data name="Settings" xml:space="preserve">
     <value>设置</value>
   </data>
-  <data name="Setting_ComponentTitle.Text" xml:space="preserve">
-    <value>组件设置</value>
-  </data>
-  <data name="Setting_ControlTitle.Text" xml:space="preserve">
-    <value>控件设置</value>
-  </data>
-  <data name="ShowDetailToggleButton.Content" xml:space="preserve">
+  <data name="ShowDetailedInfo" xml:space="preserve">
     <value>显示详细信息</value>
   </data>
-  <data name="ShowNotificationInfoText.Text" xml:space="preserve">
+  <data name="ShowNotificationBlockingInfo" xml:space="preserve">
     <value>显示通知显示阻塞信息</value>
+  </data>
+  <data name="SidebarOpenState" xml:space="preserve">
+    <value>侧边栏默认开启状态</value>
+  </data>
+  <data name="SkipCheckUpdateOfVersion" xml:space="preserve">
+    <value>{0}不提示版本{1}的更新</value>
+    <comment>#Format[String hintString, String CheckUpdate]</comment>
+  </data>
+  <data name="SkipThisVersion" xml:space="preserve">
+    <value>不再提示此版本</value>
   </data>
   <data name="SortByNameItem.Content" xml:space="preserve">
     <value>按照名称</value>
@@ -468,19 +774,25 @@
   <data name="SortByTagItem.Content" xml:space="preserve">
     <value>按照标签</value>
   </data>
-  <data name="SortSearchTextBlock.Text" xml:space="preserve">
-    <value>搜索排序：</value>
-  </data>
-  <data name="StartBackupButton.Label" xml:space="preserve">
+  <data name="StartBackup" xml:space="preserve">
     <value>开始备份</value>
   </data>
-  <data name="SyncByWindowsText.Text" xml:space="preserve">
+  <data name="Sync" xml:space="preserve">
+    <value>同步</value>
+  </data>
+  <data name="SyncByWindowsOS" xml:space="preserve">
     <value>应用设置跨设备同步</value>
   </data>
-  <data name="TagTextBlock.Text" xml:space="preserve">
+  <data name="Tag" xml:space="preserve">
     <value>标签</value>
   </data>
-  <data name="TaskPageTitle.Text" xml:space="preserve">
+  <data name="TaskClearIndicator" xml:space="preserve">
+    <value>所有任务已完成☕</value>
+  </data>
+  <data name="TaskList" xml:space="preserve">
+    <value>任务列表</value>
+  </data>
+  <data name="TaskPage" xml:space="preserve">
     <value>任务面板</value>
   </data>
   <data name="TimeEmptyPrompt" xml:space="preserve">
@@ -489,8 +801,11 @@
   <data name="TimeEmptyPromptDesc" xml:space="preserve">
     <value>还是选一个ddl时间吧⏰</value>
   </data>
-  <data name="TimeSelectorSpanText.Text" xml:space="preserve">
+  <data name="TimeSelectorSpan" xml:space="preserve">
     <value>时间选择器选项间隔（分钟）</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>标题</value>
   </data>
   <data name="TitleEmptyPrompt" xml:space="preserve">
     <value>标题不能为空</value>
@@ -498,13 +813,35 @@
   <data name="TitleEmptyPromptDesc" xml:space="preserve">
     <value>不然就找不到这个项目了😥</value>
   </data>
-  <data name="TotalBackupAppBarButton.Label" xml:space="preserve">
+  <data name="Today" xml:space="preserve">
+    <value>今天</value>
+  </data>
+  <data name="Tomorrow" xml:space="preserve">
+    <value>明天</value>
+  </data>
+  <data name="TotalBackup" xml:space="preserve">
     <value>完整备份</value>
   </data>
-  <data name="TotalBackupColumn.Header" xml:space="preserve">
-    <value>完整备份</value>
+  <data name="TwoDaysLater" xml:space="preserve">
+    <value>后天</value>
   </data>
-  <data name="TotalPathColumn.Header" xml:space="preserve">
-    <value>完整备份</value>
+  <data name="UnableToLoadFolder" xml:space="preserve">
+    <value>未能读取文件夹 {0}</value>
+    <comment>#Format[String path]</comment>
+  </data>
+  <data name="UnknownBackupState" xml:space="preserve">
+    <value>状态未知</value>
+  </data>
+  <data name="Unselected" xml:space="preserve">
+    <value>暂未选中</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="UpdateStatusTitle" xml:space="preserve">
+    <value>检测更新状态：</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>版本</value>
   </data>
 </root>

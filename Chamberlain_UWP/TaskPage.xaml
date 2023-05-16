@@ -8,6 +8,7 @@
     mc:Ignorable="d"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:Reminder="using:Chamberlain_UWP.Reminder"
+    xmlns:strings="using:Chamberlain_UWP.Strings"
     Background="{ThemeResource NavigationViewExpandedPaneBackground}"
     NavigationCacheMode="Enabled">
 
@@ -44,7 +45,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <TextBlock Name="PageTitleTextBlock" x:Uid="TaskPageTitleTextBlock" Text="任务面板"
+        <!--任务面板-->
+        <TextBlock Name="PageTitleTextBlock"
+                   Text="{x:Bind strings:Resources.TaskPage}"
                    Margin="48,48,48,12"
                    Style="{ThemeResource TitleTextBlockStyle}"/>
 
@@ -53,8 +56,9 @@
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48">
                 <!--待办-->
                 <StackPanel>
-                    <TextBlock Text="待办事项" x:Uid="ReminderTodoTitle" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,8"/>
-                    <TextBlock Name="NoTaskTextBlock" x:Uid="NoTaskTextBlock" Text="所有任务已完成☕" Margin="0,4,0,0"/>
+                    <!--待办事项-->
+                    <TextBlock Text="{x:Bind strings:Resources.ReminderTodoItems}" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,8"/>
+                    <TextBlock Name="NoTaskTextBlock" Text="{x:Bind strings:Resources.TaskClearIndicator}" Margin="0,4,0,0"/>
                     <Reminder:ReminderCardListView ReminderList="{x:Bind ReminderListOnwork,Mode=OneWay}" ListViewItemChecked="ReminderCardListView_ListViewItemChecked"/>
                 </StackPanel>
                 <!--备份-->

@@ -27,11 +27,11 @@ namespace Chamberlain_UWP.Settings.Update
                     //有更新版本，弹窗提示
                     ContentDialog updateDialog = new ContentDialog
                     {
-                        Title = $"检测到新版本:{release.Name}",
+                        Title = Strings.Resources.NewVersionDetectedTitle(release.Name), //检测到新版本:{release.Name}
                         Content = manager.RemoveMdSymbol(release.Message),
-                        PrimaryButtonText = "前往下载",
-                        SecondaryButtonText = "不再提示此版本",
-                        CloseButtonText = "关闭",
+                        PrimaryButtonText = Strings.Resources.DownloadNewVersion, //前往下载
+                        SecondaryButtonText = Strings.Resources.SkipThisVersion, //不再提示此版本
+                        CloseButtonText = Strings.Resources.Close, //关闭
                         DefaultButton = ContentDialogButton.Primary
                     };
                     ContentDialogResult result = await updateDialog.ShowAsync();

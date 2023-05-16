@@ -322,6 +322,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Chamberlain_UWP_TemporaryKey.pfx" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
     <PRIResource Include="Strings\zh-CN\Resources.resw">
       <LastGenOutput>Resources.generated.cs</LastGenOutput>
       <Generator>ReswPlusAdvancedGenerator</Generator>
@@ -333,7 +334,9 @@
       <Name>BackgroundUpdater</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <XliffResource Include="MultilingualResources\Chamberlain_UWP.en-US.xlf" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

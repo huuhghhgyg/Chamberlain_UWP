@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:strings="using:Chamberlain_UWP.Strings"
     Background="{ThemeResource NavigationViewExpandedPaneBackground}"
     NavigationCacheMode="Enabled">
 
@@ -72,14 +73,14 @@
         </Grid.RowDefinitions>
 
         <TextBlock Name="PageTitleTextBlock"
-                   x:Uid="ReminderManageTitle"
-                   Text="管理提醒项"
+                   Text="{x:Bind strings:Resources.ReminderItemsManagement}"
                    Margin="48,48,48,12"
                    Style="{ThemeResource TitleTextBlockStyle}"/>
         <Grid Grid.Row="1">
             <ScrollViewer Name="PageScrollViewer">
                 <StackPanel Name="LayoutPanel" Margin="48,0,48,48">
-                    <TextBlock x:Uid="AddTextBlock" Text="添加" Margin="0,0,0,4" Style="{ThemeResource BaseTextBlockStyle}" />
+                    <!--添加-->
+                    <TextBlock Text="{x:Bind strings:Resources.Add}" Margin="0,0,0,4" Style="{ThemeResource BaseTextBlockStyle}" />
                     <!--添加项目面板-->
                     <StackPanel Name="AddItemPanel">
                         <Grid ColumnSpacing="8" RowSpacing="8">
@@ -96,8 +97,8 @@
                                         Grid.RowSpan="2" Grid.ColumnSpan="1"
                                         Style="{StaticResource CardStackPanel}">
                                 <!--提醒项信息-->
-                                <TextBlock Text="提醒"
-                                           x:Uid="RemindTextBlock"
+                                <!--提醒-->
+                                <TextBlock Text="{x:Bind strings:Resources.Reminder}"
                                            Margin="0,0,0,8" 
                                            Style="{ThemeResource BaseTextBlockStyle}" />
                                 <StackPanel Padding="0,8">
@@ -114,8 +115,9 @@
                                                 Margin="0,12,0,0"/>
                                     <!--标签-->
                                     <StackPanel>
-                                        <TextBlock x:Uid="SelectTagTextBlock" Text="选择标签" Margin="0,12,0,4"/>
-                                        <TextBlock x:Uid="SelectedTagsTextBlock" Name="SelectedTagsTextBlock" Grid.Column="1" Text="（未选择）"/>
+                                        <!--选择标签-->
+                                        <TextBlock Text="{x:Bind strings:Resources.SelectTag}" Margin="0,12,0,4"/>
+                                        <TextBlock Name="SelectedTagsTextBlock" Grid.Column="1" Text="{x:Bind strings:Resources.NotSelectedIndicator}"/>
                                     </StackPanel>
 
                                     <ComboBox Header="优先级" Name="AddItemPriorityComboBox" x:Uid="AddItemPriorityComboBox" Margin="0,12,0,0" SelectedIndex="0">
@@ -126,7 +128,8 @@
 
                                     <!--按钮-->
                                     <RelativePanel Margin="0,16,0,0">
-                                        <Button Name="AddItemButton" x:Uid="AddItemButton" Content="添加项"
+                                        <!--添加项-->
+                                        <Button Name="AddItemButton" Content="{x:Bind strings:Resources.AddItem}"
                                                 RelativePanel.AlignRightWithPanel="True"
                                                 Style="{StaticResource AccentButtonStyle}"
                                                 Click="AddItemButton_Click"/>
@@ -145,7 +148,8 @@
                                         Grid.RowSpan="2" Grid.ColumnSpan="1"
                                         Style="{StaticResource CardStackPanel}">
                                 <!--标签信息-->
-                                <TextBlock Text="标签" x:Uid="TagTextBlock"
+                                <!--标签-->
+                                <TextBlock Text="{x:Bind strings:Resources.Tag}"
                                            Margin="0,0,0,12" 
                                            Style="{ThemeResource BaseTextBlockStyle}" />
                                 <Grid Margin="0,0,0,12">
@@ -155,7 +159,9 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBox PlaceholderText="标签名" x:Name="AddTagTextBox" />
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                        <Button Name="AddTagButton" x:Uid="AddTagButton" Content="添加"
+                                        <!--添加标签-->
+                                        <Button Name="AddTagButton"
+                                                Content="{x:Bind strings:Resources.Add}"
                                                 Margin="4,0,0,0" 
                                                 Style="{StaticResource AccentButtonStyle}"
                                                 Click="AddTagButton_Click"/>
@@ -171,7 +177,8 @@
                         </Grid>
                     </StackPanel>
 
-                    <TextBlock x:Uid="ReviseReminderTitle" Text="修改提醒" Margin="0,16,0,4" Style="{ThemeResource BaseTextBlockStyle}" />
+                    <!--修改提醒-->
+                    <TextBlock Text="{x:Bind strings:Resources.ReviseReminder}" Margin="0,16,0,4" Style="{ThemeResource BaseTextBlockStyle}" />
                     <!--处理项目面板-->
                     <StackPanel Name="PendingItemsPanel">
                         <Grid ColumnSpacing="8" RowSpacing="8">
@@ -217,23 +224,31 @@
                             
                             <StackPanel Name="PendingInfoPanel" Grid.Column="1" Padding="12" VerticalAlignment="Top" Style="{StaticResource CardStackPanel}">
                                 <!--修改面板-->
-                                <TextBlock x:Uid="BasicInfoTitle" Text="基本信息" Margin="0,0,0,12" Style="{ThemeResource BaseTextBlockStyle}"/>
-                                <TextBox Name="ItemReviseTitleText" x:Uid="ItemReviseTitleText"
-                                             Header="标题" PlaceholderText="(未选择)"/>
-                                <TextBox Name="ItemReviseDescText" x:Uid="ItemReviseDescText"
-                                             Header="提醒描述" PlaceholderText="(未选择)"
+                                <!--基本信息-->
+                                <TextBlock Text="{x:Bind strings:Resources.BasicInfo}" Margin="0,0,0,12" Style="{ThemeResource BaseTextBlockStyle}"/>
+                                <!--标题-->
+                                <TextBox Name="ItemReviseTitleText"
+                                             Header="{x:Bind strings:Resources.Title}" PlaceholderText="{x:Bind strings:Resources.NotSelectedIndicator}"/>
+                                <!--提醒描述-->
+                                <TextBox Name="ItemReviseDescText"
+                                             Header="{x:Bind strings:Resources.ReminderDescription}" PlaceholderText="{x:Bind strings:Resources.NotSelectedIndicator}"
                                              Margin="0,12,0,0"
                                              TextWrapping="Wrap"/>
-                                <TextBlock x:Uid="CreateTimeTitle" Text="创建时间" Margin="0,12,0,0"/>
-                                <TextBlock Text="(空)" Name="CreatedTimeTextBlock" x:Uid="CreatedTimeTextBlock" Margin="0,8,0,0"/>
-                                <CalendarDatePicker Name="ItemReviseDatePicker" x:Uid="ItemReviseDatePicker"
-                                                    PlaceholderText="Deadline日期" 
-                                                    Header="Deadline日期" 
+                                <TextBlock Text="{x:Bind strings:Resources.CreatedTime}" Margin="0,12,0,0"/>
+                                <!--(空)-->
+                                <TextBlock Text="{x:Bind strings:Resources.EmptyIndicator}" Name="CreatedTimeTextBlock" x:Uid="CreatedTimeTextBlock" Margin="0,8,0,0"/>
+                                <!--Deadline日期-->
+                                <CalendarDatePicker Name="ItemReviseDatePicker"
+                                                    PlaceholderText="{x:Bind strings:Resources.DeadlineDate}" 
+                                                    Header="{x:Bind strings:Resources.DeadlineDate}" 
                                                     Margin="0,12,0,0"/>
-                                <TimePicker Name="ItemReviseTimePicker" Header="Deadline时间"
+                                <!--Deadline时间-->
+                                <TimePicker Name="ItemReviseTimePicker"
+                                            Header="{x:Bind strings:Resources.DeadlineTime}"
                                             MinuteIncrement="{x:Bind TimepickerInterval, Mode=OneWay}"
                                             Margin="0,12,0,0"/>
-                                <ComboBox Header="优先级" x:Uid="ItemRevisePriorityComboBox" Name="ItemRevisePriorityComboBox" Margin="0,12,0,0" SelectedIndex="0">
+                                <!--优先级-->
+                                <ComboBox Header="{x:Bind strings:Resources.Priority}" Name="ItemRevisePriorityComboBox" Margin="0,12,0,0" SelectedIndex="0">
                                     <ComboBoxItem x:Uid="PriorityDefaultItem" Content="默认"/>
                                     <ComboBoxItem x:Uid="PriorityMiddleItem" Content="中"/>
                                     <ComboBoxItem x:Uid="PriorityHighItem" Content="高"/>
@@ -244,11 +259,12 @@
                                                     Margin="0,0,8,0"
                                                     VerticalAlignment="Center"
                                                     Style="{StaticResource SuccessIconInfoBadgeStyle}"/>
-                                    <Button Name="DeleteItemButton" x:Uid="DeleteItemButton" Content="删除" 
+                                    <Button Name="DeleteItemButton" Content="{x:Bind strings:Resources.Delete}" 
                                                 Margin="0,0,8,0" 
                                                 VerticalAlignment="Center"
                                                 Click="DeleteItemButton_Click"/>
-                                    <Button Name="ModifyItemButton" x:Uid="ModifyItemButton" Content="修改项"
+                                    <!--修改项-->
+                                    <Button Name="ModifyItemButton" x:Uid="ModifyItemButton" Content="{x:Bind strings:Resources.ModifyItem}"
                                                 VerticalAlignment="Center"
                                                 Style="{StaticResource AccentButtonStyle}" 
                                                 Click="ModifyItemButton_Click">

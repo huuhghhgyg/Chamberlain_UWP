@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
+    xmlns:strings="using:Chamberlain_UWP.Strings"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Background="{ThemeResource NavigationViewExpandedPaneBackground}"
     NavigationCacheMode="Enabled">
@@ -56,7 +57,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <TextBlock Name="PageTitleTextBlock" x:Uid="BackupPageTitle" Text="备份任务"
+        <TextBlock Name="PageTitleTextBlock" Text="{x:Bind strings:Resources.BackupTask}"
                    Margin="48,48,48,12"
                    Style="{ThemeResource TitleTextBlockStyle}"/>
 
@@ -65,7 +66,7 @@
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48">
                 <!--备份StackPanel-->
                 <StackPanel>
-                    <TextBlock Text="备份状态" x:Uid="BackupStateTitle" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <TextBlock Text="{x:Bind strings:Resources.BackupState}" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
                     <StackPanel Visibility="{x:Bind ViewModel.IsBackupCardVisible, Mode=OneWay}">
                         <TextBlock Text="{x:Bind ViewModel.BackupTaskSequenceDescription, Mode=OneWay}"
                                    Visibility="{x:Bind ViewModel.IsBackupTaskSequenceVisible,Mode=OneWay}"
@@ -102,32 +103,36 @@
                             </muxc:Expander.Header>
                             <muxc:Expander.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <!--<Button Content="取消" Margin="0,0,8,0"/>-->
-                                    <ToggleButton Content="显示详细信息" x:Uid="ShowDetailToggleButton" IsChecked="{x:Bind ViewModel.Manager.ShowDetail,Mode=TwoWay}"/>
+                                    <!--显示详细信息-->
+                                    <ToggleButton Content="{x:Bind strings:Resources.ShowDetailedInfo}" IsChecked="{x:Bind ViewModel.Manager.ShowDetail,Mode=TwoWay}"/>
                                 </StackPanel>
                             </muxc:Expander.Content>
                         </muxc:Expander>
                     </StackPanel>
-                    <TextBlock Text="（无任务）" x:Uid="NoTaskIndicatorText" Visibility="{x:Bind ViewModel.IsNoTaskTextVisible,Mode=OneWay}"/>
+                    <!--(无任务)-->
+                    <TextBlock Text="{x:Bind strings:Resources.NoTaskIndicator}" Visibility="{x:Bind ViewModel.IsNoTaskTextVisible,Mode=OneWay}"/>
 
                     <StackPanel Visibility="{x:Bind ViewModel.IsBackupTaskSequenceVisible, Mode=OneWay}">
                         <!--任务序列-->
-                        <TextBlock Text="任务序列" x:Uid="BackupTaskSeqTitle" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <TextBlock Text="{x:Bind strings:Resources.BackupTaskSeq}" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
                         <Grid Style="{StaticResource CardGrid}">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
-                                <AppBarButton Icon="Play" x:Uid="StartBackupButton" Label="开始备份" Click="{x:Bind ViewModel.StartBackup}"/>
-                                <AppBarButton Icon="Delete" x:Uid="DeleteBackupButton" Label="删除" Click="{x:Bind ViewModel.DelBackupTaskSequenceItem}"/>
+                                <!--开始备份-->
+                                <AppBarButton Icon="Play" Label="{x:Bind strings:Resources.StartBackup}" Click="{x:Bind ViewModel.StartBackup}"/>
+                                <!--删除-->
+                                <AppBarButton Icon="Delete" Label="{x:Bind strings:Resources.Delete}" Click="{x:Bind ViewModel.DelBackupTaskSequenceItem}"/>
                             </CommandBar>
                             <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"
                                                ItemsSource="{x:Bind ViewModel.BackupTaskSequence,Mode=OneWay}"
                                                SelectedIndex="{x:Bind ViewModel.BackupTaskSequenceSelectedIndex,Mode=TwoWay}"
                                                Height="200">
                                 <controls:DataGrid.Columns>
-                                    <controls:DataGridTextColumn Header="完整备份" x:Uid="TotalBackupColumn"
+                                    <!--完整备份-->
+                                    <controls:DataGridTextColumn Header="{x:Bind strings:Resources.TotalBackup}"
                                                                      Binding="{Binding IsFullBackup, Mode=OneWay}"/>
                                     <controls:DataGridTextColumn Header="备份路径" x:Uid="BackupPathColumn"
                                                                      Binding="{Binding BackupPath, Mode=OneWay}"/>
@@ -140,15 +145,16 @@
 
                     <StackPanel Visibility="{x:Bind ViewModel.Manager.IsAnyError,Mode=OneWay}">
                         <!--错误列表-->
-                        <TextBlock Text="错误信息" x:Uid="ErrorInfoTitle" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <!--错误信息-->
+                        <TextBlock Text="{x:Bind strings:Resources.ErrorInformation}" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
                         <Grid Style="{StaticResource CardGrid}">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
-                                <AppBarButton Icon="Save" x:Uid="SaveAppBarButton" Label="保存" Click="{x:Bind ViewModel.SaveErrorMessages}"/>
-                                <AppBarButton Icon="Clear" x:Uid="ClearAppBarButton" Label="清除" Click="{x:Bind ViewModel.Manager.ClearErrorMessages}"/>
+                                <AppBarButton Icon="Save" Label="{x:Bind strings:Resources.Save}" Click="{x:Bind ViewModel.SaveErrorMessages}"/>
+                                <AppBarButton Icon="Clear" Label="{x:Bind strings:Resources.Clear}" Click="{x:Bind ViewModel.Manager.ClearErrorMessages}"/>
                             </CommandBar>
                             <ListView BorderThickness="1"
                                       BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
@@ -162,20 +168,23 @@
 
                 <!--列表Pivot，外面套壳是为了调整间隙-->
                 <StackPanel Margin="-8,0,-8,0">
-                    <Pivot Title="备份信息" x:Uid="BackupInfoPiviot" Margin="0,8,0,0">
-                        <PivotItem Header="任务列表">
+                    <Pivot Title="{x:Bind strings:Resources.BackupInfoTitle}" Margin="0,8,0,0">
+                        <PivotItem Header="{x:Bind strings:Resources.TaskList}">
                             <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
                                 <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
-                                    <AppBarButton Icon="Save" Label="保存列表" x:Uid="SaveListAppBarButton" Click="{x:Bind ViewModel.SaveBackupTaskList}"/>
-                                    <AppBarButton Icon="Play" Label="快速备份" x:Uid="QuickBackupAppBarButton" Click="{x:Bind ViewModel.QuickBackup}"
+                                    <!--保存列表-->
+                                    <AppBarButton Icon="Save" Label="{x:Bind strings:Resources.SaveList}" Click="{x:Bind ViewModel.SaveBackupTaskList}"/>
+                                    <!--快速备份-->
+                                    <AppBarButton Icon="Play" Label="{x:Bind strings:Resources.QuickBackup}" Click="{x:Bind ViewModel.QuickBackup}"
                                                   IsEnabled="{x:Bind ViewModel.IsQuickBackupAllowed,Mode=OneWay}"/>
-                                    <AppBarButton Icon="MoveToFolder" Label="完整备份" x:Uid="TotalBackupAppBarButton" Click="{x:Bind ViewModel.TotalBackup}"/>
-                                    <AppBarButton Icon="Add" Label="添加" x:Uid="AddAppBarButton" Click="{x:Bind ViewModel.AddBackupTask}"/>
-                                    <AppBarButton Icon="Delete" Label="删除" x:Uid="DeleteAppBarButton" Click="{x:Bind ViewModel.DelFromBackupTask}"/>
+                                    <!--完整备份-->
+                                    <AppBarButton Icon="MoveToFolder" Label="{x:Bind strings:Resources.TotalBackup}" Click="{x:Bind ViewModel.TotalBackup}"/>
+                                    <AppBarButton Icon="Add" Label="{x:Bind strings:Resources.Add}" Click="{x:Bind ViewModel.AddBackupTask}"/>
+                                    <AppBarButton Icon="Delete" Label="{x:Bind strings:Resources.Delete}" Click="{x:Bind ViewModel.DelFromBackupTask}"/>
                                 </CommandBar>
                                 <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"
                                                    ItemsSource="{x:Bind ViewModel.BackupTasks,Mode=TwoWay}"
@@ -194,7 +203,8 @@
                             </Grid>
                         </PivotItem>
 
-                        <PivotItem Header="记录" x:Uid="RecordPiviot">
+                        <!--记录-->
+                        <PivotItem Header="{x:Bind strings:Resources.Record}">
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <!--内容还没写-->
@@ -208,14 +218,14 @@
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
                                     <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
-                                        <AppBarButton Icon="Refresh" Label="刷新" x:Uid="RefreshAppBarButton" Click="{x:Bind ViewModel.RefreshBackupRecordData}"
+                                        <AppBarButton Icon="Refresh" Label="{x:Bind strings:Resources.Refresh}" Click="{x:Bind ViewModel.RefreshBackupRecordData}"
                                                       ToolTipService.ToolTip="重新从所有文件夹中读取数据"/>
                                         <AppBarButton Icon="SyncFolder" Label="恢复" x:Uid="RestoreAppBarButton" Click="{x:Bind ViewModel.RecoverFolder}"
                                                       IsEnabled="{x:Bind ViewModel.IsRecoveryButtonEnabled, Mode=OneWay}"/>
-                                        <AppBarButton Icon="SaveLocal" Label="导出至下载" x:Uid="ExportBackupAppBarButton" Click="{x:Bind ViewModel.ExportBackup}"
+                                        <AppBarButton Icon="SaveLocal" Label="{x:Bind strings:Resources.ExportToDownloadFolder}" Click="{x:Bind ViewModel.ExportBackup}"
                                                       IsEnabled="{x:Bind ViewModel.IsRecoveryButtonEnabled, Mode=OneWay}"
                                                       ToolTipService.ToolTip="将选中的备份导出到库中的下载文件夹" VerticalAlignment="Stretch"/>
-                                        <AppBarButton Icon="Delete" Label="删除" x:Uid="DeleteAppBarButton" Click="{x:Bind ViewModel.DelBackup}"
+                                        <AppBarButton Icon="Delete" Label="{x:Bind strings:Resources.Delete}" Click="{x:Bind ViewModel.DelBackup}"
                                                       IsEnabled="{x:Bind ViewModel.IsRecoveryDeleteButtionEnabled, Mode=OneWay}"/>
                                     </CommandBar>
                                     <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"
@@ -226,7 +236,8 @@
                                                                      Binding="{Binding BackupTime, Mode=OneWay}"/>
                                             <controls:DataGridTextColumn Header="保存路径" x:Uid="SavePathColumn"
                                                                      Binding="{Binding SaveFolderPath, Mode=OneWay}"/>
-                                            <controls:DataGridTextColumn Header="完整备份" x:Uid="TotalPathColumn"
+                                            <!--完整备份-->
+                                            <controls:DataGridTextColumn Header="{x:Bind strings:Resources.TotalBackup}"
                                                                      Binding="{Binding IsFullBackup, Mode=OneWay}"/>
                                         </controls:DataGrid.Columns>
                                     </controls:DataGrid>
@@ -237,15 +248,16 @@
                             </StackPanel>
                         </PivotItem>
 
-                        <PivotItem Header="备份路径" x:Uid="BackupPathPiviot">
+                        <!--备份路径-->
+                        <PivotItem Header="{x:Bind strings:Resources.BackupPath}">
                             <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
                                 <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
-                                    <AppBarButton Icon="Add" Label="添加" x:Uid="AddAppBarButton" Click="{x:Bind ViewModel.Add2BackupPathList}"/>
-                                    <AppBarButton Icon="Delete" Label="删除" x:Uid="DeleteAppBarButton" Click="{x:Bind ViewModel.DelFromBackupPathList}"
+                                    <AppBarButton Icon="Add" Label="{x:Bind strings:Resources.Add}" Click="{x:Bind ViewModel.Add2BackupPathList}"/>
+                                    <AppBarButton Icon="Delete" Label="{x:Bind strings:Resources.Delete}" Click="{x:Bind ViewModel.DelFromBackupPathList}"
                                                   IsEnabled="{x:Bind ViewModel.IsBackupDeleteButtonEnabled,Mode=OneWay}"/>
                                 </CommandBar>
                                 <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"
@@ -269,8 +281,8 @@
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
                                 <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" IsSticky="True">
-                                    <AppBarButton Icon="Add" Label="添加" x:Uid="AddAppBarButton" Click="{x:Bind ViewModel.Add2SavePathList}"/>
-                                    <AppBarButton Icon="Delete" Label="删除" x:Uid="DeleteAppBarButton" Click="{x:Bind ViewModel.DelFromSavePathList}"
+                                    <AppBarButton Icon="Add" Label="{x:Bind strings:Resources.Add}" Click="{x:Bind ViewModel.Add2SavePathList}"/>
+                                    <AppBarButton Icon="Delete" Label="{x:Bind strings:Resources.Delete}" Click="{x:Bind ViewModel.DelFromSavePathList}"
                                                   IsEnabled="{x:Bind ViewModel.IsSaveDeleteButtonEnabled,Mode=OneWay}"/>
                                 </CommandBar>
                                 <controls:DataGrid Grid.Row="1" AutoGenerateColumns="False"

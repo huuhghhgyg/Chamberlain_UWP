@@ -118,9 +118,9 @@ namespace Chamberlain_UWP.Reminder
         {
             get
             {
-                if (Deadline.ToString("d") == DateTime.Today.ToString("d")) return "今天 " + Deadline.ToString("HH:mm");
-                else if (Deadline.ToString("d") == DateTime.Today.AddDays(1).ToString("d")) return "明天 " + Deadline.ToString("HH:mm");
-                else if (Deadline.ToString("d") == DateTime.Today.AddDays(2).ToString("d")) return "后天 " + Deadline.ToString("HH:mm");
+                if (Deadline.ToString("d") == DateTime.Today.ToString("d")) return $"{Strings.Resources.Today} {Deadline.ToString("HH:mm")}"; //今天
+                else if (Deadline.ToString("d") == DateTime.Today.AddDays(1).ToString("d")) return $"{Strings.Resources.Tomorrow} {Deadline.ToString("HH:mm")}"; //明天
+                else if (Deadline.ToString("d") == DateTime.Today.AddDays(2).ToString("d")) return $"{Strings.Resources.TwoDaysLater} {Deadline.ToString("HH:mm")}"; //后天
                 else if (Deadline - DateTime.Today > TimeSpan.Zero && Deadline - DateTime.Today < new TimeSpan(7, 0, 0, 0)) return Deadline.ToString("dddd HH:mm");
                 return Deadline.ToString("MM/dd HH:mm");
             }
@@ -158,11 +158,11 @@ namespace Chamberlain_UWP.Reminder
                 {
                     // 没过期
                     if (TaskState == TaskState.Onwork) return ProgressValue.ToString("#0.0%"); // 正在进行
-                    else return "已完成"; // 已完成
+                    else return Strings.Resources.Finished; //已完成
                 }
                 else
                 {
-                    return "已过期";
+                    return Strings.Resources.OutOfDate; //已过期
                 }
             }
         }
@@ -199,7 +199,7 @@ namespace Chamberlain_UWP.Reminder
         [JsonIgnore]
         public string TagsString
         {
-            get => "标签：" + string.Join(", ", _tags);
+            get => $"{Strings.Resources.Label}：" + string.Join(", ", _tags); //标签
         }
 
         [JsonIgnore]
@@ -209,8 +209,8 @@ namespace Chamberlain_UWP.Reminder
             {
                 switch (Priority)
                 {
-                    case Priority.Middle: return "🟡(优先)";
-                    case Priority.High: return "🔴(紧急)";
+                    case Priority.Middle: return Strings.Resources.PriorityMiddle; //🟡(优先)
+                    case Priority.High: return Strings.Resources.PriorityHigh; //🔴(紧急)
                     default: return "";
                 }
             }

@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:strings="using:Chamberlain_UWP.Strings"
     Background="{ThemeResource NavigationViewExpandedPaneBackground}"
     NavigationCacheMode="Enabled"
     Unloaded="Page_Unloaded">
@@ -72,8 +73,8 @@
                             Click="ManageRemindItemButton_Click"/>
                 </Grid>
 
-
-                <TextBlock Text="搜索" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <!--搜索-->
+                <TextBlock Text="{x:Bind strings:Resources.Search}" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -91,8 +92,9 @@
                                         HorizontalAlignment="Stretch"
                                         TextChanged="OnworkItemSuggestBox_TextChanged"/>
                     </Grid>
+                    <!--搜索排序：-->
                     <StackPanel Orientation="Horizontal" Grid.Column="1">
-                        <TextBlock Text="搜索排序：" x:Uid="SortSearchTextBlock"
+                        <TextBlock Text="{x:Bind strings:Resources.SearchResultSortBy}"
                                 VerticalAlignment="Center" Margin="14,0,0,0"/>
                         <ComboBox Name="ItemsSortComboBox" 
                                   SelectedIndex="0" Margin="0,0,1,0"
@@ -103,14 +105,16 @@
                     </StackPanel>
                 </Grid>
 
-                <TextBlock Text="待处理" x:Uid="ReminderTodoTextBlock" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <!--待处理-->
+                <TextBlock Text="{x:Bind strings:Resources.ReminderTodo}" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <TextBlock Visibility="{x:Bind ReminderListOnwork.Count, Mode=OneWay, Converter={StaticResource VisibilityConverter}}"
                            Text="（无）" x:Uid="EmptyIndicatorTextBlock"
                            Style="{StaticResource BodyTextBlockStyle}"/>
                 <local:ReminderCardListView x:Name="ListOnWork"
                     ReminderList="{x:Bind ReminderListOnwork,Mode=OneWay}"
                     ListViewItemChecked="ReminderCardListView_ItemChecked"/>
-                <TextBlock Text="已完成" x:Uid="ReminderDoneTitle" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <!--已完成-->
+                <TextBlock Text="{x:Bind strings:Resources.ReminderDone}" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <TextBlock Visibility="{x:Bind ReminderListFinished.Count, Mode=OneWay, Converter={StaticResource VisibilityConverter}}"
                            Text="（无）" x:Uid="EmptyIndicatorTextBlock"
                            Style="{StaticResource BodyTextBlockStyle}"/>
