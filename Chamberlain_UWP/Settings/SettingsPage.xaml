@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Chamberlain_UWP"
     xmlns:strings="using:Chamberlain_UWP.Strings"
+    xmlns:setting="using:Chamberlain_UWP.Settings"
     mc:Ignorable="d"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     NavigationCacheMode="Enabled"
@@ -83,6 +84,21 @@
                     <ToggleSwitch MinWidth="80" Grid.Column="2" HorizontalAlignment="Right"
                                   ToolTipService.ToolTip="此选项在Windows11上可能没有效果"
                                   IsOn="{x:Bind vm.IsPaneOpen, Mode=TwoWay}"/>
+                </Grid>
+                <!--语言设置-->
+                <Grid Margin="0,4,0,0" Padding="16,12" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <FontIcon Glyph="&#xF2B7;" />
+                    <TextBlock Text="{x:Bind strings:Resources.Language}" Grid.Column="1" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="LanguageComboBox"
+                              Grid.Column="2" HorizontalAlignment="Right"
+                              Width="160"
+                              SelectedIndex="{x:Bind vm.LanguageIndex, Mode=TwoWay}"
+                              ItemsSource="{x:Bind setting:LanguageHelper.SupportLang}"/>
                 </Grid>
 
                 <!--后台任务-->
@@ -450,7 +466,7 @@
                     <StackPanel>
                         <Grid RowSpacing="8">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="180"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -470,7 +486,7 @@
                         </Grid>
                         <Grid Margin="0,24,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="108"/>
+                                <ColumnDefinition Width="170"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>

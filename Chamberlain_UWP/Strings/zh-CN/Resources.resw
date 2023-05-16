@@ -130,16 +130,13 @@
     <value>添加项</value>
   </data>
   <data name="AddItemDatePicker.Header" xml:space="preserve">
-    <value>选择日期</value>
+    <value>到期日期</value>
   </data>
   <data name="AddItemDatePicker.PlaceholderText" xml:space="preserve">
-    <value>到期日期</value>
+    <value>选择日期</value>
   </data>
   <data name="AddItemPriorityComboBox.Header" xml:space="preserve">
     <value>优先级</value>
-  </data>
-  <data name="AddItemTimePicker.Header" xml:space="preserve">
-    <value>到期时间</value>
   </data>
   <data name="AddTagTextBox.PlaceholderText" xml:space="preserve">
     <value>标签名</value>
@@ -321,6 +318,9 @@
   <data name="DragJsonFileHere" xml:space="preserve">
     <value>将Json文件拖到此处</value>
   </data>
+  <data name="DueTime" xml:space="preserve">
+    <value>到期时间</value>
+  </data>
   <data name="EmptyIndicator" xml:space="preserve">
     <value>（空）</value>
   </data>
@@ -443,6 +443,9 @@
   <data name="LabelEmptyPromptDesc" xml:space="preserve">
     <value>请在列表中选择一个或多个标签，也可以在下方新建标签🏷</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
   <data name="LevelStringError" xml:space="preserve">
     <value>错误❌：</value>
   </data>
@@ -509,6 +512,9 @@
   </data>
   <data name="NoFileChangeDetected" xml:space="preserve">
     <value>没有检测到文件变更</value>
+  </data>
+  <data name="NoReminderIndicator" xml:space="preserve">
+    <value>(无)</value>
   </data>
   <data name="NoSelectedItemPrompt" xml:space="preserve">
     <value>没有选中项</value>

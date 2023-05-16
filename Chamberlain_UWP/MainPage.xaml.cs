@@ -33,8 +33,6 @@ namespace Chamberlain_UWP
 
             SetTitleBar();
 
-            SettingsConfig.InitialLoad();
-
             InitializeData(initializeNavigate); // 使用回调（Action），先data后navigate
 
             Updater.CheckUpdate();

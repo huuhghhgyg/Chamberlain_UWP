@@ -8,137 +8,133 @@
       <group id="CHAMBERLAIN_UWP/STRINGS/ZH-CN/RESOURCES.RESW" datatype="resx">
         <trans-unit id="AddDescTextBox.PlaceholderText" translate="yes" xml:space="preserve">
           <source>提醒内容</source>
-          <target state="new">提醒内容</target>
+          <target state="translated">What to remind</target>
         </trans-unit>
         <trans-unit id="AddItemDatePicker.Header" translate="yes" xml:space="preserve">
-          <source>选择日期</source>
-          <target state="new">选择日期</target>
+          <source>到期日期</source>
+          <target state="translated">Due date</target>
         </trans-unit>
         <trans-unit id="AddItemDatePicker.PlaceholderText" translate="yes" xml:space="preserve">
-          <source>到期日期</source>
-          <target state="new">到期日期</target>
+          <source>选择日期</source>
+          <target state="translated">Select date</target>
         </trans-unit>
         <trans-unit id="AddItemPriorityComboBox.Header" translate="yes" xml:space="preserve">
           <source>优先级</source>
-          <target state="new">优先级</target>
-        </trans-unit>
-        <trans-unit id="AddItemTimePicker.Header" translate="yes" xml:space="preserve">
-          <source>到期时间</source>
-          <target state="new">到期时间</target>
+          <target state="translated">Priority</target>
         </trans-unit>
         <trans-unit id="AddTagTextBox.PlaceholderText" translate="yes" xml:space="preserve">
           <source>标签名</source>
-          <target state="new">标签名</target>
+          <target state="translated">Label name</target>
         </trans-unit>
         <trans-unit id="AddTitleTextBox.PlaceholderText" translate="yes" xml:space="preserve">
           <source>标题名称</source>
-          <target state="new">标题名称</target>
+          <target state="translated">Title name</target>
         </trans-unit>
         <trans-unit id="AutoDetectUpdateTitle" translate="yes" xml:space="preserve">
           <source>自动检测更新</source>
-          <target state="new">自动检测更新</target>
+          <target state="translated">Auto detect updates</target>
         </trans-unit>
         <trans-unit id="BackupDone" translate="yes" xml:space="preserve">
           <source>已完成</source>
-          <target state="new">已完成</target>
+          <target state="translated">Finished</target>
         </trans-unit>
         <trans-unit id="BackupErrorIndicatorTextBlock.Text" translate="yes" xml:space="preserve">
           <source>* 备份错误列表中有信息,请转到备份页查看</source>
-          <target state="new">* 备份错误列表中有信息,请转到备份页查看</target>
+          <target state="translated">* There is information in the backup error list, please go to the backup page to view</target>
         </trans-unit>
         <trans-unit id="Backuping" translate="yes" xml:space="preserve">
           <source>正在备份文件</source>
-          <target state="new">正在备份文件</target>
+          <target state="translated">Backing up files</target>
         </trans-unit>
         <trans-unit id="BackupPathColumn.Header" translate="yes" xml:space="preserve">
           <source>备份路径</source>
-          <target state="new">备份路径</target>
+          <target state="translated">Backup path</target>
         </trans-unit>
         <trans-unit id="BackupPathExistDesc" translate="yes" xml:space="preserve">
           <source>检测到路径已经存在，路径将不会被添加</source>
-          <target state="new">检测到路径已经存在，路径将不会被添加</target>
+          <target state="translated">Detected that the path already exists, the path will not be added</target>
         </trans-unit>
         <trans-unit id="BackupProcessing" translate="yes" xml:space="preserve">
           <source>处理中</source>
-          <target state="new">处理中</target>
+          <target state="translated">Processing</target>
         </trans-unit>
         <trans-unit id="BackupRestoring" translate="yes" xml:space="preserve">
           <source>正在恢复文件</source>
-          <target state="new">正在恢复文件</target>
+          <target state="translated">Restoring files</target>
         </trans-unit>
         <trans-unit id="BackupTargetPathColumn.Header" translate="yes" xml:space="preserve">
           <source>备份目标</source>
-          <target state="new">备份目标</target>
+          <target state="translated">Backup Target</target>
         </trans-unit>
         <trans-unit id="BackupTaskSequenceDesc" translate="yes" xml:space="preserve">
           <source>剩余{0}条任务</source>
-          <target state="new">剩余{0}条任务</target>
+          <target state="translated">{0} tasks remaining</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[Int count]</note>
         </trans-unit>
         <trans-unit id="BackupTimeColumn.Header" translate="yes" xml:space="preserve">
           <source>备份时间</source>
-          <target state="new">备份时间</target>
+          <target state="translated">Backup Time</target>
         </trans-unit>
         <trans-unit id="CalculatingHash" translate="yes" xml:space="preserve">
           <source>正在计算文件Hash</source>
-          <target state="new">正在计算文件Hash</target>
+          <target state="translated">Calculating file Hash</target>
         </trans-unit>
         <trans-unit id="Cancel" translate="yes" xml:space="preserve">
           <source>取消</source>
-          <target state="new">取消</target>
+          <target state="translated">Cancel</target>
         </trans-unit>
         <trans-unit id="CheckUpdateWhenStartup" translate="yes" xml:space="preserve">
           <source>{0}开启应用时自动检查更新</source>
-          <target state="new">{0}开启应用时自动检查更新</target>
+          <target state="translated">{0} Automatically check for updates when launching the app</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String hintString]</note>
         </trans-unit>
         <trans-unit id="ClearAppBarButton.Label" translate="yes" xml:space="preserve">
           <source>清除</source>
-          <target state="new">清除</target>
+          <target state="translated">Clear</target>
         </trans-unit>
         <trans-unit id="ClearBackupDataConfirmDesc" translate="yes" xml:space="preserve">
           <source>是否要清除备份模块的数据？保存于备份文件夹中的数据将不会被清除</source>
-          <target state="new">是否要清除备份模块的数据？保存于备份文件夹中的数据将不会被清除</target>
+          <target state="translated">Do you want to clear the data of the backup module? Data saved in the backup folder will not be erased</target>
         </trans-unit>
         <trans-unit id="ClearBackupDataTitle" translate="yes" xml:space="preserve">
           <source>清除备份列表</source>
-          <target state="new">清除备份列表</target>
+          <target state="translated">Clear backup list</target>
         </trans-unit>
         <trans-unit id="ClearExternalReminderDataDesc" translate="yes" xml:space="preserve">
           <source>是否一并删除？</source>
-          <target state="new">是否一并删除？</target>
+          <target state="translated">Do you want to delete them together?</target>
         </trans-unit>
         <trans-unit id="ClearExternalReminderDataTitle" translate="yes" xml:space="preserve">
           <source>您正在使用指定文件夹中的数据</source>
-          <target state="new">您正在使用指定文件夹中的数据</target>
+          <target state="translated">You are using data from the specified folder</target>
         </trans-unit>
         <trans-unit id="ClearReminderDataDialogDesc" translate="yes" xml:space="preserve">
           <source>删除的数据不可恢复，确定删除？</source>
-          <target state="new">删除的数据不可恢复，确定删除？</target>
+          <target state="translated">Deleted data cannot be recovered, are you sure to delete?</target>
         </trans-unit>
         <trans-unit id="ClearReminderDataDialogTitle" translate="yes" xml:space="preserve">
           <source>您正在尝试删除Reminder的数据</source>
-          <target state="new">您正在尝试删除Reminder的数据</target>
+          <target state="translated">You are trying to delete Reminder's data</target>
         </trans-unit>
         <trans-unit id="Close" translate="yes" xml:space="preserve">
           <source>关闭</source>
-          <target state="new">关闭</target>
+          <target state="translated">Close</target>
         </trans-unit>
         <trans-unit id="ComparingInfo" translate="yes" xml:space="preserve">
           <source>正在比对信息</source>
-          <target state="new">正在比对信息</target>
+          <target state="translated">Comparing information</target>
         </trans-unit>
         <trans-unit id="ComparingToFullBackup" translate="yes" xml:space="preserve">
           <source>正在与完整备份进行比对</source>
-          <target state="new">正在与完整备份进行比对</target>
+          <target state="translated">Comparing with full backup</target>
         </trans-unit>
         <trans-unit id="Confirm" translate="yes" xml:space="preserve">
           <source>确定</source>
-          <target state="new">确定</target>
+          <target state="translated">Confirm</target>
         </trans-unit>
         <trans-unit id="DateEmptyPrompt" translate="yes" xml:space="preserve">
           <source>日期不能为空</source>
-          <target state="new">日期不能为空</target>
+          <target state="translated">Date cannot be empty</target>
         </trans-unit>
         <trans-unit id="DateEmptyPromptDesc" translate="yes" xml:space="preserve">
           <source>ddl日期必须要有📅</source>
@@ -146,827 +142,839 @@
         </trans-unit>
         <trans-unit id="Delete" translate="yes" xml:space="preserve">
           <source>删除</source>
-          <target state="new">删除</target>
+          <target state="translated">Delete</target>
         </trans-unit>
         <trans-unit id="Developer" translate="yes" xml:space="preserve">
           <source>开发者</source>
-          <target state="new">开发者</target>
+          <target state="translated">Developer</target>
         </trans-unit>
         <trans-unit id="DoNotCheckUpdate" translate="yes" xml:space="preserve">
           <source>{0}不检查更新</source>
-          <target state="new">{0}不检查更新</target>
+          <target state="translated">{0} does not check for updates</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String hintString]</note>
         </trans-unit>
         <trans-unit id="DownloadNewVersion" translate="yes" xml:space="preserve">
           <source>前往下载</source>
-          <target state="new">前往下载</target>
+          <target state="translated">go to download</target>
         </trans-unit>
         <trans-unit id="DragJsonFileHere" translate="yes" xml:space="preserve">
           <source>将Json文件拖到此处</source>
-          <target state="new">将Json文件拖到此处</target>
+          <target state="translated">Drag the Json file here</target>
         </trans-unit>
         <trans-unit id="EmptyIndicator" translate="yes" xml:space="preserve">
           <source>（空）</source>
-          <target state="new">（空）</target>
+          <target state="translated">(Empty)</target>
         </trans-unit>
         <trans-unit id="EncounterProblem" translate="yes" xml:space="preserve">
           <source>遇到问题？</source>
-          <target state="new">遇到问题？</target>
+          <target state="translated">Encountering problems?</target>
         </trans-unit>
         <trans-unit id="Error" translate="yes" xml:space="preserve">
           <source>错误</source>
-          <target state="new">错误</target>
+          <target state="translated">Error</target>
         </trans-unit>
         <trans-unit id="ErrorMessageUnableSaveTo" translate="yes" xml:space="preserve">
           <source>无法保存到 {0}</source>
-          <target state="new">无法保存到 {0}</target>
+          <target state="translated">Unable to save to {0}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String filename]</note>
         </trans-unit>
         <trans-unit id="ExportBackupAppBarButton.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
           <source>将选中的备份导出到库中的下载文件夹</source>
-          <target state="new">将选中的备份导出到库中的下载文件夹</target>
+          <target state="translated">Export selected backups to the Downloads folder in the library</target>
         </trans-unit>
         <trans-unit id="ExternalReminderDataAccessible" translate="yes" xml:space="preserve">
           <source>已启用，具有访问权限：{0}</source>
-          <target state="new">已启用，具有访问权限：{0}</target>
+          <target state="translated">Enabled, with path access to: {0}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String path]</note>
         </trans-unit>
         <trans-unit id="ExternalReminderFolderDataDetectedDesc" translate="yes" xml:space="preserve">
           <source>从这个文件内导入，还是覆盖这个文件？</source>
-          <target state="new">从这个文件内导入，还是覆盖这个文件？</target>
+          <target state="translated">Import from this file, or overwrite this file?</target>
         </trans-unit>
         <trans-unit id="ExternalReminderFolderDataDetectedTitle" translate="yes" xml:space="preserve">
           <source>检测到选定的文件夹内存在数据文件</source>
-          <target state="new">检测到选定的文件夹内存在数据文件</target>
+          <target state="translated">Data files detected in the selected folder</target>
         </trans-unit>
         <trans-unit id="ExternalReminderFolderUnavailable" translate="yes" xml:space="preserve">
           <source>指定文件夹不存在，已被清除</source>
-          <target state="new">指定文件夹不存在，已被清除</target>
+          <target state="translated">The specified folder does not exist and has been cleared</target>
         </trans-unit>
         <trans-unit id="ExternalReminderFolderUnspecified" translate="yes" xml:space="preserve">
           <source>未指定任何文件夹</source>
-          <target state="new">未指定任何文件夹</target>
+          <target state="translated">No folder specified</target>
         </trans-unit>
         <trans-unit id="FeedbackOnGithub" translate="yes" xml:space="preserve">
           <source>前往Github反馈</source>
-          <target state="new">前往Github反馈</target>
+          <target state="translated">Feedback on Github</target>
         </trans-unit>
         <trans-unit id="FileNotExist" translate="yes" xml:space="preserve">
           <source>复制时文件不存在：{0}</source>
-          <target state="new">复制时文件不存在：{0}</target>
+          <target state="translated">File does not exist when copying: {0}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String path]</note>
         </trans-unit>
         <trans-unit id="Finished" translate="yes" xml:space="preserve">
           <source>已完成</source>
-          <target state="new">已完成</target>
+          <target state="translated">Finished</target>
         </trans-unit>
         <trans-unit id="FolderNameColumn.Header" translate="yes" xml:space="preserve">
           <source>目录名称</source>
-          <target state="new">目录名称</target>
+          <target state="translated">Folder Name</target>
         </trans-unit>
         <trans-unit id="GetBackupPathFailed" translate="yes" xml:space="preserve">
           <source>无法获取备份文件夹 {0}</source>
-          <target state="new">无法获取备份文件夹 {0}</target>
+          <target state="translated">Unable to get backup folder {0}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String backupPath]</note>
         </trans-unit>
         <trans-unit id="GetSavePathFailed" translate="yes" xml:space="preserve">
           <source>无法获取保存文件夹 {0}</source>
-          <target state="new">无法获取保存文件夹 {0}</target>
+          <target state="translated">Unable to get save folder {0}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String savePath]</note>
         </trans-unit>
         <trans-unit id="GoAhead" translate="yes" xml:space="preserve">
           <source>前往</source>
-          <target state="new">前往</target>
+          <target state="translated">Go ahead</target>
         </trans-unit>
         <trans-unit id="Import" translate="yes" xml:space="preserve">
           <source>导入</source>
-          <target state="new">导入</target>
+          <target state="translated">Import</target>
         </trans-unit>
         <trans-unit id="ImportBackup" translate="yes" xml:space="preserve">
           <source>导入备份</source>
-          <target state="new">导入备份</target>
+          <target state="translated">Import backup</target>
         </trans-unit>
         <trans-unit id="ImportFailed" translate="yes" xml:space="preserve">
           <source>⚠导入失败</source>
-          <target state="new">⚠导入失败</target>
+          <target state="translated">⚠Import failed</target>
         </trans-unit>
         <trans-unit id="ImportReminderTextBox.PlaceholderText" translate="yes" xml:space="preserve">
           <source>JSON格式文本（支持文件拖拽）</source>
-          <target state="new">JSON格式文本（支持文件拖拽）</target>
+          <target state="translated">JSON format text (support file drag and drop)</target>
         </trans-unit>
         <trans-unit id="ImportSuccessful" translate="yes" xml:space="preserve">
           <source>✅导入成功</source>
-          <target state="new">✅导入成功</target>
+          <target state="translated">✅Import successfully</target>
         </trans-unit>
         <trans-unit id="InstallDate" translate="yes" xml:space="preserve">
           <source>安装日期</source>
-          <target state="new">安装日期</target>
+          <target state="translated">Install date</target>
         </trans-unit>
         <trans-unit id="IsSidebarOpenText.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
           <source>此选项在Windows11上可能没有效果</source>
-          <target state="new">此选项在Windows11上可能没有效果</target>
+          <target state="translated">This option may have no effect on Windows 11</target>
         </trans-unit>
         <trans-unit id="ItemReviseDescText.Header" translate="yes" xml:space="preserve">
           <source>提醒描述</source>
-          <target state="new">提醒描述</target>
+          <target state="translated">Reminder description</target>
         </trans-unit>
         <trans-unit id="ItemReviseDescText.PlaceholderText" translate="yes" xml:space="preserve">
           <source>(未选择)</source>
-          <target state="new">(未选择)</target>
+          <target state="translated">(Not Selected)</target>
         </trans-unit>
         <trans-unit id="ItemRevisePriorityComboBox.Header" translate="yes" xml:space="preserve">
           <source>优先级</source>
-          <target state="new">优先级</target>
+          <target state="translated">Priority</target>
         </trans-unit>
         <trans-unit id="ItemReviseTimePicker.Header" translate="yes" xml:space="preserve">
           <source>Deadline时间</source>
-          <target state="new">Deadline时间</target>
+          <target state="translated">Deadline Time</target>
         </trans-unit>
         <trans-unit id="ItemReviseTitleText.Header" translate="yes" xml:space="preserve">
           <source>标题</source>
-          <target state="new">标题</target>
+          <target state="translated">Title</target>
         </trans-unit>
         <trans-unit id="ItemReviseTitleText.PlaceholderText" translate="yes" xml:space="preserve">
           <source>(未选择)</source>
-          <target state="new">(未选择)</target>
+          <target state="translated">(Not Selected)</target>
         </trans-unit>
         <trans-unit id="ItemSuggestBox.PlaceholderText" translate="yes" xml:space="preserve">
           <source>搜索"提醒"</source>
-          <target state="new">搜索"提醒"</target>
+          <target state="translated">Search for "Reminders"</target>
         </trans-unit>
         <trans-unit id="Label" translate="yes" xml:space="preserve">
           <source>标签</source>
-          <target state="new">标签</target>
+          <target state="translated">Tag</target>
         </trans-unit>
         <trans-unit id="LabelEmptyPrompt" translate="yes" xml:space="preserve">
           <source>标签不能为空</source>
-          <target state="new">标签不能为空</target>
+          <target state="translated">Tag cannot be empty</target>
         </trans-unit>
         <trans-unit id="LabelEmptyPromptDesc" translate="yes" xml:space="preserve">
           <source>请在列表中选择一个或多个标签，也可以在下方新建标签🏷</source>
-          <target state="new">请在列表中选择一个或多个标签，也可以在下方新建标签🏷</target>
+          <target state="translated">Please select one or more tags in the list, or create a new tag below🏷</target>
         </trans-unit>
         <trans-unit id="LevelStringError" translate="yes" xml:space="preserve">
           <source>错误❌：</source>
-          <target state="new">错误❌：</target>
+          <target state="translated">Error❌：</target>
         </trans-unit>
         <trans-unit id="LevelStringInfo" translate="yes" xml:space="preserve">
           <source>提示ℹ：</source>
-          <target state="new">提示ℹ：</target>
+          <target state="translated">Infoℹ：</target>
         </trans-unit>
         <trans-unit id="LevelStringWarning" translate="yes" xml:space="preserve">
           <source>警告⚠：</source>
-          <target state="new">警告⚠：</target>
+          <target state="translated">Warning⚠：</target>
         </trans-unit>
         <trans-unit id="LoadingBackups" translate="yes" xml:space="preserve">
           <source>正在读取备份文件</source>
-          <target state="new">正在读取备份文件</target>
+          <target state="translated">Loading backup file</target>
         </trans-unit>
         <trans-unit id="ManageReminderCardSubitle.Text" translate="yes" xml:space="preserve">
           <source>添加 / 删除提醒项</source>
-          <target state="new">添加 / 删除提醒项</target>
+          <target state="translated">Add/Remove Reminders</target>
         </trans-unit>
         <trans-unit id="ManageReminderCardTitle.Text" translate="yes" xml:space="preserve">
           <source>管理提醒</source>
-          <target state="new">管理提醒</target>
+          <target state="translated">Reminder Management</target>
         </trans-unit>
         <trans-unit id="ManageRemindItemButton.Content" translate="yes" xml:space="preserve">
           <source>转到管理页面</source>
-          <target state="new">转到管理页面</target>
+          <target state="translated">Manage Reminders</target>
         </trans-unit>
         <trans-unit id="NavigationItem_Backup.Content" translate="yes" xml:space="preserve">
           <source>备份</source>
-          <target state="new">备份</target>
+          <target state="translated">Backup</target>
         </trans-unit>
         <trans-unit id="NavigationItem_Reminder.Content" translate="yes" xml:space="preserve">
           <source>提醒</source>
-          <target state="new">提醒</target>
+          <target state="translated">Reminder</target>
         </trans-unit>
         <trans-unit id="NavigationItem_Task.Content" translate="yes" xml:space="preserve">
           <source>任务</source>
-          <target state="new">任务</target>
+          <target state="translated">Task</target>
         </trans-unit>
         <trans-unit id="NewVersionDetectedTitle" translate="yes" xml:space="preserve">
           <source>检测到新版本:{0}</source>
-          <target state="new">检测到新版本:{0}</target>
+          <target state="translated">New version detected: {0}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String version]</note>
         </trans-unit>
         <trans-unit id="NoAccessToSourceFolderToken" translate="yes" xml:space="preserve">
           <source>无法访问源文件夹token</source>
-          <target state="new">无法访问源文件夹token</target>
+          <target state="translated">Unable to access source folder token</target>
         </trans-unit>
         <trans-unit id="NoAccessToTargetFolderToken" translate="yes" xml:space="preserve">
           <source>无法访问目标文件夹token</source>
-          <target state="new">无法访问目标文件夹token</target>
+          <target state="translated">Unable to access target folder token</target>
         </trans-unit>
         <trans-unit id="NoBackupTaskDesc" translate="yes" xml:space="preserve">
           <source>请先添加备份任务</source>
-          <target state="new">请先添加备份任务</target>
+          <target state="translated">Please add a backup task first</target>
         </trans-unit>
         <trans-unit id="NoBackupTaskSelectedDesc" translate="yes" xml:space="preserve">
           <source>请先选中备份任务再进行备份</source>
-          <target state="new">请先选中备份任务再进行备份</target>
+          <target state="translated">Please select a backup task before performing backup</target>
         </trans-unit>
         <trans-unit id="NoBackupTaskSelectedTitle" translate="yes" xml:space="preserve">
           <source>没有选中备份任务</source>
-          <target state="new">没有选中备份任务</target>
+          <target state="translated">No backup task selected</target>
         </trans-unit>
         <trans-unit id="NoBackupTaskTitle" translate="yes" xml:space="preserve">
           <source>没有备份任务</source>
-          <target state="new">没有备份任务</target>
+          <target state="translated">No backup tasks</target>
         </trans-unit>
         <trans-unit id="NoContentDetectedDesc" translate="yes" xml:space="preserve">
           <source>请填写有意义的文本内容</source>
-          <target state="new">请填写有意义的文本内容</target>
+          <target state="translated">Please fill in text content</target>
         </trans-unit>
         <trans-unit id="NoContentDetectedTitle" translate="yes" xml:space="preserve">
           <source>未检测到内容</source>
-          <target state="new">未检测到内容</target>
+          <target state="translated">No contenet detected</target>
         </trans-unit>
         <trans-unit id="NoDescriptionIndicator" translate="yes" xml:space="preserve">
           <source>(无描述)</source>
-          <target state="new">(无描述)</target>
+          <target state="translated">(No Description)</target>
         </trans-unit>
         <trans-unit id="NoFileChangeDetected" translate="yes" xml:space="preserve">
           <source>没有检测到文件变更</source>
-          <target state="new">没有检测到文件变更</target>
+          <target state="translated">No file changes detected</target>
         </trans-unit>
         <trans-unit id="NoSelectedItemPrompt" translate="yes" xml:space="preserve">
           <source>没有选中项</source>
-          <target state="new">没有选中项</target>
+          <target state="translated">No item selected</target>
         </trans-unit>
         <trans-unit id="NoSelectedItemPromptDesc" translate="yes" xml:space="preserve">
           <source>请在这个列表中选择一项进行修改🛠</source>
-          <target state="new">请在这个列表中选择一项进行修改🛠</target>
+          <target state="translated">Please select an item in this list to edit 🛠</target>
         </trans-unit>
         <trans-unit id="NoTaskNow" translate="yes" xml:space="preserve">
           <source>当前无任务</source>
-          <target state="new">当前无任务</target>
+          <target state="translated">Currently no tasks</target>
         </trans-unit>
         <trans-unit id="NotifyBlockingInfo" translate="yes" xml:space="preserve">
           <source>{0}(空转次数{1}，共{2}ms)</source>
-          <target state="new">{0}(空转次数{1}，共{2}ms)</target>
+          <target state="translated">{0} (idling times: {1}, {2}ms in total)</target>
           <note from="MultilingualBuild" annotates="source" priority="2">desc, blocking_count, blocking_time</note>
         </trans-unit>
         <trans-unit id="NotifyDeadlineWithinHours" translate="yes" xml:space="preserve">
           <source>deadline不足{0}小时</source>
-          <target state="new">deadline不足{0}小时</target>
+          <target state="translated">Deadline is less than {0} hours</target>
           <note from="MultilingualBuild" annotates="source" priority="2">remain_hour</note>
         </trans-unit>
         <trans-unit id="NotifyDescInAddition" translate="yes" xml:space="preserve">
           <source>此外，</source>
-          <target state="new">此外，</target>
+          <target state="translated">In addition, </target>
         </trans-unit>
         <trans-unit id="NotifyDueInHours" translate="yes" xml:space="preserve">
           <source>将在{0}个小时内到期。</source>
-          <target state="new">将在{0}个小时内到期。</target>
+          <target state="translated">Will expire in {0} hours.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">remain_hour</note>
         </trans-unit>
         <trans-unit id="NotifyMultipleDeadlineWithinHours" translate="yes" xml:space="preserve">
           <source>{0}项deadline不足{1}小时</source>
-          <target state="new">{0}项deadline不足{1}小时</target>
+          <target state="translated">The deadline for {0} items is less than {1} hours</target>
           <note from="MultilingualBuild" annotates="source" priority="2">count, remain_hour</note>
         </trans-unit>
         <trans-unit id="NotifyMultipleDueInHours" translate="yes" xml:space="preserve">
           <source>等，共{0}项将在{1}个小时内到期。</source>
-          <target state="new">等，共{0}项将在{1}个小时内到期。</target>
+          <target state="translated"> {0} items in total will expire in {1} hours.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">count, remain_hour</note>
         </trans-unit>
         <trans-unit id="NotifyOutdatedItems" translate="yes" xml:space="preserve">
           <source>{0}项已过期，请尽快处理。</source>
-          <target state="new">{0}项已过期，请尽快处理。</target>
+          <target state="translated">Item {0} has expired, please process it as soon as possible.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">outdated</note>
         </trans-unit>
         <trans-unit id="NotifyReminderItemMeetDeadline" translate="yes" xml:space="preserve">
           <source>"{0}"即将到期，是否已经完成？</source>
-          <target state="new">"{0}"即将到期，是否已经完成？</target>
+          <target state="translated">"{0}" is about to expire, has it been completed?</target>
           <note from="MultilingualBuild" annotates="source" priority="2">item.Title</note>
         </trans-unit>
         <trans-unit id="NotSelectedIndicator" translate="yes" xml:space="preserve">
           <source>(未选择)</source>
-          <target state="new">(未选择)</target>
+          <target state="translated">(Not Selected)</target>
         </trans-unit>
         <trans-unit id="OnworkItemSuggestBox.PlaceholderText" translate="yes" xml:space="preserve">
           <source>搜索未完成的任务</source>
-          <target state="new">搜索未完成的任务</target>
+          <target state="translated">Search for unfinished tasks</target>
         </trans-unit>
         <trans-unit id="OperationCanceled" translate="yes" xml:space="preserve">
           <source>操作取消</source>
-          <target state="new">操作取消</target>
+          <target state="translated">Operation Canceled</target>
         </trans-unit>
         <trans-unit id="OutOfDate" translate="yes" xml:space="preserve">
           <source>已过期</source>
-          <target state="new">已过期</target>
+          <target state="translated">Expired</target>
         </trans-unit>
         <trans-unit id="Override" translate="yes" xml:space="preserve">
           <source>覆盖</source>
-          <target state="new">覆盖</target>
+          <target state="translated">Override</target>
         </trans-unit>
         <trans-unit id="PastTargetTimePrompt" translate="yes" xml:space="preserve">
           <source>目标时间已经过了</source>
-          <target state="new">目标时间已经过了</target>
+          <target state="translated">Target time has passed</target>
         </trans-unit>
         <trans-unit id="PastTargetTimePromptDesc" translate="yes" xml:space="preserve">
           <source>穿越不了捏😵</source>
-          <target state="new">穿越不了捏😵</target>
+          <target state="translated">Cannot be set to preivous time😵</target>
         </trans-unit>
         <trans-unit id="PathColumn.Header" translate="yes" xml:space="preserve">
           <source>路径</source>
-          <target state="new">路径</target>
+          <target state="translated">Path</target>
         </trans-unit>
         <trans-unit id="PlainText" translate="yes" xml:space="preserve">
           <source>纯文本</source>
-          <target state="new">纯文本</target>
+          <target state="translated">Plain Text</target>
         </trans-unit>
         <trans-unit id="PriorityDefaultItem.Content" translate="yes" xml:space="preserve">
           <source>默认</source>
-          <target state="new">默认</target>
+          <target state="translated">Default</target>
         </trans-unit>
         <trans-unit id="PriorityHigh" translate="yes" xml:space="preserve">
           <source>🔴(紧急)</source>
-          <target state="new">🔴(紧急)</target>
+          <target state="translated">🔴(Urgent)</target>
         </trans-unit>
         <trans-unit id="PriorityHighItem.Content" translate="yes" xml:space="preserve">
           <source>高</source>
-          <target state="new">高</target>
+          <target state="translated">Urgent</target>
         </trans-unit>
         <trans-unit id="PriorityMiddle" translate="yes" xml:space="preserve">
           <source>🟡(优先)</source>
-          <target state="new">🟡(优先)</target>
+          <target state="translated">🟡(Prior)</target>
         </trans-unit>
         <trans-unit id="PriorityMiddleItem.Content" translate="yes" xml:space="preserve">
           <source>中</source>
-          <target state="new">中</target>
+          <target state="translated">Prior</target>
         </trans-unit>
         <trans-unit id="Prompt" translate="yes" xml:space="preserve">
           <source>提示</source>
-          <target state="new">提示</target>
+          <target state="translated">Prompt</target>
         </trans-unit>
         <trans-unit id="RefreshAppBarButton.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
           <source>重新从所有文件夹中读取数据</source>
-          <target state="new">重新从所有文件夹中读取数据</target>
+          <target state="translated">Reload data from all folders</target>
         </trans-unit>
         <trans-unit id="ReminderDataBothDeleted" translate="yes" xml:space="preserve">
           <source>🗑内部数据文件和外部数据文件均已清空</source>
-          <target state="new">🗑内部数据文件和外部数据文件均已清空</target>
+          <target state="translated">🗑 Both internal data files and external data files have been cleared</target>
           <note from="MultilingualBuild" annotates="source" priority="2">内外部数据文件均清空</note>
         </trans-unit>
         <trans-unit id="ReminderDataDeleted" translate="yes" xml:space="preserve">
           <source>🗑已删除内部数据文件</source>
-          <target state="new">🗑已删除内部数据文件</target>
+          <target state="translated">🗑 Deleted internal data files</target>
         </trans-unit>
         <trans-unit id="ReminderFolderImportCancel" translate="yes" xml:space="preserve">
           <source>取消导入，路径：{0}</source>
-          <target state="new">取消导入，路径：{0}</target>
+          <target state="translated">Import canceled, path: {0}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String path]</note>
         </trans-unit>
         <trans-unit id="ReminderFoundBackupFileTitle" translate="yes" xml:space="preserve">
           <source>找到"提醒"的数据备份</source>
-          <target state="new">找到"提醒"的数据备份</target>
+          <target state="translated">Find the data backup of "Reminder"</target>
         </trans-unit>
         <trans-unit id="ReminderFoundDataEmptyDesc" translate="yes" xml:space="preserve">
           <source>找到数据文件，数据为空，但是找到数据备份。是否使用备份数据恢复？</source>
-          <target state="new">找到数据文件，数据为空，但是找到数据备份。是否使用备份数据恢复？</target>
+          <target state="translated">The data file is found, the data is empty, but the data backup is found. Do you want to use the backup data to restore?</target>
         </trans-unit>
         <trans-unit id="ReminderNotFoundDataDesc" translate="yes" xml:space="preserve">
           <source>目前无数据文件，但是找到数据备份。是否使用备份数据恢复？</source>
-          <target state="new">目前无数据文件，但是找到数据备份。是否使用备份数据恢复？</target>
+          <target state="translated">There is currently no data file, but a data backup has been found. Do you want to use the backup data to restore?</target>
         </trans-unit>
         <trans-unit id="ReminderNotifyDescItemDueInADay" translate="yes" xml:space="preserve">
           <source>将在1天之内到期，请留意。</source>
-          <target state="new">将在1天之内到期，请留意。</target>
+          <target state="translated">Will expire within 1 day, please pay attention.</target>
         </trans-unit>
         <trans-unit id="ReminderNotifyDescItemsDueInADay" translate="yes" xml:space="preserve">
           <source>共{0}项将在1天之内到期。</source>
-          <target state="new">共{0}项将在1天之内到期。</target>
+          <target state="translated">{0} items in total will expire within 1 day.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">list.Count</note>
         </trans-unit>
         <trans-unit id="ReminderNotifyDescMultipleDueInADay" translate="yes" xml:space="preserve">
           <source>有{0}项将在1天之内到期。</source>
-          <target state="new">有{0}项将在1天之内到期。</target>
+          <target state="translated">There are {0} items due within 1 day.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">list.Count</note>
         </trans-unit>
         <trans-unit id="ReminderNotifyDescRemaining" translate="yes" xml:space="preserve">
           <source>剩余事项提醒</source>
-          <target state="new">剩余事项提醒</target>
+          <target state="translated">Reminder of Remaining Items</target>
         </trans-unit>
         <trans-unit id="ReminderNotifyTitle" translate="yes" xml:space="preserve">
           <source>事项提醒</source>
-          <target state="new">事项提醒</target>
+          <target state="translated">Reminder</target>
         </trans-unit>
         <trans-unit id="ReminderOOBEImportSubtitle.Text" translate="yes" xml:space="preserve">
           <source>点击按钮打开文件或将文件拖动到标题上，或指定文件夹</source>
-          <target state="new">点击按钮打开文件或将文件拖动到标题上，或指定文件夹</target>
+          <target state="translated">Click the button to open the file or drag the file onto the header, or specify a folder</target>
         </trans-unit>
         <trans-unit id="ReminderOOBEImportTitle.Text" translate="yes" xml:space="preserve">
           <source>现在导入提醒项数据📲</source>
-          <target state="new">现在导入提醒项数据📲</target>
+          <target state="translated">Now import reminder data 📲</target>
         </trans-unit>
         <trans-unit id="ReminderOOBEOpenFileButton.Content" translate="yes" xml:space="preserve">
           <source>打开文件</source>
-          <target state="new">打开文件</target>
+          <target state="translated">Open File</target>
         </trans-unit>
         <trans-unit id="ReminderOOBEPickFolderButton.Content" translate="yes" xml:space="preserve">
           <source>指定文件夹</source>
-          <target state="new">指定文件夹</target>
+          <target state="translated">Specified folder</target>
         </trans-unit>
         <trans-unit id="ReminderOOBEWelcomeDesc" translate="yes" xml:space="preserve">
           <source>现在来创建一些提醒项吧</source>
-          <target state="new">现在来创建一些提醒项吧</target>
+          <target state="translated">Now let's create some reminders</target>
         </trans-unit>
         <trans-unit id="ReminderOOBEWelcomeTitle" translate="yes" xml:space="preserve">
           <source>欢迎使用Reminder👋</source>
-          <target state="new">欢迎使用Reminder👋</target>
+          <target state="translated">Welcome to Reminder👋</target>
         </trans-unit>
         <trans-unit id="RepositoryPage" translate="yes" xml:space="preserve">
           <source>项目主页</source>
-          <target state="new">项目主页</target>
+          <target state="translated">Project Repository</target>
         </trans-unit>
         <trans-unit id="Reset" translate="yes" xml:space="preserve">
           <source>重置</source>
-          <target state="new">重置</target>
+          <target state="translated">Reset</target>
         </trans-unit>
         <trans-unit id="Restore" translate="yes" xml:space="preserve">
           <source>恢复</source>
-          <target state="new">恢复</target>
+          <target state="translated">Restore</target>
         </trans-unit>
         <trans-unit id="RestoreAppBarButton.Label" translate="yes" xml:space="preserve">
           <source>恢复</source>
-          <target state="new">恢复</target>
+          <target state="translated">Restore</target>
         </trans-unit>
         <trans-unit id="Retain" translate="yes" xml:space="preserve">
           <source>保留</source>
-          <target state="new">保留</target>
+          <target state="translated">Retain</target>
         </trans-unit>
         <trans-unit id="SavePathColumn.Header" translate="yes" xml:space="preserve">
           <source>保存路径</source>
-          <target state="new">保存路径</target>
+          <target state="translated">Save Path</target>
         </trans-unit>
         <trans-unit id="SavePathPiviot.Header" translate="yes" xml:space="preserve">
           <source>保存路径</source>
-          <target state="new">保存路径</target>
+          <target state="translated">Save Path</target>
         </trans-unit>
         <trans-unit id="ScanningPaths" translate="yes" xml:space="preserve">
           <source>正在扫描路径</source>
-          <target state="new">正在扫描路径</target>
+          <target state="translated">Scanning path</target>
         </trans-unit>
         <trans-unit id="Search" translate="yes" xml:space="preserve">
           <source>搜索</source>
-          <target state="new">搜索</target>
+          <target state="translated">Search</target>
         </trans-unit>
         <trans-unit id="SelectedFolder" translate="yes" xml:space="preserve">
           <source>选取的文件夹:</source>
-          <target state="new">选取的文件夹:</target>
+          <target state="translated">Selected folder: </target>
         </trans-unit>
         <trans-unit id="SkipCheckUpdateOfVersion" translate="yes" xml:space="preserve">
           <source>{0}不提示版本{1}的更新</source>
-          <target state="new">{0}不提示版本{1}的更新</target>
+          <target state="translated">{0} does not prompt for update of version {1}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String hintString, String CheckUpdate]</note>
         </trans-unit>
         <trans-unit id="SkipThisVersion" translate="yes" xml:space="preserve">
           <source>不再提示此版本</source>
-          <target state="new">不再提示此版本</target>
+          <target state="translated">Skip updates for this version</target>
         </trans-unit>
         <trans-unit id="SortByNameItem.Content" translate="yes" xml:space="preserve">
           <source>按照名称</source>
-          <target state="new">按照名称</target>
+          <target state="translated">Name</target>
         </trans-unit>
         <trans-unit id="SortByTagItem.Content" translate="yes" xml:space="preserve">
           <source>按照标签</source>
-          <target state="new">按照标签</target>
+          <target state="translated">Tag</target>
         </trans-unit>
         <trans-unit id="TaskClearIndicator" translate="yes" xml:space="preserve">
           <source>所有任务已完成☕</source>
-          <target state="new">所有任务已完成☕</target>
+          <target state="translated">All tasks completed ☕</target>
         </trans-unit>
         <trans-unit id="TimeEmptyPrompt" translate="yes" xml:space="preserve">
           <source>时间不能为空</source>
-          <target state="new">时间不能为空</target>
+          <target state="translated">Time cannot be empty</target>
         </trans-unit>
         <trans-unit id="TimeEmptyPromptDesc" translate="yes" xml:space="preserve">
           <source>还是选一个ddl时间吧⏰</source>
-          <target state="new">还是选一个ddl时间吧⏰</target>
+          <target state="translated">Let’s choose a deadline time⏰</target>
         </trans-unit>
         <trans-unit id="TitleEmptyPrompt" translate="yes" xml:space="preserve">
           <source>标题不能为空</source>
-          <target state="new">标题不能为空</target>
+          <target state="translated">The title can not be blank</target>
         </trans-unit>
         <trans-unit id="TitleEmptyPromptDesc" translate="yes" xml:space="preserve">
           <source>不然就找不到这个项目了😥</source>
-          <target state="new">不然就找不到这个项目了😥</target>
+          <target state="translated">Otherwise you will not find this item 😥</target>
         </trans-unit>
         <trans-unit id="Today" translate="yes" xml:space="preserve">
           <source>今天</source>
-          <target state="new">今天</target>
+          <target state="translated">Today</target>
         </trans-unit>
         <trans-unit id="Tomorrow" translate="yes" xml:space="preserve">
           <source>明天</source>
-          <target state="new">明天</target>
+          <target state="translated">Tomorrow</target>
         </trans-unit>
         <trans-unit id="TwoDaysLater" translate="yes" xml:space="preserve">
           <source>后天</source>
-          <target state="new">后天</target>
+          <target state="translated">2 days later</target>
         </trans-unit>
         <trans-unit id="UnableToLoadFolder" translate="yes" xml:space="preserve">
           <source>未能读取文件夹 {0}</source>
-          <target state="new">未能读取文件夹 {0}</target>
+          <target state="translated">Could not read folder {0}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String path]</note>
         </trans-unit>
         <trans-unit id="UnknownBackupState" translate="yes" xml:space="preserve">
           <source>状态未知</source>
-          <target state="new">状态未知</target>
+          <target state="translated">Backup status unknown</target>
         </trans-unit>
         <trans-unit id="Unselected" translate="yes" xml:space="preserve">
           <source>暂未选中</source>
-          <target state="new">暂未选中</target>
+          <target state="translated">Not Selected</target>
         </trans-unit>
         <trans-unit id="UpdateStatusTitle" translate="yes" xml:space="preserve">
           <source>检测更新状态：</source>
-          <target state="new">检测更新状态：</target>
+          <target state="translated">Check update status:</target>
         </trans-unit>
         <trans-unit id="Version" translate="yes" xml:space="preserve">
           <source>版本</source>
-          <target state="new">版本</target>
+          <target state="translated">Version</target>
         </trans-unit>
         <trans-unit id="About" translate="yes" xml:space="preserve">
           <source>关于</source>
-          <target state="new">关于</target>
+          <target state="translated">About</target>
         </trans-unit>
         <trans-unit id="AddItem" translate="yes" xml:space="preserve">
           <source>添加项</source>
-          <target state="new">添加项</target>
+          <target state="translated">Add Item</target>
         </trans-unit>
         <trans-unit id="BackupTitle" translate="yes" xml:space="preserve">
           <source>备份</source>
-          <target state="new">备份</target>
+          <target state="translated">Backup</target>
         </trans-unit>
         <trans-unit id="BasicInfo" translate="yes" xml:space="preserve">
           <source>基本信息</source>
-          <target state="new">基本信息</target>
+          <target state="translated">Basic Information</target>
         </trans-unit>
         <trans-unit id="ClearDataListDesc" translate="yes" xml:space="preserve">
           <source>这可能有助于修复崩溃问题</source>
-          <target state="new">这可能有助于修复崩溃问题</target>
+          <target state="translated">This might help fix the crash</target>
         </trans-unit>
         <trans-unit id="ClearDataListTitle" translate="yes" xml:space="preserve">
           <source>清除所有列表数据</source>
-          <target state="new">清除所有列表数据</target>
+          <target state="translated">Clear all list data</target>
         </trans-unit>
         <trans-unit id="DetailedInfo" translate="yes" xml:space="preserve">
           <source>详细信息</source>
-          <target state="new">详细信息</target>
+          <target state="translated">Detailed information</target>
         </trans-unit>
         <trans-unit id="ModifyItem" translate="yes" xml:space="preserve">
           <source>修改项</source>
-          <target state="new">修改项</target>
+          <target state="translated">Modify items</target>
         </trans-unit>
         <trans-unit id="Clear" translate="yes" xml:space="preserve">
           <source>清除</source>
-          <target state="new">清除</target>
+          <target state="translated">Clear</target>
         </trans-unit>
         <trans-unit id="Application" translate="yes" xml:space="preserve">
           <source>应用</source>
-          <target state="new">应用</target>
+          <target state="translated">Application</target>
         </trans-unit>
         <trans-unit id="ApplicationFolder" translate="yes" xml:space="preserve">
           <source>应用程序文件夹</source>
-          <target state="new">应用程序文件夹</target>
+          <target state="translated">Application folder</target>
         </trans-unit>
         <trans-unit id="JsonOutputOnly" translate="yes" xml:space="preserve">
           <source>JSON（仅输出）</source>
-          <target state="new">JSON（仅输出）</target>
+          <target state="translated">JSON (output only)</target>
         </trans-unit>
         <trans-unit id="SaveData" translate="yes" xml:space="preserve">
           <source>保存数据</source>
-          <target state="new">保存数据</target>
+          <target state="translated">Save Data</target>
         </trans-unit>
         <trans-unit id="ReminderSaveTextBox.PlaceholderText" translate="yes" xml:space="preserve">
           <source>文件保存路径（仅输出）</source>
-          <target state="new">文件保存路径（仅输出）</target>
+          <target state="translated">File save path (output only)</target>
         </trans-unit>
         <trans-unit id="SaveReminderDataFile" translate="yes" xml:space="preserve">
           <source>保存Reminder</source>
-          <target state="new">保存Reminder</target>
+          <target state="translated">Save Reminder</target>
         </trans-unit>
         <trans-unit id="Add" translate="yes" xml:space="preserve">
           <source>添加</source>
-          <target state="new">添加</target>
+          <target state="translated">Add</target>
         </trans-unit>
         <trans-unit id="ReviseReminder" translate="yes" xml:space="preserve">
           <source>修改提醒</source>
-          <target state="new">修改提醒</target>
+          <target state="translated">Revise Reminder Item</target>
         </trans-unit>
         <trans-unit id="Update" translate="yes" xml:space="preserve">
           <source>更新</source>
-          <target state="new">更新</target>
+          <target state="translated">Update</target>
         </trans-unit>
         <trans-unit id="DataSavePath" translate="yes" xml:space="preserve">
           <source>指定位置存放数据</source>
-          <target state="new">指定位置存放数据</target>
+          <target state="translated">Specify location to store data</target>
         </trans-unit>
         <trans-unit id="Reminder" translate="yes" xml:space="preserve">
           <source>提醒</source>
-          <target state="new">提醒</target>
+          <target state="translated">Reminder</target>
         </trans-unit>
         <trans-unit id="DebugOption" translate="yes" xml:space="preserve">
           <source>调试选项</source>
-          <target state="new">调试选项</target>
+          <target state="translated">Debug options</target>
         </trans-unit>
         <trans-unit id="BackgroundTask" translate="yes" xml:space="preserve">
           <source>后台任务</source>
-          <target state="new">后台任务</target>
+          <target state="translated">Background task</target>
         </trans-unit>
         <trans-unit id="BackgroundWakeSpan" translate="yes" xml:space="preserve">
           <source>后台唤醒间隔（分钟）</source>
-          <target state="new">后台唤醒间隔（分钟）</target>
+          <target state="translated">Background wakeup interval (minutes)</target>
         </trans-unit>
         <trans-unit id="BackupInfoTitle" translate="yes" xml:space="preserve">
           <source>备份信息</source>
-          <target state="new">备份信息</target>
+          <target state="translated">Backup Information</target>
         </trans-unit>
         <trans-unit id="TaskList" translate="yes" xml:space="preserve">
           <source>任务列表</source>
-          <target state="new">任务列表</target>
+          <target state="translated">Task List</target>
         </trans-unit>
         <trans-unit id="BackupTask" translate="yes" xml:space="preserve">
           <source>备份任务</source>
-          <target state="new">备份任务</target>
+          <target state="translated">Backup Task</target>
         </trans-unit>
         <trans-unit id="BackupState" translate="yes" xml:space="preserve">
           <source>备份状态</source>
-          <target state="new">备份状态</target>
+          <target state="translated">Backup Status</target>
         </trans-unit>
         <trans-unit id="BackupTaskSeq" translate="yes" xml:space="preserve">
           <source>任务序列</source>
-          <target state="new">任务序列</target>
+          <target state="translated">Task Sequence</target>
         </trans-unit>
         <trans-unit id="ClearReminderData" translate="yes" xml:space="preserve">
           <source>清除Reminder数据</source>
-          <target state="new">清除Reminder数据</target>
+          <target state="translated">Clear Reminder Data</target>
         </trans-unit>
         <trans-unit id="CreatedTime" translate="yes" xml:space="preserve">
           <source>创建时间</source>
-          <target state="new">创建时间</target>
+          <target state="translated">Created time</target>
         </trans-unit>
         <trans-unit id="DailyNotification" translate="yes" xml:space="preserve">
           <source>每日定时通知</source>
-          <target state="new">每日定时通知</target>
+          <target state="translated">Daily scheduled notification</target>
         </trans-unit>
         <trans-unit id="DailyNotificationTime" translate="yes" xml:space="preserve">
           <source>每日定时提醒时间</source>
-          <target state="new">每日定时提醒时间</target>
+          <target state="translated">Daily regular reminder time</target>
         </trans-unit>
         <trans-unit id="Sync" translate="yes" xml:space="preserve">
           <source>同步</source>
-          <target state="new">同步</target>
+          <target state="translated">Sync</target>
         </trans-unit>
         <trans-unit id="DeadlineDate" translate="yes" xml:space="preserve">
           <source>Deadline日期</source>
-          <target state="new">Deadline日期</target>
+          <target state="translated">Deadline Date</target>
         </trans-unit>
         <trans-unit id="EnableNotification" translate="yes" xml:space="preserve">
           <source>开启通知</source>
-          <target state="new">开启通知</target>
+          <target state="translated">Turn on notifications</target>
         </trans-unit>
         <trans-unit id="ExportToDownloadFolder" translate="yes" xml:space="preserve">
           <source>导出至下载</source>
-          <target state="new">导出至下载</target>
+          <target state="translated">Export to download</target>
         </trans-unit>
         <trans-unit id="ImportReminderJson" translate="yes" xml:space="preserve">
           <source>导入Reminder(JSON)</source>
-          <target state="new">导入Reminder(JSON)</target>
+          <target state="translated">Import Reminder (JSON)</target>
         </trans-unit>
         <trans-unit id="SidebarOpenState" translate="yes" xml:space="preserve">
           <source>侧边栏默认开启状态</source>
-          <target state="new">侧边栏默认开启状态</target>
+          <target state="translated">Sidebar open on launch</target>
         </trans-unit>
         <trans-unit id="DeadlineTime" translate="yes" xml:space="preserve">
           <source>Deadline时间</source>
-          <target state="new">Deadline时间</target>
+          <target state="translated">Deadline time</target>
         </trans-unit>
         <trans-unit id="NoTaskIndicator" translate="yes" xml:space="preserve">
           <source>(无任务)</source>
-          <target state="new">(无任务)</target>
+          <target state="translated">(No Task)</target>
         </trans-unit>
         <trans-unit id="OpenFile" translate="yes" xml:space="preserve">
           <source>打开文件</source>
-          <target state="new">打开文件</target>
+          <target state="translated">Open file</target>
         </trans-unit>
         <trans-unit id="Priority" translate="yes" xml:space="preserve">
           <source>优先级</source>
-          <target state="new">优先级</target>
+          <target state="translated">Priority</target>
         </trans-unit>
         <trans-unit id="ReminderDescription" translate="yes" xml:space="preserve">
           <source>提醒描述</source>
-          <target state="new">提醒描述</target>
+          <target state="translated">Reminder description</target>
         </trans-unit>
         <trans-unit id="Title" translate="yes" xml:space="preserve">
           <source>标题</source>
-          <target state="new">标题</target>
+          <target state="translated">Title</target>
         </trans-unit>
         <trans-unit id="Record" translate="yes" xml:space="preserve">
           <source>记录</source>
-          <target state="new">记录</target>
+          <target state="translated">Record</target>
         </trans-unit>
         <trans-unit id="ReminderDone" translate="yes" xml:space="preserve">
           <source>已完成</source>
-          <target state="new">已完成</target>
+          <target state="translated">Finished</target>
         </trans-unit>
         <trans-unit id="ReminderItemsManagement" translate="yes" xml:space="preserve">
           <source>管理提醒项</source>
-          <target state="new">管理提醒项</target>
+          <target state="translated">Manage Reminders</target>
         </trans-unit>
         <trans-unit id="ReminderLoadFromJsonFile" translate="yes" xml:space="preserve">
           <source>从JSON文件中读取数据</source>
-          <target state="new">从JSON文件中读取数据</target>
+          <target state="translated">Load data from JSON file</target>
         </trans-unit>
         <trans-unit id="ReminderTodo" translate="yes" xml:space="preserve">
           <source>待处理</source>
-          <target state="new">待处理</target>
+          <target state="translated">Pending Reminders</target>
         </trans-unit>
         <trans-unit id="ReminderTodoItems" translate="yes" xml:space="preserve">
           <source>待办事项</source>
-          <target state="new">待办事项</target>
+          <target state="translated">Reminder Todo</target>
         </trans-unit>
         <trans-unit id="Save" translate="yes" xml:space="preserve">
           <source>保存</source>
-          <target state="new">保存</target>
+          <target state="translated">Save</target>
         </trans-unit>
         <trans-unit id="ControlSettings" translate="yes" xml:space="preserve">
           <source>控件设置</source>
-          <target state="new">控件设置</target>
+          <target state="translated">Control settings</target>
         </trans-unit>
         <trans-unit id="ErrorInformation" translate="yes" xml:space="preserve">
           <source>错误信息</source>
-          <target state="new">错误信息</target>
+          <target state="translated">Error Information</target>
         </trans-unit>
         <trans-unit id="OpenFolder" translate="yes" xml:space="preserve">
           <source>打开文件夹</source>
-          <target state="new">打开文件夹</target>
+          <target state="translated">Open folder</target>
         </trans-unit>
         <trans-unit id="QuickBackup" translate="yes" xml:space="preserve">
           <source>快速备份</source>
-          <target state="new">快速备份</target>
+          <target state="translated">Quick backup</target>
         </trans-unit>
         <trans-unit id="Refresh" translate="yes" xml:space="preserve">
           <source>刷新</source>
-          <target state="new">刷新</target>
+          <target state="translated">Refresh</target>
         </trans-unit>
         <trans-unit id="SaveList" translate="yes" xml:space="preserve">
           <source>保存列表</source>
-          <target state="new">保存列表</target>
+          <target state="translated">Save list</target>
         </trans-unit>
         <trans-unit id="SearchResultSortBy" translate="yes" xml:space="preserve">
           <source>搜索排序：</source>
-          <target state="new">搜索排序：</target>
+          <target state="translated">Search Sort by: </target>
         </trans-unit>
         <trans-unit id="SelectTag" translate="yes" xml:space="preserve">
           <source>选择标签</source>
-          <target state="new">选择标签</target>
+          <target state="translated">Select tag</target>
         </trans-unit>
         <trans-unit id="Settings" translate="yes" xml:space="preserve">
           <source>设置</source>
-          <target state="new">设置</target>
+          <target state="translated">Settings</target>
         </trans-unit>
         <trans-unit id="ShowDetailedInfo" translate="yes" xml:space="preserve">
           <source>显示详细信息</source>
-          <target state="new">显示详细信息</target>
+          <target state="translated">Show detailed info</target>
         </trans-unit>
         <trans-unit id="ShowNotificationBlockingInfo" translate="yes" xml:space="preserve">
           <source>显示通知显示阻塞信息</source>
-          <target state="new">显示通知显示阻塞信息</target>
+          <target state="translated">Show blocking information when showing notifications</target>
         </trans-unit>
         <trans-unit id="StartBackup" translate="yes" xml:space="preserve">
           <source>开始备份</source>
-          <target state="new">开始备份</target>
+          <target state="translated">Start backup</target>
         </trans-unit>
         <trans-unit id="SyncByWindowsOS" translate="yes" xml:space="preserve">
           <source>应用设置跨设备同步</source>
-          <target state="new">应用设置跨设备同步</target>
+          <target state="translated">App settings sync across devices</target>
         </trans-unit>
         <trans-unit id="ComponentSettings" translate="yes" xml:space="preserve">
           <source>组件设置</source>
-          <target state="new">组件设置</target>
+          <target state="translated">Component settings</target>
         </trans-unit>
         <trans-unit id="Tag" translate="yes" xml:space="preserve">
           <source>标签</source>
-          <target state="new">标签</target>
+          <target state="translated">Tag</target>
         </trans-unit>
         <trans-unit id="TaskPage" translate="yes" xml:space="preserve">
           <source>任务面板</source>
-          <target state="new">任务面板</target>
+          <target state="translated">Task Page</target>
         </trans-unit>
         <trans-unit id="TimeSelectorSpan" translate="yes" xml:space="preserve">
           <source>时间选择器选项间隔（分钟）</source>
-          <target state="new">时间选择器选项间隔（分钟）</target>
+          <target state="translated">Time picker option interval (minutes)</target>
         </trans-unit>
         <trans-unit id="TotalBackup" translate="yes" xml:space="preserve">
           <source>完整备份</source>
-          <target state="new">完整备份</target>
+          <target state="translated">Total backup</target>
         </trans-unit>
         <trans-unit id="BackupPath" translate="yes" xml:space="preserve">
           <source>备份路径</source>
-          <target state="new">备份路径</target>
+          <target state="translated">Backup Path</target>
+        </trans-unit>
+        <trans-unit id="Language" translate="yes" xml:space="preserve">
+          <source>语言</source>
+          <target state="translated">Language</target>
+        </trans-unit>
+        <trans-unit id="DueTime" translate="yes" xml:space="preserve">
+          <source>到期时间</source>
+          <target state="translated">Due Time</target>
+        </trans-unit>
+        <trans-unit id="NoReminderIndicator" translate="yes" xml:space="preserve">
+          <source>(无)</source>
+          <target state="new">(无)</target>
         </trans-unit>
       </group>
     </body>

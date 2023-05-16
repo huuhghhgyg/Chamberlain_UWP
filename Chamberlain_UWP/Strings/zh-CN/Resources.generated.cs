@@ -722,6 +722,19 @@ namespace Chamberlain_UWP.Strings{
         }
         #endregion
 
+        #region DueTime
+        /// <summary>
+        ///   Looks up a localized string similar to: 到期时间
+        /// </summary>
+        public static string DueTime
+        {
+            get
+            {
+                return _resourceLoader.GetString("DueTime");
+            }
+        }
+        #endregion
+
         #region EmptyIndicator
         /// <summary>
         ///   Looks up a localized string similar to: （空）
@@ -1071,6 +1084,19 @@ namespace Chamberlain_UWP.Strings{
         }
         #endregion
 
+        #region Language
+        /// <summary>
+        ///   Looks up a localized string similar to: 语言
+        /// </summary>
+        public static string Language
+        {
+            get
+            {
+                return _resourceLoader.GetString("Language");
+            }
+        }
+        #endregion
+
         #region LevelStringError
         /// <summary>
         ///   Looks up a localized string similar to: 错误❌：
@@ -1272,6 +1298,19 @@ namespace Chamberlain_UWP.Strings{
             get
             {
                 return _resourceLoader.GetString("NoFileChangeDetected");
+            }
+        }
+        #endregion
+
+        #region NoReminderIndicator
+        /// <summary>
+        ///   Looks up a localized string similar to: (无)
+        /// </summary>
+        public static string NoReminderIndicator
+        {
+            get
+            {
+                return _resourceLoader.GetString("NoReminderIndicator");
             }
         }
         #endregion
@@ -2515,6 +2554,7 @@ namespace Chamberlain_UWP.Strings{
             DoNotCheckUpdate,
             DownloadNewVersion,
             DragJsonFileHere,
+            DueTime,
             EmptyIndicator,
             EnableNotification,
             EncounterProblem,
@@ -2543,6 +2583,7 @@ namespace Chamberlain_UWP.Strings{
             Label,
             LabelEmptyPrompt,
             LabelEmptyPromptDesc,
+            Language,
             LevelStringError,
             LevelStringInfo,
             LevelStringWarning,
@@ -2559,6 +2600,7 @@ namespace Chamberlain_UWP.Strings{
             NoContentDetectedTitle,
             NoDescriptionIndicator,
             NoFileChangeDetected,
+            NoReminderIndicator,
             NoSelectedItemPrompt,
             NoSelectedItemPromptDesc,
             NoTaskIndicator,

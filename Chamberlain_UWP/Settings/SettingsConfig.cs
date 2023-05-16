@@ -35,6 +35,8 @@ namespace Chamberlain_UWP.Settings
             CheckUpdate = LoadSetting("CheckUpdate", "Enabled", roaming_settings); //检测更新的状态，默认Enabled
 
             IsPaneOpen = LoadSetting("IsPaneOpen", false, roaming_settings); //程序开启时左导航栏是否打开，默认关闭
+
+            Language = LoadSetting("Language", "auto", roaming_settings); //载入语言
         }
 
         #region 数据区：
@@ -52,6 +54,7 @@ namespace Chamberlain_UWP.Settings
         private static TimeSpan _RemindTime;
         private static string _checkUpdate;
         private static bool _isPaneOpen;
+        private static string _language;
 
         /// <summary>
         /// 是否允许设置漫游
@@ -131,6 +134,12 @@ namespace Chamberlain_UWP.Settings
             get => _isPaneOpen;
             set { _isPaneOpen = value; SaveSetting(value, "IsPaneOpen", true); }
         }
+
+        public static string Language
+        {
+            get => _language;
+            set { _language = value; SaveSetting(value, "Language", true); }
+        }
         #endregion
 
         #region 公共变量
@@ -174,6 +183,7 @@ namespace Chamberlain_UWP.Settings
             SaveSetting(RemindTime, "RemindTime", true);
             SaveSetting(CheckUpdate, "CheckUpdate", true);
             SaveSetting(IsPaneOpen, "IsPaneOpen", true);
+            SaveSetting(Language, "Language", true);
         }
         /// <summary>
         /// 读取设置

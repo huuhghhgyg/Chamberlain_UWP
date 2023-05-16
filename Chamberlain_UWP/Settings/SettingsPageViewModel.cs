@@ -25,6 +25,7 @@ namespace Chamberlain_UWP.Settings
         {
             LoadExternalReminderFolder();
         }
+
         #region 属性和内部变量
         // 应用设置
         internal int UpdateTriggerInterval
@@ -138,6 +139,23 @@ namespace Chamberlain_UWP.Settings
             }
         }
 
+        int languageIndex = LanguageHelper.SupportLang.Count - 1;
+
+        /// <summary>
+        /// 对应LanguageHelper.SupportLang中的Index，用于ComboBox
+        /// </summary>
+        internal int LanguageIndex
+        {
+            get => languageIndex;
+            set
+            {
+                languageIndex = value;
+                string[] langItem = LanguageHelper.SupportLang[languageIndex].Split(' '); //获取Item的语言代码
+                LanguageHelper.SetLanguage(langItem[0]); //设置语言
+                OnPropertyChanged(nameof(LanguageIndex));
+            }
+        }
+
         /// <summary>
         /// 导入ReminderJson的InfoBar
         /// </summary>
@@ -166,12 +184,28 @@ namespace Chamberlain_UWP.Settings
         {
             ImportReminderJsonFileText = string.Empty; //清除导入状态
             DeleteReminderDataText = string.Empty; //清除删除状态
+            LoadLanguageSettings(); //设置语言
         }
         internal void ResetUpdateState()
         {
             CheckUpdate = "auto";
             Updater.CheckUpdate();
         }
+
+        /// <summary>
+        /// 读取语言
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        private void LoadLanguageSettings()
+        {
+            string displayLanguage = LanguageHelper.CurrentLanguage;
+
+            //从支持的语言中找到当前显示语言的index
+            for (int i = 0; i < LanguageHelper.SupportLang.Count; i++)
+                if (LanguageHelper.SupportLang[i].Split(" ").Contains(displayLanguage))
+                    LanguageIndex = i; //设置绑定到ComboBox的LanguageIndex
+        }
+
         /// <summary>
         /// 读取提示文字
         /// </summary>

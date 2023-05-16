@@ -47,7 +47,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock Name="PageTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="48,48,48,12">提醒</TextBlock>
+        <TextBlock Name="PageTitleTextBlock" Text="{x:Bind strings:Resources.Reminder}" Style="{StaticResource TitleTextBlockStyle}" Margin="48,48,48,12"/>
 
         <!--面板-->
         <ScrollViewer Grid.Row="1">
@@ -108,7 +108,7 @@
                 <!--待处理-->
                 <TextBlock Text="{x:Bind strings:Resources.ReminderTodo}" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <TextBlock Visibility="{x:Bind ReminderListOnwork.Count, Mode=OneWay, Converter={StaticResource VisibilityConverter}}"
-                           Text="（无）" x:Uid="EmptyIndicatorTextBlock"
+                           Text="{x:Bind strings:Resources.NoReminderIndicator}"
                            Style="{StaticResource BodyTextBlockStyle}"/>
                 <local:ReminderCardListView x:Name="ListOnWork"
                     ReminderList="{x:Bind ReminderListOnwork,Mode=OneWay}"
@@ -116,7 +116,7 @@
                 <!--已完成-->
                 <TextBlock Text="{x:Bind strings:Resources.ReminderDone}" Margin="0,12,0,8" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <TextBlock Visibility="{x:Bind ReminderListFinished.Count, Mode=OneWay, Converter={StaticResource VisibilityConverter}}"
-                           Text="（无）" x:Uid="EmptyIndicatorTextBlock"
+                           Text="{x:Bind strings:Resources.NoReminderIndicator}"
                            Style="{StaticResource BodyTextBlockStyle}"/>
                 <local:ReminderCardListView x:Name="ListFinished"
                     ReminderList="{x:Bind ReminderListFinished,Mode=OneWay}" 
