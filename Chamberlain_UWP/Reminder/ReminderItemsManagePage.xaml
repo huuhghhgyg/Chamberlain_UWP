@@ -160,7 +160,7 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBox PlaceholderText="标签名" x:Name="AddTagTextBox" />
+                                    <TextBox PlaceholderText="标签名" x:Name="AddTagTextBox" x:Uid="AddTagTextBox"/>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <!--添加标签-->
                                         <Button Name="AddTagButton"
