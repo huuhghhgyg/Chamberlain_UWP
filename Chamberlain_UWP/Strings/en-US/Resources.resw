@@ -124,7 +124,7 @@
     <comment>#Format[String hintString]</comment>
   </data>
   <data name="DownloadNewVersion" xml:space="preserve">
-    <value>go to download</value>
+    <value>Download</value>
   </data>
   <data name="DragJsonFileHere" xml:space="preserve">
     <value>Drag the Json file here</value>
@@ -478,7 +478,7 @@
     <comment>#Format[String hintString, String CheckUpdate]</comment>
   </data>
   <data name="SkipThisVersion" xml:space="preserve">
-    <value>Skip updates for this version</value>
+    <value>Skip this version</value>
   </data>
   <data name="SortByNameItem.Content" xml:space="preserve">
     <value>Name</value>
@@ -698,7 +698,7 @@
     <value>Save list</value>
   </data>
   <data name="SearchResultSortBy" xml:space="preserve">
-    <value>Search Sort by: </value>
+    <value>Sort by: </value>
   </data>
   <data name="SelectTag" xml:space="preserve">
     <value>Select tag</value>

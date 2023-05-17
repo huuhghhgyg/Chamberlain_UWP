@@ -155,7 +155,7 @@
         </trans-unit>
         <trans-unit id="DownloadNewVersion" translate="yes" xml:space="preserve">
           <source>前往下载</source>
-          <target state="translated">go to download</target>
+          <target state="translated">Download</target>
         </trans-unit>
         <trans-unit id="DragJsonFileHere" translate="yes" xml:space="preserve">
           <source>将Json文件拖到此处</source>
@@ -621,7 +621,7 @@
         </trans-unit>
         <trans-unit id="SkipThisVersion" translate="yes" xml:space="preserve">
           <source>不再提示此版本</source>
-          <target state="translated">Skip updates for this version</target>
+          <target state="translated">Skip this version</target>
         </trans-unit>
         <trans-unit id="SortByNameItem.Content" translate="yes" xml:space="preserve">
           <source>按照名称</source>
@@ -914,7 +914,7 @@
         </trans-unit>
         <trans-unit id="SearchResultSortBy" translate="yes" xml:space="preserve">
           <source>搜索排序：</source>
-          <target state="translated">Search Sort by: </target>
+          <target state="translated">Sort by: </target>
         </trans-unit>
         <trans-unit id="SelectTag" translate="yes" xml:space="preserve">
           <source>选择标签</source>
