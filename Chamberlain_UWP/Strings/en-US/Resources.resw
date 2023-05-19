@@ -146,7 +146,7 @@
     <value>Export selected backups to the Downloads folder in the library</value>
   </data>
   <data name="ExternalReminderDataAccessible" xml:space="preserve">
-    <value>Enabled, with path access to: {0}</value>
+    <value>Enabled, with access to path: {0}</value>
     <comment>#Format[String path]</comment>
   </data>
   <data name="ExternalReminderFolderDataDetectedDesc" xml:space="preserve">
@@ -671,7 +671,7 @@
     <value>Load data from JSON file</value>
   </data>
   <data name="ReminderTodo" xml:space="preserve">
-    <value>Pending Reminders</value>
+    <value>Pending</value>
   </data>
   <data name="ReminderTodoItems" xml:space="preserve">
     <value>Reminder Todo</value>

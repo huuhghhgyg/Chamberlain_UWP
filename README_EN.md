@@ -33,3 +33,9 @@ Another project of reinventing the wheel 🤣 But it feels comfortable (mainly b
 *   Restore backed-up files from backup records, supporting restore to the original folder or export to a download folder.
 *   Quick backup: Compare with the most recent full backup to skip unnecessary files, saving space.
 *   Backup task sequence: Add multiple backup tasks to a backup sequence for automated backup without manual intervention.
+
+## Special thanks to
+
+* CommunityToolkit.MVVM
+* Microsoft.Toolkit.Uwp
+* Microsoft.UI.Xaml

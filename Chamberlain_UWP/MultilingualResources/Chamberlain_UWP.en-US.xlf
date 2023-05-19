@@ -184,7 +184,7 @@
         </trans-unit>
         <trans-unit id="ExternalReminderDataAccessible" translate="yes" xml:space="preserve">
           <source>已启用，具有访问权限：{0}</source>
-          <target state="translated">Enabled, with path access to: {0}</target>
+          <target state="translated">Enabled, with access to path: {0}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">#Format[String path]</note>
         </trans-unit>
         <trans-unit id="ExternalReminderFolderDataDetectedDesc" translate="yes" xml:space="preserve">
@@ -878,7 +878,7 @@
         </trans-unit>
         <trans-unit id="ReminderTodo" translate="yes" xml:space="preserve">
           <source>待处理</source>
-          <target state="translated">Pending Reminders</target>
+          <target state="translated">Pending</target>
         </trans-unit>
         <trans-unit id="ReminderTodoItems" translate="yes" xml:space="preserve">
           <source>待办事项</source>
