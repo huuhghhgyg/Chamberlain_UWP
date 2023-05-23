@@ -86,7 +86,7 @@
                                   IsOn="{x:Bind vm.IsPaneOpen, Mode=TwoWay}"/>
                 </Grid>
                 <!--语言设置-->
-                <Grid Margin="0,4,0,0" Padding="16,12" Style="{StaticResource CardGrid}" ColumnSpacing="16">
+                <Grid Margin="0,4,0,0" Padding="16" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
@@ -210,6 +210,7 @@
 
                 <!--同步-->
                 <TextBlock Text="{x:Bind strings:Resources.Sync}" Margin="0,12,0,0" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <!--视觉补偿 PaddingY=12,后期可以修改-->
                 <Grid Margin="0,4,0,0" Padding="16,12" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
