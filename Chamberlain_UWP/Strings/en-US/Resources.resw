@@ -237,13 +237,13 @@
     <value>Please select one or more tags in the list, or create a new tag below🏷</value>
   </data>
   <data name="LevelStringError" xml:space="preserve">
-    <value>Error❌：</value>
+    <value>Error❌: </value>
   </data>
   <data name="LevelStringInfo" xml:space="preserve">
-    <value>Infoℹ：</value>
+    <value>Infoℹ: </value>
   </data>
   <data name="LevelStringWarning" xml:space="preserve">
-    <value>Warning⚠：</value>
+    <value>Warning⚠: </value>
   </data>
   <data name="LoadingBackups" xml:space="preserve">
     <value>Loading backup file</value>
@@ -471,7 +471,7 @@
     <value>Search</value>
   </data>
   <data name="SelectedFolder" xml:space="preserve">
-    <value>Selected folder: </value>
+    <value>Selected folder : </value>
   </data>
   <data name="SkipCheckUpdateOfVersion" xml:space="preserve">
     <value>{0} does not prompt for update of version {1}</value>
@@ -548,7 +548,7 @@
     <value>Detailed information</value>
   </data>
   <data name="ModifyItem" xml:space="preserve">
-    <value>Modify items</value>
+    <value>Modify Item</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Clear</value>
@@ -698,7 +698,7 @@
     <value>Save list</value>
   </data>
   <data name="SearchResultSortBy" xml:space="preserve">
-    <value>Sort by: </value>
+    <value>Sort by </value>
   </data>
   <data name="SelectTag" xml:space="preserve">
     <value>Select tag</value>

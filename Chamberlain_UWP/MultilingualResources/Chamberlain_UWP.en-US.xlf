@@ -304,15 +304,15 @@
         </trans-unit>
         <trans-unit id="LevelStringError" translate="yes" xml:space="preserve">
           <source>错误❌：</source>
-          <target state="translated">Error❌：</target>
+          <target state="translated">Error❌: </target>
         </trans-unit>
         <trans-unit id="LevelStringInfo" translate="yes" xml:space="preserve">
           <source>提示ℹ：</source>
-          <target state="translated">Infoℹ：</target>
+          <target state="translated">Infoℹ: </target>
         </trans-unit>
         <trans-unit id="LevelStringWarning" translate="yes" xml:space="preserve">
           <source>警告⚠：</source>
-          <target state="translated">Warning⚠：</target>
+          <target state="translated">Warning⚠: </target>
         </trans-unit>
         <trans-unit id="LoadingBackups" translate="yes" xml:space="preserve">
           <source>正在读取备份文件</source>
@@ -612,7 +612,7 @@
         </trans-unit>
         <trans-unit id="SelectedFolder" translate="yes" xml:space="preserve">
           <source>选取的文件夹:</source>
-          <target state="translated">Selected folder: </target>
+          <target state="translated">Selected folder : </target>
         </trans-unit>
         <trans-unit id="SkipCheckUpdateOfVersion" translate="yes" xml:space="preserve">
           <source>{0}不提示版本{1}的更新</source>
@@ -714,7 +714,7 @@
         </trans-unit>
         <trans-unit id="ModifyItem" translate="yes" xml:space="preserve">
           <source>修改项</source>
-          <target state="translated">Modify items</target>
+          <target state="translated">Modify Item</target>
         </trans-unit>
         <trans-unit id="Clear" translate="yes" xml:space="preserve">
           <source>清除</source>
@@ -913,8 +913,8 @@
           <target state="translated">Save list</target>
         </trans-unit>
         <trans-unit id="SearchResultSortBy" translate="yes" xml:space="preserve">
-          <source>搜索排序：</source>
-          <target state="translated">Sort by: </target>
+          <source>搜索排序</source>
+          <target state="translated">Sort by </target>
         </trans-unit>
         <trans-unit id="SelectTag" translate="yes" xml:space="preserve">
           <source>选择标签</source>

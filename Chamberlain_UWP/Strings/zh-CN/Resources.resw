@@ -747,7 +747,7 @@
     <value>搜索</value>
   </data>
   <data name="SearchResultSortBy" xml:space="preserve">
-    <value>搜索排序：</value>
+    <value>搜索排序</value>
   </data>
   <data name="SelectedFolder" xml:space="preserve">
     <value>选取的文件夹:</value>

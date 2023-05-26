@@ -166,9 +166,10 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!--列表Pivot，外面套壳是为了调整间隙-->
-                <StackPanel Margin="-8,0,-8,0">
-                    <Pivot Title="{x:Bind strings:Resources.BackupInfoTitle}" Margin="0,8,0,0">
+                <!--列表Pivot-->
+                <StackPanel Margin="0,12,0,0">
+                    <TextBlock Text="{x:Bind strings:Resources.BackupInfoTitle}" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <Pivot Margin="-12,0">
                         <PivotItem Header="{x:Bind strings:Resources.TaskList}">
                             <Grid Margin="0,4,0,0" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                                 <Grid.RowDefinitions>

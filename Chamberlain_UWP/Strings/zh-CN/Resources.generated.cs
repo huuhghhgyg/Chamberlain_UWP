@@ -2081,7 +2081,7 @@ namespace Chamberlain_UWP.Strings{
 
         #region SearchResultSortBy
         /// <summary>
-        ///   Looks up a localized string similar to: 搜索排序：
+        ///   Looks up a localized string similar to: 搜索排序
         /// </summary>
         public static string SearchResultSortBy
         {
