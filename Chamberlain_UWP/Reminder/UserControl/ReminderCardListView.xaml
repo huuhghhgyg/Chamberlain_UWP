@@ -26,5 +26,11 @@
               SelectionMode="None"
               ItemContainerStyle="{StaticResource SectionView}"
               ItemTemplate="{StaticResource ReminderItemViewTemplate}">
+        <ListView.ItemContainerTransitions>
+            <TransitionCollection>
+                <AddDeleteThemeTransition/>
+                <RepositionThemeTransition/>
+            </TransitionCollection>
+        </ListView.ItemContainerTransitions>
     </ListView>
 </UserControl>

@@ -52,6 +52,11 @@
         <!--面板-->
         <ScrollViewer Grid.Row="1">
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48">
+                <StackPanel.ChildrenTransitions>
+                    <TransitionCollection>
+                        <RepositionThemeTransition/>
+                    </TransitionCollection>
+                </StackPanel.ChildrenTransitions>
                 <Grid Margin="0,4,0,0" Padding="16" Style="{StaticResource CardGrid}" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>

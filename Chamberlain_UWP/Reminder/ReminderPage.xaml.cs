@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -59,82 +60,109 @@ namespace Chamberlain_UWP.Reminder
         private void RefreshReminderList(bool state)
         {
             /* 点击之后状态的collection+1。执行前的ObservableList没同步，存在差异。
+             * 前提假设：每次只变化一项
              * true: 已完成 +1
              * false：未完成/已过期 +1
              */
-            ReminderItem itemMoved = null;
+
             if (state)
             {
                 // 未完成/已过期+1
-                List<ReminderItem> finished = new List<ReminderItem>();
-                ReminderManager.GetList(finished, TaskState.Finished);
-                finished.ForEach(item =>
-                {
-                    if (!ReminderListFinished.Contains(item)) // 找旧列表中不包含的项
-                    {
-                        itemMoved = item;
-                    }
-                });
-                if (itemMoved != null)
-                {
-                    ReminderListFinished.Insert(0,itemMoved);
-                    ReminderListOnwork.Remove(itemMoved);
-                }
+                RefreshUnfinishedReminderList();
             }
             else
             {
                 // 已完成+1
-                List<ReminderItem> onwork = new List<ReminderItem>();
-                ReminderManager.GetList(onwork,TaskState.Onwork);
-                ReminderManager.GetList(onwork,TaskState.OutOfDate);
-                onwork.ForEach(item =>
-                {
-                    if (!ReminderListOnwork.Contains(item)) // 找旧列表中不包含的项
-                    {
-                        itemMoved = item;
-                    }
-                });
-                if (itemMoved != null)
-                {
-                    // 选择插入。顺序：过期事项、高优先级、中优先级、普通
-                    if (itemMoved.TaskState == TaskState.OutOfDate) // 是否过期项
-                    {
-                        ReminderListOnwork.Insert(0, itemMoved);
-                    }
-                    else if (itemMoved.Priority > Priority.Default) // 是否特别优先级项
-                    {
-                        if(itemMoved.Priority == Priority.High) // 是否高优先级项
-                        {
-                            int items_outofdate = ReminderListOnwork
-                                .Where(item => item.TaskState == TaskState.OutOfDate)
-                                .ToList()
-                                .Count();
-                            ReminderListOnwork.Insert(items_outofdate, itemMoved);
-                        }
-                        else
-                        {
-                            // 中优先级项
-                            int items_before = ReminderListOnwork
-                                .Where(item => item.Priority == Priority.High || item.TaskState == TaskState.OutOfDate)
-                                .ToList()
-                                .Count();
-                            ReminderListOnwork.Insert(items_before, itemMoved);
-                        }
-                    }
-                    else
-                    {
-                        int items_before = ReminderListOnwork
-                            .Where(item => item.TaskState == TaskState.OutOfDate || item.Priority > Priority.Default)
-                            .ToList()
-                            .Count();
-                        ReminderListOnwork.Insert(items_before,itemMoved);
-                    }
+                RefreshFinishedReminderList();
+            }
+        }
 
-                    ReminderListFinished.Remove(itemMoved);
-                    
-                    // 由于IsCheck为双向绑定，因此不需要在这里更新ReminderManager里面的列表
+        private void RefreshUnfinishedReminderList()
+        {
+            // 未完成/已过期+1
+            List<ReminderItem> finishedItems = new List<ReminderItem>();
+            ReminderManager.GetList(finishedItems, TaskState.Finished);
+
+            ReminderItem itemMoved = null; //初始化变化项
+            foreach (ReminderItem item in finishedItems)
+            {
+                if (!ReminderListFinished.Contains(item) && NotFiltered(item)) // 找旧列表中不包含的项
+                {
+                    itemMoved = item;
+                    break;
                 }
             }
+
+            Insert2ReminderList(ReminderListFinished, itemMoved);
+            ReminderListOnwork.Remove(itemMoved);
+        }
+
+        private void RefreshFinishedReminderList()
+        {
+            // 已完成+1
+            List<ReminderItem> unfinishedItems = new List<ReminderItem>();
+            ReminderManager.GetList(unfinishedItems, TaskState.Onwork);
+            ReminderManager.GetList(unfinishedItems, TaskState.OutOfDate);
+
+            ReminderItem itemMoved = null; //初始化变化项
+            foreach (ReminderItem item in unfinishedItems)
+            {
+                if (!ReminderListOnwork.Contains(item) && NotFiltered(item)) // 找旧列表中不包含的项
+                {
+                    itemMoved = item;
+                    break;
+                }
+            }
+
+            Insert2ReminderList(ReminderListOnwork, itemMoved); //插入到目标列表中
+            ReminderListFinished.Remove(itemMoved); //从源列表中删除
+
+            // 由于IsCheck为双向绑定，因此不需要在这里更新ReminderManager里面的列表
+        }
+
+        /// <summary>
+        /// 计算排序分数
+        /// </summary>
+        /// <param name="item">需要计算评分的项</param>
+        /// <returns>排序分数</returns>
+        private int InsertRankScore(ReminderItem item)
+        {
+            // 排序方式
+            // 优先级：高 + 2，中 + 1，正常 + 0
+            // 是否过期：过期 + 3，未到期 + 0
+
+            int score = 0;
+
+            // 优先级
+            if (item.Priority == Priority.High) score += 2;
+            else if (item.Priority == Priority.Middle) score += 1;
+
+            // 任务完成状态
+            if (item.TaskState == TaskState.OutOfDate) score += 3;
+
+            return score;
+        }
+
+        /// <summary>
+        /// 将ReminderItem插入到对应的ReminderList中
+        /// </summary>
+        /// <param name="reminderList">要插入的列表</param>
+        /// <param name="insertItem">要插入的项</param>
+        private void Insert2ReminderList(IList<ReminderItem> reminderList, ReminderItem insertItem)
+        {
+            // 排序方式
+            // 优先级：高+2，中+1，正常+0
+            // 是否过期：过期+3，未到期+0
+
+            // 计算本项得分
+            int insertItemScore = InsertRankScore(insertItem);
+
+            // 计算前面的项数
+            int itemsBefore = reminderList
+                .Where(item => InsertRankScore(item) > insertItemScore)
+                .ToList()
+                .Count();
+            reminderList.Insert(itemsBefore, insertItem);
         }
 
         private void ManageRemindItemButton_Click(object sender, RoutedEventArgs e)
@@ -142,56 +170,104 @@ namespace Chamberlain_UWP.Reminder
             this.Frame.Navigate(typeof(ReminderItemsManagePage));
         }
 
-        delegate void FilterReminderItems(AutoSuggestBox sender);
+        delegate void FilterReminderItems(AutoSuggestBox sender, IList<ReminderItem> unfinishedItems, IList<ReminderItem> finishedItems);
 
         private void OnworkItemSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            GetListOnwork();
+            //获取列表
+            List<ReminderItem> unfinishedItems = new(); //未完成项
+            ReminderManager.GetList(unfinishedItems, TaskState.Onwork);
+            ReminderManager.GetList(unfinishedItems, TaskState.OutOfDate);
+
+            List<ReminderItem> finishedItems = new(); //已完成项
+            ReminderManager.GetList(finishedItems, TaskState.Finished);
 
             FilterReminderItems filter; //声明委托
             List<string> suggestList = new List<string>(); //AutoSuggest项目列表
 
             if (ItemsSortComboBox.SelectedIndex == 1)
             {
-                //ReminderListOnwork.ToList().ForEach(item => suggestList.Add(item.Title));
-                //sender.ItemsSource = suggestList.Where(item => item.Contains(sender.Text)).ToList();
-                sender.ItemsSource = ReminderListOnwork
-                                        .Where(item => item.Title.Contains(sender.Text))
-                                        .Select(item => item.Title)
-                                        .ToList();
+                //按照名称排序
+                List<ReminderItem> list = new();
+                ReminderManager.GetList(list);
+
+                sender.ItemsSource = list
+                    .Where(item => item.Title.Contains(sender.Text))
+                    .Select(item => item.Title)
+                    .ToList();
 
                 filter = new FilterReminderItems(FilterReminderItemsByName);
             }
             else
             {
+                //按照标签排序
                 ReminderManager.GetTagList(suggestList);
                 sender.ItemsSource = suggestList.Where(item => item.Contains(sender.Text)).ToList();
 
                 filter = new FilterReminderItems(FilterReminderItemsByTag);
             }
-            filter(sender); // 使用委托
+
+            filter(sender, unfinishedItems, finishedItems); // 使用委托
         }
 
-        private void FilterReminderItemsByName(AutoSuggestBox sender)
+        private void FilterReminderItemsByName(AutoSuggestBox sender, IList<ReminderItem> unfinishedItems, IList<ReminderItem> finishedItems)
         {
-            List<ReminderItem> reminderItems = new List<ReminderItem>(ReminderListOnwork);
+            //根据名称分别筛选
+            unfinishedItems = unfinishedItems.Where(item => item.Title.Contains(sender.Text)).ToList();
+            finishedItems = finishedItems.Where(item => item.Title.Contains(sender.Text)).ToList();
 
-            reminderItems = reminderItems.Where(item => item.Title.Contains(sender.Text)).ToList();
-
-            //根据名称搜索
-            ReminderListOnwork.Clear();
-            reminderItems.ForEach(item => ReminderListOnwork.Add(item));
+            //应用筛选
+            ApplyFilteredResults(ReminderListOnwork, unfinishedItems);
+            ApplyFilteredResults(ReminderListFinished, finishedItems);
         }
 
-        private void FilterReminderItemsByTag(AutoSuggestBox sender)
+        private void FilterReminderItemsByTag(AutoSuggestBox sender, IList<ReminderItem> unfinishedItems, IList<ReminderItem> finishedItems)
         {
-            List<ReminderItem> reminderItems = new List<ReminderItem>(ReminderListOnwork);
+            //根据tag分别筛选
+            unfinishedItems = unfinishedItems.Where(item => item.TagsString.Contains(sender.Text)).ToList();
+            finishedItems = finishedItems.Where(item => item.TagsString.Contains(sender.Text)).ToList();
 
-            //根据tag搜索
-            reminderItems = reminderItems.Where(item => item.TagsString.Contains(sender.Text)).ToList();
+            //应用筛选
+            ApplyFilteredResults(ReminderListOnwork, unfinishedItems);
+            ApplyFilteredResults(ReminderListFinished, finishedItems);
+        }
 
-            ReminderListOnwork.Clear();
-            reminderItems.ForEach(item => ReminderListOnwork.Add(item));
+        /// <summary>
+        /// 用于判断输入的ReminderItem是否按照条件被过滤
+        /// </summary>
+        /// <param name="item">要判断的ReminderItem</param>
+        /// <returns>是否被过滤</returns>
+        private bool NotFiltered(ReminderItem item)
+        {
+            if (ItemsSortComboBox.SelectedIndex == 0)
+            {
+                //按照标签
+                return item.TagsString.Contains(OnworkItemSuggestBox.Text); //包含tag说明没有被过滤
+            }
+            else
+            {
+                //按照名字
+                return item.Title.Contains(OnworkItemSuggestBox.Text); //包含说明没有被过滤
+            }
+        }
+
+        /// <summary>
+        /// 根据筛选结果在列表中显示（保留动画）
+        /// </summary>
+        /// <param name="filteredItems"></param>
+        private void ApplyFilteredResults(ObservableCollection<ReminderItem> targetList, IList<ReminderItem> filteredItems)
+        {
+            //遍历列表元素，删除不包含在目标列表中的元素
+            for (int i = targetList.Count - 1; i >= 0; i--)
+            {
+                if (!filteredItems.Contains(targetList[i])) targetList.RemoveAt(i);
+            }
+
+            //遍历目标元素，添加不包含在列表中的元素
+            foreach (ReminderItem item in filteredItems)
+            {
+                if (!targetList.Contains(item)) targetList.Add(item);
+            }
         }
 
         private void ItemsSortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -201,7 +277,7 @@ namespace Chamberlain_UWP.Reminder
 
         private void GetListOnwork() // 用于筛选Onwork状态的item
         {
-            ReminderListOnwork.Clear();
+            //ReminderListOnwork.Clear();
             ReminderManager.GetList(ReminderListOnwork, TaskState.Onwork); // 获取未完成提醒，放入正在处理
             ReminderManager.GetList(ReminderListOnwork, TaskState.OutOfDate); // 获取过期提醒，放入正在处理
         }
@@ -239,7 +315,7 @@ namespace Chamberlain_UWP.Reminder
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            IsPageAlive=false;
+            IsPageAlive = false;
         }
     }
 

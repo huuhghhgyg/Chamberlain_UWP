@@ -97,21 +97,15 @@ namespace Chamberlain_UWP.Reminder
             ReminderItemList.ForEach(item => collection.Add(item));
         }
 
-        public static void GetList(ObservableCollection<ReminderItem> collection, TaskState taskstate) // 用于往ObservableCollection中添加条目（有条件）
+        public static void GetList(IList<ReminderItem> collection, TaskState taskstate) // 用于往ObservableCollection中添加条目（有条件）
         {
-            var reminder_item_list = ReminderItemList.Where(item => item.TaskState == taskstate).ToList(); // 筛选符合taskstate的元素
-            reminder_item_list.ForEach(item => collection.Add(item)); // 添加元素
+            var filteredItems = ReminderItemList.Where(item => item.TaskState == taskstate).ToList(); // 筛选符合taskstate的元素
+            filteredItems.ForEach(item => collection.Add(item)); // 添加元素
         }
 
-        public static void GetList(List<ReminderItem> list) // 只读访问函数
+        public static void GetList(IList<ReminderItem> list) // 只读访问函数
         {
             ReminderItemList.ForEach(item => list.Add(item));
-        }
-
-        public static void GetList(List<ReminderItem> collection, TaskState taskstate) // 用于按条件复制到List
-        {
-            var reminder_item_list = ReminderItemList.Where(item => item.TaskState == taskstate).ToList(); // 筛选符合taskstate的元素
-            reminder_item_list.ForEach(item => collection.Add(item)); // 添加元素
         }
 
         public static async void UpdateList(ObservableCollection<ReminderItem> collection) // 导入ObservableCollection的数据更新List
