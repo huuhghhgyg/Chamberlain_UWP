@@ -175,7 +175,13 @@
                                          SelectionMode="Multiple" 
                                          MaxHeight="400"
                                          ItemsSource="{x:Bind TagList,Mode=OneWay}"
-                                         SelectionChanged="TagListBox_SelectionChanged"/>
+                                         SelectionChanged="TagListBox_SelectionChanged">
+                                    <ListBox.ItemContainerTransitions>
+                                        <TransitionCollection>
+                                            <AddDeleteThemeTransition/>
+                                        </TransitionCollection>
+                                    </ListBox.ItemContainerTransitions>
+                                </ListBox>
                             </StackPanel>
                         </Grid>
                     </StackPanel>

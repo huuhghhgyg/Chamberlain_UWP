@@ -51,6 +51,12 @@
         <ScrollViewer Grid.Row="1">
             <!--设置面板-->
             <StackPanel x:Name="LayoutPanel" Margin="48,0,48,48" Grid.Row="1">
+                <StackPanel.ChildrenTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition IsStaggeringEnabled="True"/>
+                        <RepositionThemeTransition IsStaggeringEnabled="False"/>
+                    </TransitionCollection>
+                </StackPanel.ChildrenTransitions>
                 <!--应用设置-->
                 <!--控件设置-->
                 <TextBlock Text="{x:Bind strings:Resources.ControlSettings}" Style="{ThemeResource BaseTextBlockStyle}"/>
